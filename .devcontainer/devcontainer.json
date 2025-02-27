@@ -15,10 +15,15 @@
 			"version": "1.10.5"
 		},
 		"kubectl-helm-minikube": {
-			"version": "1.30.0"
+			"version": "1.30.0",
+			"helm": "3.16.4",
+			"minikube": "none",
+			"gpgCheck": false
 		}
 	},
 	"mounts": [
-	    "source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind,readonly"
+		//"source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind"
+	    "source=${localEnv:HOME}/work/dev-credentials/aws,target=/home/vscode/.aws,type=bind",
+	    "source=${localEnv:HOME}/work/dev-credentials/kube,target=/home/vscode/.kube,type=bind"
 	]
 }

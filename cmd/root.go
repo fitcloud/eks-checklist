@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	// 승도가 만든 네트워크 패키지
+	"eks-checklist/cmd/network"
 )
 
 var (
@@ -30,12 +32,36 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: EKS Cluster is publicly accessible from the internet")
 		}
 
+		// 클러스터가 사용하는 서브넷의 가용가능한 IP주소의 가용성 검사하는 함수, 반환값이 있을 경우 FAIL 출력 없으면 PASS 출력
+		if ipCapacities := network.CheckVpcSubnetIpCapacity(network.EksCluster(eksCluster)); len(ipCapacities) > 0 {
+			for subnetId, ipCapacity := range ipCapacities {
+				fmt.Printf("FAIL: Subnet %s has less than 10%% of available IPs remaining: %d\n", subnetId, ipCapacity)
+			}
+		} else {
+			// 해석하면 모든 서브넷에 사용가능한 IP주소가 10%이상 남아있다
+			fmt.Println("PASS: All subnets have more than 10% of available IPs remaining")
+		}
+
 		k8sClient := createK8sClient(kubeconfig)
 
 		if getKarpenter(k8sClient) {
 			fmt.Println("PASS: Karpenter is installed")
 		} else {
 			fmt.Println("FAIL: Karpenter is not installed")
+		}
+
+		// VPC CNI에서 Prefix 모드 사용 유무 확인
+		if network.CheckVpcCniPrefixMode(k8sClient) {
+			fmt.Println("PASS: VPC CNI is in prefix mode")
+		} else {
+			fmt.Println("FAIL: VPC CNI is not in prefix mode")
+		}
+
+		// aws-loadblaancer-controller 설치 여부 확인
+		if network.CheckAwsLoadBalancerController(k8sClient) {
+			fmt.Println("PASS: AWS Load Balancer Controller is installed")
+		} else {
+			fmt.Println("FAIL: AWS Load Balancer Controller is not installed")
 		}
 	},
 }
