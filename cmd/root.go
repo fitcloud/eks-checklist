@@ -32,7 +32,7 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: EKS Cluster is publicly accessible from the internet")
 		}
 
-		// 이경호 추가: Secret 객체 암호화
+		// 이경호 추가: Secret 객체 암호화.
 		if len(eksCluster.Cluster.EncryptionConfig) > 0 {
 			fmt.Println("PASS: EKS Cluster Secret encryption is enabled")
 		} else {
