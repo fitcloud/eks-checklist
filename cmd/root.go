@@ -32,6 +32,12 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: EKS Cluster is publicly accessible from the internet")
 		}
 
+		if len(eksCluster.Cluster.EncryptionConfig) > 0 {
+			fmt.Println("PASS: EKS Cluster Secret encryption is enabled")
+		} else {
+			fmt.Println("FAIL: EKS Cluster Secret encryption is not enabled")
+		}
+
 		// 클러스터가 사용하는 서브넷의 가용가능한 IP주소의 가용성 검사하는 함수, 반환값이 있을 경우 FAIL 출력 없으면 PASS 출력
 		if ipCapacities := network.CheckVpcSubnetIpCapacity(network.EksCluster(eksCluster)); len(ipCapacities) > 0 {
 			for subnetId, ipCapacity := range ipCapacities {

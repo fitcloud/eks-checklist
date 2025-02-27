@@ -19,3 +19,5 @@
     ```
     aws eks update-kubeconfig --name eks-checklist
     ```
+
+## 이경호 병합 테스트
