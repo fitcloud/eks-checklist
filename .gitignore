@@ -58,7 +58,3 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
-
-# devcontainer.json 이 사람마다 마운트 경로가 달라서 우선 제외
-.devcontainer.json
-devcontainer.json
