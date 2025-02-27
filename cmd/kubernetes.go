@@ -65,3 +65,67 @@ func getKarpenter(client kubernetes.Interface) bool {
 
 	return false
 }
+
+func getKubecost(client kubernetes.Interface) bool {
+	deploys, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for _, deploy := range deploys.Items {
+		for _, container := range deploy.Spec.Template.Spec.Containers {
+			if strings.Contains(container.Image, "kubecost") {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func getHpa(client kubernetes.Interface) bool {
+	hpas, err := client.AutoscalingV1().HorizontalPodAutoscalers("").List(context.TODO(), v1.ListOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return len(hpas.Items) > 0
+}
+
+func getClusterAutoscaler(client kubernetes.Interface) bool {
+	deploys, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for _, deploy := range deploys.Items {
+		for _, container := range deploy.Spec.Template.Spec.Containers {
+			if strings.Contains(container.Image, "cluster-autoscaler") {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func getcontainerImagelatestTag(client kubernetes.Interface) bool {
+	deploys, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for _, deploy := range deploys.Items {
+		for _, container := range deploy.Spec.Template.Spec.Containers {
+			if strings.Contains(container.Image, ":latest") {
+				return false
+			}
+		}
+	}
+
+	return true
+}

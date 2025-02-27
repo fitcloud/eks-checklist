@@ -25,18 +25,61 @@ var rootCmd = &cobra.Command{
 		eksCluster := Describe(cluster)
 
 		if !eksCluster.Cluster.ResourcesVpcConfig.EndpointPublicAccess {
-			fmt.Println("PASS: EKS Cluster is not publicly accessible from the internet")
+			fmt.Println(C("PASS: EKS Cluster is not publicly accessible from the internet"))
 		} else {
-			fmt.Println("FAIL: EKS Cluster is publicly accessible from the internet")
+			fmt.Println(C("FAIL: EKS Cluster is publicly accessible from the internet"))
+		}
+
+		if eksCluster.Cluster.Logging.ClusterLogging[0].Types[0] == "audit" {
+			fmt.Println(C("PASS: Audit logging is enabled"))
+		} else {
+			fmt.Println(C("FAIL: Audit logging is not enabled"))
+		}
+
+		if eksCluster.Cluster.AccessConfig.AuthenticationMode == "API_AND_CONFIG_MAP" {
+			fmt.Println(C("PASS: RBAC is enabled"))
+		} else {
+			fmt.Println(C("FAIL: RBAC is not enabled"))
+		}
+
+		if eksCluster.Cluster.UpgradePolicy.SupportType == "EXTENDED" {
+			fmt.Println(C("PASS: Extended support is enabled"))
+		} else {
+			fmt.Println(C("FAIL: Extended support is not enabled"))
 		}
 
 		k8sClient := createK8sClient(kubeconfig)
 
 		if getKarpenter(k8sClient) {
-			fmt.Println("PASS: Karpenter is installed")
+			fmt.Println(C("PASS: Karpenter is installed"))
 		} else {
-			fmt.Println("FAIL: Karpenter is not installed")
+			fmt.Println(C("FAIL: Karpenter is not installed"))
 		}
+
+		if getClusterAutoscaler(k8sClient) {
+			fmt.Println(C("PASS: Cluster Autoscaler is installed"))
+		} else {
+			fmt.Println(C("FAIL: Cluster Autoscaler is not installed"))
+		}
+
+		if getKubecost(k8sClient) {
+			fmt.Println(C("PASS: Kubecost is installed"))
+		} else {
+			fmt.Println(C("FAIL: Kubecost is not installed"))
+		}
+
+		if getHpa(k8sClient) {
+			fmt.Println(C("PASS: Horizontal Pod Autoscaler is installed"))
+		} else {
+			fmt.Println(C("FAIL: Horizontal Pod Autoscaler is not installed"))
+		}
+
+		if getcontainerImagelatestTag(k8sClient) {
+			fmt.Println(C("PASS: Containers are not using the latest tag"))
+		} else {
+			fmt.Println(C("FAIL: Containers are using the latest tag"))
+		}
+
 	},
 }
 
