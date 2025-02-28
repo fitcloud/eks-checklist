@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 	// 승도가 만든 네트워크 패키지
+	"eks-checklist/cmd/general"
 	"eks-checklist/cmd/network"
 )
 
@@ -63,6 +64,9 @@ var rootCmd = &cobra.Command{
 		} else {
 			fmt.Println("FAIL: AWS Load Balancer Controller is not installed")
 		}
+
+		// 이렇게 그냥 함수 안에 if로 넣어도 될까용?
+		general.CheckImageTag(k8sClient)
 	},
 }
 
