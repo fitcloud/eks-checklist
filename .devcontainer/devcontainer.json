@@ -17,5 +17,8 @@
 		"kubectl-helm-minikube": {
 			"version": "1.30.0"
 		}
-	}
+	},
+	"mounts": [
+	    "source=C:/.aws,target=/home/vscode/.aws,type=bind,readonly"
+	]
 }
