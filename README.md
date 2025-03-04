@@ -1,21 +1,65 @@
 # EKS Checklist
 
+## 개요
+EKS Checklist는 Amazon Elastic Kubernetes Service(EKS) 클러스터의 상태를 점검하고, 필수적인 검증을 수행하는 도구입니다.  
+이 프로젝트는 Go 언어로 개발되었으며, 샘플 EKS 클러스터는 Terraform을 이용해 생성됩니다.
+
 ## 개발 환경 구성
-1. VSCode를 IDE로 사용한다고 가정하여 Dev Container에 애플리케이션 개발/빌드/테스트에 필요한 모든 도구를 구성하여 사용
-2. VSCode를 실행하면 루트 경로의 `.devcontainer/devcontainer.json`에 명시된 구성대로 Dev Container가 자동으로 생성됨
+### 1. 환경 변수 설정 (Windows)
+Windows 환경에서 `Powershell(Admin)`을 실행하고 다음 명령어를 입력하여 환경 변수를 설정합니다.
+```powershell
+PS C:\Windows\system32> [System.Environment]::SetEnvironmentVariable('HOME', $env:USERPROFILE,[System.EnvironmentVariableTarget]::Machine)
+```
+
+### 2. 개발 도구
+- IDE : VSCode를 사용하며, Dev Container Extension을 활용하여 개발 환경을 자동 구성합니다.
+
+- VSCode를 실행하면 루트 디렉토리의 .devcontainer/devcontainer.json 파일에 정의된 환경이 자동으로 세팅됩니다.
+
+### 3. 실행 방법
+```sh
+go run main.go
+```
 
 ## 테스트 환경 구성
-1. 애플리케이션 기능 테스트를 위해서는 EKS 클러스터가 필요하고 EKS 클러스터는 Terraform을 통해서 구성 가능
-2. `terraform` 경로에 있는 TF 파일들로 테스트 환경 구성
-    - 테라폼 코드 실행에 필요한 제공자 및 모듈 다운로드
-        ```
-        terraform init
-        ```
-    - 테라롬 코드로 인프라 구성
-        ```
-        terraform apply
-        ```
-3. EKS 클러스터 생성이 완료되면 아래의 명령어를 실행해서 kubeconfig 파일 생성
-    ```
-    aws eks update-kubeconfig --name eks-checklist
-    ```
+EKS 클러스터를 이용한 테스트가 필요하며, Terraform을 사용해 환경을 구성합니다.
+### 1. Terraform을 이용한 EKS 클러스터 생성
+Terraform을 이용해 테스트 환경을 구성하려면 terraform 디렉터리로 이동 후 다음 명령어를 실행합니다.
+
+#### (1).  테라폼 초기화 (필수 모듈 다운로드)
+```sh
+terraform init
+```
+
+#### (2).  인프라 생성 (EKS 클러스터 구축)
+```sh
+terraform apply
+```
+
+### 2. Kubeconfig 설정
+EKS 클러스터가 생성되면 kubectl이 클러스터에 접근할 수 있도록 kubeconfig를 설정합니다.
+```sh
+aws eks update-kubeconfig --name eks-checklist
+```
+
+## Git Flow
+본 프로젝트는 Git Flow 전략을 따르며, dev 브랜치를 기준으로 기능별 feature 브랜치를 생성하여 작업합니다.
+
+### 1. 브랜치 네이밍 규칙
+```
+feature/<대분류>-<기능>
+```
+
+예시:
+```
+feature/network-targetip
+```
+
+### 2. 개발 프로세스
+#### (1). ```dev``` 브랜치에서 ```feature``` 브랜치를 생성하여 기능 개발을 진행합니다.
+
+#### (2). 기능 구현 후 ```dev``` 브랜치로 Pull Request(PR)를 생성합니다.
+
+#### (3). 코드 리뷰를 거친 후 dev 브랜치에 머지(Merge)합니다.
+
+#### (4). 다른 기능 브랜치는 최신 ```dev``` 브랜치를 반영하여 지속적으로 동기화합니다.
