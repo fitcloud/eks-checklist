@@ -8,6 +8,7 @@ import (
 	// 승도가 만든 네트워크 패키지
 	"eks-checklist/cmd/general"
 	"eks-checklist/cmd/network"
+	"eks-checklist/cmd/security"
 )
 
 var (
@@ -67,6 +68,7 @@ var rootCmd = &cobra.Command{
 
 		// 이렇게 그냥 함수 안에 if로 넣어도 될까용?
 		general.CheckImageTag(k8sClient)
+		security.CheckContainerExecutionUser(k8sClient)
 	},
 }
 
