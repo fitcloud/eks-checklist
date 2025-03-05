@@ -13,3 +13,4 @@ variable "eks_cluster_endpoint_public_access" {
   default     = false
   type        = bool
 }
+
