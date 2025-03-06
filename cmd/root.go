@@ -9,6 +9,7 @@ import (
 	"eks-checklist/cmd/general"
 	"eks-checklist/cmd/network"
 	"eks-checklist/cmd/security"
+	"eks-checklist/cmd/stability"
 )
 
 var (
@@ -76,6 +77,14 @@ var rootCmd = &cobra.Command{
 		// 이렇게 그냥 함수 안에 if로 넣어도 될까용?
 		general.CheckImageTag(k8sClient)
 		security.CheckContainerExecutionUser(k8sClient)
+
+		// 클러스터에 Cluster Autoscaler가 설치되어 있는지 확인
+		if stability.CheckClusterAutoscalerEnabled(k8sClient) {
+			fmt.Println("PASS: Cluster Autoscaler is installed")
+		} else {
+			fmt.Println("FAIL: Cluster Autoscaler is not installed")
+		}
+
 	},
 }
 

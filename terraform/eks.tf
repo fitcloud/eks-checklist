@@ -36,7 +36,7 @@ module "eks" {
     coredns                = {}
     eks-pod-identity-agent = {}
     kube-proxy             = {}
-    vpc-cni                = {
+    vpc-cni = {
       // before_compute = true
       configuration_values = jsonencode({
         env = {
@@ -50,12 +50,12 @@ module "eks" {
   # EKS 노드 그룹 t3.medium 인스턴스 타입 단 1개 생성
   eks_managed_node_groups = {
     nodegroup-1 = {
-      instance_types = ["t3.medium"]
+      instance_types   = ["t3.medium"]
       desired_capacity = 1
-      min_size = 1
-      max_size = 3
-      volume_size = 20
-      subnet_ids = module.vpc.private_subnets
+      min_size         = 1
+      max_size         = 3
+      volume_size      = 20
+      subnet_ids       = module.vpc.private_subnets
 
       tags = {
         "Name" = "${local.project}-nodegroup-1"
