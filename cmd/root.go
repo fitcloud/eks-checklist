@@ -67,6 +67,13 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: AWS Load Balancer Controller is not installed")
 		}
 
+		// AWS Load Balancer Pod IP가 사용 중인지 확인
+		if network.CheckAwsLoadBalancerPodIp(k8sClient) {
+			fmt.Println("PASS: AWS Load Balancer Pod IP is in use")
+		} else {
+			fmt.Println("FAIL: AWS Load Balancer Pod IP is not in use")
+		}
+
 		// 이렇게 그냥 함수 안에 if로 넣어도 될까용?
 		general.CheckImageTag(k8sClient)
 		security.CheckContainerExecutionUser(k8sClient)
