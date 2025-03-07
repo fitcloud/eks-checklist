@@ -6,14 +6,10 @@ import (
 	"log"
 	"strings"
 
-	//디펜던시에 추가 필요
-	// go get -u github.com/aws/aws-sdk-go/...
-	//
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/iam"
-
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -43,8 +39,8 @@ func GetNodeIPs(client kubernetes.Interface) []string {
 
 // GetIAMRoleForNode retrieves the IAM role associated with a given node IP.
 func GetIAMRoleForNode(nodeIP string) (string, error) {
-	sess := session.Must(session.NewSession(&aws.Config{
-		Region: aws.String("ap-northeast-2"), // 필요에 따라 변경하세요.
+	sess := session.Must(session.NewSessionWithOptions(session.Options{
+		SharedConfigState: session.SharedConfigEnable,
 	}))
 	svc := ec2.New(sess)
 
@@ -71,13 +67,30 @@ func GetIAMRoleForNode(nodeIP string) (string, error) {
 		return "", fmt.Errorf("no IAM role associated with instance %s", *instance.InstanceId)
 	}
 
-	return *instance.IamInstanceProfile.Arn, nil
+	profileArn := *instance.IamInstanceProfile.Arn
+	profileName := profileArn[strings.LastIndex(profileArn, "/")+1:]
+
+	iamSvc := iam.New(sess)
+	profileInput := &iam.GetInstanceProfileInput{
+		InstanceProfileName: aws.String(profileName),
+	}
+
+	profileOutput, err := iamSvc.GetInstanceProfile(profileInput)
+	if err != nil {
+		return "", fmt.Errorf("failed to get IAM instance profile details: %v", err)
+	}
+
+	if len(profileOutput.InstanceProfile.Roles) == 0 {
+		return "", fmt.Errorf("no IAM role found in instance profile %s", profileName)
+	}
+
+	return *profileOutput.InstanceProfile.Roles[0].RoleName, nil
 }
 
 // GetAttachedPolicies fetches the attached IAM policies for a given role.
 func GetAttachedPolicies(roleName string) ([]string, error) {
-	sess := session.Must(session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1"),
+	sess := session.Must(session.NewSessionWithOptions(session.Options{
+		SharedConfigState: session.SharedConfigEnable,
 	}))
 	svc := iam.New(sess)
 
@@ -102,13 +115,14 @@ func GetAttachedPolicies(roleName string) ([]string, error) {
 func CheckNodeIAMRoles(client kubernetes.Interface) bool {
 	nodeIPs := GetNodeIPs(client)
 	for _, ip := range nodeIPs {
-		roleArn, err := GetIAMRoleForNode(ip)
+		//		fmt.Printf("🔍 Checking IAM role for node with IP: %s\n", ip)
+		roleName, err := GetIAMRoleForNode(ip)
 		if err != nil {
 			fmt.Printf("⚠️  Failed to get IAM role for node IP %s: %v\n", ip, err)
 			return false
 		}
 
-		roleName := roleArn[strings.LastIndex(roleArn, "/")+1:]
+		//		fmt.Printf("ℹ️  Extracted IAM Role Name: %s\n", roleName)
 		policies, err := GetAttachedPolicies(roleName)
 		if err != nil {
 			fmt.Printf("⚠️  Failed to get IAM policies for role %s: %v\n", roleName, err)
@@ -117,12 +131,12 @@ func CheckNodeIAMRoles(client kubernetes.Interface) bool {
 
 		for _, policy := range policies {
 			if !allowedPolicies[policy] {
-				fmt.Printf("❌ Unauthorized policy detected: %s on role %s\n", policy, roleName)
+				fmt.Printf("FAIL: Unauthorized policy detected: %s on role %s\n", policy, roleName)
 				return false
 			}
 		}
 	}
 
-	fmt.Println("✅ All nodes have only allowed IAM policies.")
+	fmt.Println("PASS: All nodes have only allowed IAM policies.")
 	return true
 }
