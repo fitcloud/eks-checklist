@@ -78,6 +78,8 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: Cluster Autoscaler is not installed")
 		}
 
+		security.CheckNodeIAMRoles(k8sClient)
+
 	},
 }
 
