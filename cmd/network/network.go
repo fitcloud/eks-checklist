@@ -121,7 +121,7 @@ func CheckAwsLoadBalancerPodIp(client kubernetes.Interface) bool {
 	for _, ing := range ingress.Items {
 		if ing.Annotations["alb.ingress.kubernetes.io/target-type"] == "" || ing.Annotations["alb.ingress.kubernetes.io/target-type"] == "instance" {
 			// 디버깅 용
-			log.Printf("ingress: %s", ing.Name)
+			log.Printf("ingresssssssss: %s", ing.Name)
 			return false
 		}
 	}
