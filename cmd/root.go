@@ -85,6 +85,14 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: Cluster Autoscaler is not installed")
 		}
 
+		// 싱글톤 Pod 사용 중인지 확인
+		// 클러스터에 Cluster Autoscaler가 설치되어 있는지 확인
+		if stability.SingletonPodCheck(k8sClient) {
+			fmt.Println("PASS: SingletonPod No Used")
+		} else {
+			fmt.Println("FAIL: SingletonPod Used")
+		}
+
 	},
 }
 
