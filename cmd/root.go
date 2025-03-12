@@ -85,7 +85,7 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: Cluster Autoscaler is not installed")
 		}
 
-		// 클러스터에 Horizontal Pod Autoscaler가 설정정되어 있는지 확인
+		// 클러스터에 Horizontal Pod Autoscaler가 설정되어 있는지 확인
 		if stability.CheckHpa(k8sClient) {
 			fmt.Println("PASS: Horizontal Pod Autoscaler is installed")
 		} else {
