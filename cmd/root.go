@@ -60,8 +60,7 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: VPC CNI is not in prefix mode")
 		}
 
-		// EKS 클러스터 Audit로깅 설정 유무를 확인하는 함수, 존재하면 PASS 출력 아니면 FAIL 출력
-		if eksCluster.Cluster.Logging.ClusterLogging[0].Types[0] == "audit" {
+		if security.CheckAuditLoggingEnabled(&security.EksCluster{Cluster: eksCluster.Cluster}) {
 			fmt.Println("PASS: Audit logging is enabled")
 		} else {
 			fmt.Println("FAIL: Audit logging is not enabled")
