@@ -91,6 +91,8 @@ var rootCmd = &cobra.Command{
 		} else {
 			fmt.Println("FAIL: CoreDNS HPA is not installed")
 		}
+ 
+    security.CheckNodeIAMRoles(k8sClient)
 
 	},
 }
