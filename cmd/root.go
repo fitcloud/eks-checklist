@@ -85,6 +85,13 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: Cluster Autoscaler is not installed")
 		}
 
+		// CoreDNS의 HPA가 존재하는지 확인
+		if stability.CheckCoreDNSHpa(k8sClient) {
+			fmt.Println("PASS: CoreDNS HPA is installed")
+		} else {
+			fmt.Println("FAIL: CoreDNS HPA is not installed")
+		}
+
 	},
 }
 
