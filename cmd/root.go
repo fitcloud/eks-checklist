@@ -9,6 +9,7 @@ import (
 	"eks-checklist/cmd/cost"
 	"eks-checklist/cmd/general"
 	"eks-checklist/cmd/network"
+	"eks-checklist/cmd/scalability"
 	"eks-checklist/cmd/security"
 	"eks-checklist/cmd/stability"
 )
@@ -86,6 +87,13 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: Cluster Autoscaler is not installed")
 		}
 
+    // 클러스터의 노드 인스턴스 유형이 다양한지 확인
+		if scalability.CheckInstanceTypes(k8sClient) {
+			fmt.Println("PASS: Cluster has multiple instance types")
+		} else {
+			fmt.Println("FAIL: Cluster does not have multiple instance types")
+		}
+
 		// 클러스터에 Kubecost가 설치되어 있는지 확인
 		if cost.GetKubecost(k8sClient) {
 			fmt.Println("PASS: Kubecost is installed")
@@ -110,7 +118,7 @@ var rootCmd = &cobra.Command{
  
     security.CheckNodeIAMRoles(k8sClient)
 
-	},
+  },
 }
 
 func Execute() {
