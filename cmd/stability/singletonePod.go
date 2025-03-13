@@ -36,12 +36,12 @@ func checkDeploymentReplicas(client kubernetes.Interface) bool {
 		panic(err.Error())
 	}
 
-	result := true
+	result := false
 
 	for _, deployment := range deployments.Items {
 		if deployment.Spec.Replicas != nil && *deployment.Spec.Replicas == 1 {
 			fmt.Printf("[WARNING] Deployment %s in namespace %s has replicas: 1\n", deployment.Name, deployment.Namespace)
-			result = false
+			result = true
 		}
 	}
 
@@ -55,12 +55,12 @@ func checkStandalonePods(client kubernetes.Interface) bool {
 		panic(err.Error())
 	}
 
-	result := true
+	result := false
 
 	for _, pod := range pods.Items {
 		if pod.OwnerReferences == nil || len(pod.OwnerReferences) == 0 {
 			fmt.Printf("[WARNING] Standalone Pod %s in namespace %s detected\n", pod.Name, pod.Namespace)
-			result = false
+			result = true
 		}
 	}
 
@@ -74,12 +74,12 @@ func checkStatefulSetReplicas(client kubernetes.Interface) bool {
 		panic(err.Error())
 	}
 
-	result := true
+	result := false
 
 	for _, statefulSet := range statefulSets.Items {
 		if statefulSet.Spec.Replicas != nil && *statefulSet.Spec.Replicas == 1 {
 			fmt.Printf("[WARNING] StatefulSet %s in namespace %s has replicas: 1\n", statefulSet.Name, statefulSet.Namespace)
-			result = false
+			result = true
 		}
 	}
 
@@ -93,12 +93,12 @@ func checkNodeSelectorPods(client kubernetes.Interface) bool {
 		panic(err.Error())
 	}
 
-	result := true
+	result := false
 
 	for _, pod := range pods.Items {
 		if len(pod.Spec.NodeSelector) > 0 {
 			fmt.Printf("[WARNING] Pod %s in namespace %s has nodeSelector set\n", pod.Name, pod.Namespace)
-			result = false
+			result = true
 		}
 	}
 
