@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 	// 승도가 만든 네트워크 패키지
+	"eks-checklist/cmd/cost"
 	"eks-checklist/cmd/general"
 	"eks-checklist/cmd/network"
 	"eks-checklist/cmd/scalability"
@@ -85,13 +86,39 @@ var rootCmd = &cobra.Command{
 		} else {
 			fmt.Println("FAIL: Cluster Autoscaler is not installed")
 		}
-		// 클러스터의 노드 인스턴스 유형이 다양한지 확인
+
+    // 클러스터의 노드 인스턴스 유형이 다양한지 확인
 		if scalability.CheckInstanceTypes(k8sClient) {
 			fmt.Println("PASS: Cluster has multiple instance types")
 		} else {
 			fmt.Println("FAIL: Cluster does not have multiple instance types")
 		}
-	},
+
+		// 클러스터에 Kubecost가 설치되어 있는지 확인
+		if cost.GetKubecost(k8sClient) {
+			fmt.Println("PASS: Kubecost is installed")
+		} else {
+			fmt.Println("FAIL: Kubecost is not installed")
+		}
+
+		// 싱글톤 Pod 사용 중인지 확인
+		// 클러스터에 Cluster Autoscaler가 설치되어 있는지 확인
+		if stability.SingletonPodCheck(k8sClient) {
+			fmt.Println("PASS: SingletonPod No Used")
+		} else {
+			fmt.Println("FAIL: SingletonPod Used")
+		}
+
+    // CoreDNS의 HPA가 존재하는지 확인
+		if stability.CheckCoreDNSHpa(k8sClient) {
+			fmt.Println("PASS: CoreDNS HPA is installed")
+		} else {
+			fmt.Println("FAIL: CoreDNS HPA is not installed")
+		}
+ 
+    security.CheckNodeIAMRoles(k8sClient)
+
+  },
 }
 
 func Execute() {
