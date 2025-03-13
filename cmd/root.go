@@ -62,6 +62,12 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: VPC CNI is not in prefix mode")
 		}
 
+		if security.CheckAuditLoggingEnabled(&security.EksCluster{Cluster: eksCluster.Cluster}) {
+			fmt.Println("PASS: Audit logging is enabled")
+		} else {
+			fmt.Println("FAIL: Audit logging is not enabled")
+		}
+
 		// aws-loadblaancer-controller 설치 여부 확인
 		if network.CheckAwsLoadBalancerController(k8sClient) {
 			fmt.Println("PASS: AWS Load Balancer Controller is installed")
