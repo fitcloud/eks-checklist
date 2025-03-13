@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 	// 승도가 만든 네트워크 패키지
+	"eks-checklist/cmd/cost"
 	"eks-checklist/cmd/general"
 	"eks-checklist/cmd/network"
 	"eks-checklist/cmd/security"
@@ -83,6 +84,13 @@ var rootCmd = &cobra.Command{
 			fmt.Println("PASS: Cluster Autoscaler is installed")
 		} else {
 			fmt.Println("FAIL: Cluster Autoscaler is not installed")
+		}
+
+		// 클러스터에 Kubecost가 설치되어 있는지 확인
+		if cost.GetKubecost(k8sClient) {
+			fmt.Println("PASS: Kubecost is installed")
+		} else {
+			fmt.Println("FAIL: Kubecost is not installed")
 		}
 
 		// 싱글톤 Pod 사용 중인지 확인
