@@ -20,6 +20,13 @@ var allowedPolicies = map[string]bool{
 	"AmazonEKSWorkerNodePolicy":          true,
 }
 
+const (
+	Red    = "\033[31m" // 빨간색
+	Green  = "\033[32m" // 초록색
+	Yellow = "\033[33m" // 노란색
+	Reset  = "\033[0m"  // 기본 색상으로 리셋
+)
+
 // GetNodeIPs retrieves the provided-node-ip annotations from all nodes.
 func GetNodeIPs(client kubernetes.Interface) []string {
 	nodes, err := client.CoreV1().Nodes().List(context.TODO(), v1.ListOptions{})
@@ -131,12 +138,12 @@ func CheckNodeIAMRoles(client kubernetes.Interface) bool {
 
 		for _, policy := range policies {
 			if !allowedPolicies[policy] {
-				fmt.Printf("FAIL: Unauthorized policy detected: %s on role %s\n", policy, roleName)
+				fmt.Printf(Red+"✖ FAIL: Unauthorized policy detected: %s on role %s\n"+Reset, policy, roleName)
 				return false
 			}
 		}
 	}
 
-	fmt.Println("PASS: All nodes have only allowed IAM policies.")
+	fmt.Println(Green + "✔ PASS: All nodes have only allowed IAM policies." + Reset)
 	return true
 }
