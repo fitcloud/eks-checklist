@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/spf13/cobra"
-	// 승도가 만든 네트워크 패키지
 	"eks-checklist/cmd/cost"
 	"eks-checklist/cmd/general"
 	"eks-checklist/cmd/network"
 	"eks-checklist/cmd/scalability"
 	"eks-checklist/cmd/security"
 	"eks-checklist/cmd/stability"
+
+	"github.com/spf13/cobra"
 )
 
 var (
@@ -30,7 +30,9 @@ var rootCmd = &cobra.Command{
 		fmt.Printf("Running checks on %s\n", cluster)
 
 		eksCluster := Describe(cluster)
+		k8sClient := createK8sClient(kubeconfig)
 
+		// 클러스터 엔드포인트가 public 인지 않인지 확인
 		if !eksCluster.Cluster.ResourcesVpcConfig.EndpointPublicAccess {
 			fmt.Println("PASS: EKS Cluster is not publicly accessible from the internet")
 		} else {
@@ -47,8 +49,6 @@ var rootCmd = &cobra.Command{
 			fmt.Println("PASS: All subnets have more than 10% of available IPs remaining")
 		}
 
-		k8sClient := createK8sClient(kubeconfig)
-
 		if getKarpenter(k8sClient) {
 			fmt.Println("PASS: Karpenter is installed")
 		} else {
@@ -62,6 +62,7 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: VPC CNI is not in prefix mode")
 		}
 
+		// EKS Audit log 활성화 유무 확인
 		if security.CheckAuditLoggingEnabled(&security.EksCluster{Cluster: eksCluster.Cluster}) {
 			fmt.Println("PASS: Audit logging is enabled")
 		} else {
@@ -71,19 +72,21 @@ var rootCmd = &cobra.Command{
 		// aws-loadblaancer-controller 설치 여부 확인
 		if network.CheckAwsLoadBalancerController(k8sClient) {
 			fmt.Println("PASS: AWS Load Balancer Controller is installed")
+			// AWS Load Balancer Pod IP가 사용 중인지 확인
+			if network.CheckAwsLoadBalancerPodIp(k8sClient) {
+				fmt.Println("PASS: AWS Load Balancer Pod IP is in use")
+			} else {
+				fmt.Println("FAIL: AWS Load Balancer Pod IP is not in use")
+			}
 		} else {
 			fmt.Println("FAIL: AWS Load Balancer Controller is not installed")
-		}
-
-		// AWS Load Balancer Pod IP가 사용 중인지 확인
-		if network.CheckAwsLoadBalancerPodIp(k8sClient) {
-			fmt.Println("PASS: AWS Load Balancer Pod IP is in use")
-		} else {
 			fmt.Println("FAIL: AWS Load Balancer Pod IP is not in use")
 		}
 
-		// 이렇게 그냥 함수 안에 if로 넣어도 될까용?
+		// latest 태그를 가진 이미지를 사용해서는 안됨
 		general.CheckImageTag(k8sClient)
+
+		// 컨테이너 이미지들이 root을 사용하면 안됨
 		security.CheckContainerExecutionUser(k8sClient)
 
 		// 클러스터에 Cluster Autoscaler가 설치되어 있는지 확인
@@ -93,7 +96,7 @@ var rootCmd = &cobra.Command{
 			fmt.Println("FAIL: Cluster Autoscaler is not installed")
 		}
 
-    // 클러스터의 노드 인스턴스 유형이 다양한지 확인
+		// 클러스터의 노드 인스턴스 유형이 다양한지 확인
 		if scalability.CheckInstanceTypes(k8sClient) {
 			fmt.Println("PASS: Cluster has multiple instance types")
 		} else {
@@ -108,23 +111,23 @@ var rootCmd = &cobra.Command{
 		}
 
 		// 싱글톤 Pod 사용 중인지 확인
-		// 클러스터에 Cluster Autoscaler가 설치되어 있는지 확인
 		if stability.SingletonPodCheck(k8sClient) {
 			fmt.Println("PASS: SingletonPod No Used")
 		} else {
 			fmt.Println("FAIL: SingletonPod Used")
 		}
 
-    // CoreDNS의 HPA가 존재하는지 확인
+		// CoreDNS의 HPA가 존재하는지 확인
 		if stability.CheckCoreDNSHpa(k8sClient) {
 			fmt.Println("PASS: CoreDNS HPA is installed")
 		} else {
 			fmt.Println("FAIL: CoreDNS HPA is not installed")
 		}
- 
-    security.CheckNodeIAMRoles(k8sClient)
 
-  },
+		// worker node role에는 최소환의 권한만 가져야함
+		security.CheckNodeIAMRoles(k8sClient)
+
+	},
 }
 
 func Execute() {
