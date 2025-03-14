@@ -144,9 +144,16 @@ var rootCmd = &cobra.Command{
 			} else {
 				fmt.Println(Red + "FAIL: AWS Load Balancer Pod IP is not in use" + Reset)
 			}
+			// Readiness Gate 활성화 유무
+			if network.CheckReadinessGateEnabled(k8sClient) {
+				fmt.Println(Green + "✔ PASS: Readiness Gate is enabled" + Reset)
+			} else {
+				fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
+			}
 		} else {
 			fmt.Println(Red + "✖ FAIL: AWS Load Balancer Controller is not installed" + Reset)
 			fmt.Println(Red + "✖ FAIL: AWS Load Balancer Pod IP is not in use" + Reset)
+			fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
 		}
 
 		// 비용최적화 항목 체크 기능은 하단 항목에 추가
