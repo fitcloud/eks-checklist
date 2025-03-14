@@ -51,20 +51,20 @@ func CheckHpa(client kubernetes.Interface) {
 
 	// 결과 출력
 	if len(deploymentsWithHPA) > 0 {
-		fmt.Println("Deployments with Horizontal Pod Autoscaler:")
+		fmt.Println("FAIL: Deployments with Horizontal Pod Autoscaler:")
 		for _, dep := range deploymentsWithHPA {
 			fmt.Println(dep)
 		}
 	} else {
-		fmt.Println("No deployments with Horizontal Pod Autoscaler found.")
+		fmt.Println("FAIL: No deployments with Horizontal Pod Autoscaler found.")
 	}
 
 	if len(deploymentsWithoutHPA) > 0 {
-		fmt.Println("\nDeployments without Horizontal Pod Autoscaler:")
+		fmt.Println("PASS: Deployments without Horizontal Pod Autoscaler:")
 		for _, dep := range deploymentsWithoutHPA {
 			fmt.Println(dep)
 		}
 	} else {
-		fmt.Println("No deployments without Horizontal Pod Autoscaler found.")
+		fmt.Println("PASS: No deployments without Horizontal Pod Autoscaler found.")
 	}
 }
