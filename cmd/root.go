@@ -156,6 +156,9 @@ var rootCmd = &cobra.Command{
 			fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
 		}
 
+		// 클러스터에 Horizontal Pod Autoscaler가 설정되어 있는지 확인
+		stability.CheckHpa(k8sClient)
+    
 		// 비용최적화 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Cost-Optimized Check]===============\n")
 
