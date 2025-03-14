@@ -109,6 +109,12 @@ var rootCmd = &cobra.Command{
 			fmt.Println(Red + "✖ FAIL: SingletonPod Used" + Reset)
 		}
 
+		if stability.PodReplicaSetCheck(k8sClient) {
+			fmt.Println(Green + "✔ PASS: ReplicaSet Used more than one Pod" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: ReplicaSet Used one Pod" + Reset)
+		}
+
 		// Network 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Network Check]===============\n" + Reset)
 
