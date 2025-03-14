@@ -13,6 +13,7 @@ func SingletonPodCheck(client kubernetes.Interface) bool {
 	// kube-system 네임스페이스의 모든 Deployment 목록 가져오기
 
 	result := true
+
 	if checkDeploymentReplicas(client) {
 		result = false
 	}
