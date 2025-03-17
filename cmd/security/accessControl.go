@@ -26,30 +26,43 @@ func PrintAccessControl(client kubernetes.Interface, eksCluster string) bool {
 		fmt.Printf("%s: %s\n", key, value)
 	}
 
-	// mapRoles 항목이 있는 경우 출력
+	// Access Entries 출력
+	fmt.Println("\nAccess Entries:")
+
+	// mapRoles 항목 출력
 	if roles, exists := configMap.Data["mapRoles"]; exists {
-		fmt.Println("\nmapRoles:")
-		// 각 역할을 줄바꿈으로 분리하여 출력
+		fmt.Println("\n- IAM Roles:")
 		for _, role := range strings.Split(roles, "\n") {
 			if role != "" {
-				fmt.Printf("- %s\n", role)
+				fmt.Printf("  - %s\n", role)
 			}
 		}
 	} else {
-		fmt.Println("\nmapRoles 항목이 없습니다.")
+		fmt.Println("\n- IAM Roles: 없음")
 	}
 
-	// mapUsers 항목이 있는 경우 출력
+	// mapUsers 항목 출력
 	if users, exists := configMap.Data["mapUsers"]; exists {
-		fmt.Println("\nmapUsers:")
-		// 각 사용자를 줄바꿈으로 분리하여 출력
+		fmt.Println("\n- IAM Users:")
 		for _, user := range strings.Split(users, "\n") {
 			if user != "" {
-				fmt.Printf("- %s\n", user)
+				fmt.Printf("  - %s\n", user)
 			}
 		}
 	} else {
-		fmt.Println("\nmapUsers 항목이 없습니다.")
+		fmt.Println("\n- IAM Users: 없음")
+	}
+
+	// mapAccounts (AWS 계정 기반 액세스) 항목 출력
+	if accounts, exists := configMap.Data["mapAccounts"]; exists {
+		fmt.Println("\n- AWS Accounts:")
+		for _, account := range strings.Split(accounts, "\n") {
+			if account != "" {
+				fmt.Printf("  - %s\n", account)
+			}
+		}
+	} else {
+		fmt.Println("\n- AWS Accounts: 없음")
 	}
 
 	return true
