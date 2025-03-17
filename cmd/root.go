@@ -48,6 +48,7 @@ var rootCmd = &cobra.Command{
 		// Security 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Security Check]===============\n")
 
+		//컨피그맵이랑 accesslist 출력인데 정확히 어케 출력되야되는지랑, 인자로 cluster 받는거 맞는지 확인 필요
 		security.PrintAccessControl(k8sClient, cluster)
 
 		// 클러스터 엔드포인트가 public 인지 않인지 확인
