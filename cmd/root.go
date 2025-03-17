@@ -48,6 +48,8 @@ var rootCmd = &cobra.Command{
 		// Security 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Security Check]===============\n")
 
+		security.PrintAccessControl(k8sClient, cluster)
+
 		// 클러스터 엔드포인트가 public 인지 않인지 확인
 		if !eksCluster.Cluster.ResourcesVpcConfig.EndpointPublicAccess {
 			fmt.Println(Green + "✔ PASS: EKS Cluster is not publicly accessible from the internet" + Reset)
@@ -158,7 +160,7 @@ var rootCmd = &cobra.Command{
 
 		// 클러스터에 Horizontal Pod Autoscaler가 설정되어 있는지 확인
 		stability.CheckHpa(k8sClient)
-    
+
 		// 비용최적화 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Cost-Optimized Check]===============\n")
 
