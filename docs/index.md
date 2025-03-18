@@ -1,21 +1,10 @@
----
-layout: default
-title: EKS Checklist Docs
----
+# 기능별 런북
 
-# EKS Checklist Docs
+{% for category in site.collections %}
+## {{ category.label | capitalize }}
 
-이 문서는 EKS 클러스터 점검을 위한 런북을 제공합니다.
+{% for page in category.docs %}
+- [{{ page.title | default: page.name | replace: ".md", "" }}]({{ page.url | relative_url }})
+{% endfor %}
 
-📌 **런북 목록**
-
-{% assign categories = site.pages | map: "dir" | uniq | sort %}
-{% for category in categories %}
-  {% if category != "/" and category != "" %}
-  ### {{ category | replace: "/", "" | capitalize }}
-  {% assign pages = site.pages | where: "dir", category %}
-  {% for page in pages %}
-  - [{{ page.title }}]({{ page.url | relative_url }})
-  {% endfor %}
-  {% endif %}
 {% endfor %}
