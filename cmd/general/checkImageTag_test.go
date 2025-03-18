@@ -22,7 +22,7 @@ type TestCase struct {
 }
 
 func loadTestCases(t *testing.T) []TestCase {
-	path := filepath.Join("testdata", "check_image_tag.yaml")
+	path, err := filepath.Abs(filepath.Join("..", "..", "testdata", "check_image_tag.yaml"))
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		t.Fatalf("failed to read test data: %v", err)

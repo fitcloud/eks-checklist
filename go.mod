@@ -6,8 +6,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.36.2
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.203.1
 	github.com/spf13/cobra v1.8.1
-	gopkg.in/yaml.v2 v2.2.8
-	k8s.io/client-go v0.32.1
+	k8s.io/client-go v0.32.3
 )
 
 require (
@@ -24,6 +23,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.33.14 // indirect
 	github.com/aws/smithy-go v1.22.2 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (
@@ -62,9 +62,8 @@ require (
 	gopkg.in/evanphx/json-patch.v4 v4.12.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0
-	gopkg.in/yaml.v3 v3.0.1 // indirect
-	k8s.io/api v0.32.1
-	k8s.io/apimachinery v0.32.1
+	k8s.io/api v0.32.3 // indirect
+	k8s.io/apimachinery v0.32.3
 	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20241105132330-32ad38e42d3f // indirect
 	k8s.io/utils v0.0.0-20241104100929-3ea5e8cea738 // indirect
