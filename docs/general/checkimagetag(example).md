@@ -1,8 +1,3 @@
----
-layout: runbook
-title: Feature 1
----
-
 ## Meaning
 이 기능의 의미를 설명합니다.
 
