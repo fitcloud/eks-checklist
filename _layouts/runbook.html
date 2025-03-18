@@ -1,0 +1,31 @@
+---
+layout: default
+---
+
+{% include header.html %}
+
+<article class="runbook">
+    <h1>{{ page.title }}</h1>
+
+    <section>
+        <h2>📝 Meaning</h2>
+        <p>{{ content | split: '## Impact' | first }}</p>
+    </section>
+
+    <section>
+        <h2>⚡ Impact</h2>
+        <p>{{ content | split: '## Impact' | last | split: '## Diagnosis' | first }}</p>
+    </section>
+
+    <section>
+        <h2>🔍 Diagnosis</h2>
+        <p>{{ content | split: '## Diagnosis' | last | split: '## Mitigation' | first }}</p>
+    </section>
+
+    <section>
+        <h2>🛠️ Mitigation</h2>
+        <p>{{ content | split: '## Mitigation' | last }}</p>
+    </section>
+</article>
+
+{% include footer.html %}

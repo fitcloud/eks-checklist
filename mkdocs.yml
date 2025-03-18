@@ -1,0 +1,5 @@
+site_name: "My Runbook Site"
+theme:
+  name: "material"
+nav:
+  - Home: index.md
