@@ -1,5 +1,7 @@
-site_name: "My Runbook Site"
+site_name: "EKS Checklist Runbooks"
 theme:
   name: "material"
 nav:
-  - Home: index.md
+  - EKS Checklist: index.md
+  - General:
+    - checkimagetag(example) : general/checkimagetag(example).md
