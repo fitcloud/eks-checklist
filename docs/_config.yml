@@ -1,5 +1,9 @@
-title: "EKS Checklist Docs"
-description: "EKS 클러스터 점검을 위한 런북 문서"
-theme: minima
-permalink: pretty
-markdown: kramdown
+title: "My Runbook"
+description: "기능별 런북 문서"
+theme: jekyll-theme-cayman
+
+collections:
+  general:
+    output: true
+  stability:
+    output: true
