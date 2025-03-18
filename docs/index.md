@@ -1,10 +1,10 @@
-# 기능별 런북
+---
+layout: home
+title: "Runbook Home"
+permalink: /
+---
 
-{% for category in site.collections %}
-## {{ category.label | capitalize }}
+# 운영 가이드 문서
 
-{% for page in category.docs %}
-- [{{ page.title | default: page.name | replace: ".md", "" }}]({{ page.url | relative_url }})
-{% endfor %}
-
-{% endfor %}
+## 카테고리별 문서
+- [General Runbooks](/runbooks/general/)
