@@ -1,32 +1,30 @@
 title: "My Runbook"
 description: "운영 가이드 문서"
-baseurl: "/eks-checklist"
-url: "https://fitcloud.github.io"
+theme: just-the-docs
 
-# Jekyll 테마 적용
-remote_theme: mmistakes/minimal-mistakes
+# 기본 설정
+color_scheme: light # or dark
+search_enabled: true
 
-# 컬렉션 설정 (자동 인덱스 생성을 위해 필요)
+# 네비게이션 설정
+nav_order: 1
+has_children: true
+
+# Sidebar Navigation
+aux_links:
+  "GitHub Repository":
+    - "https://github.com/fitcloud/eks-checklist"
+
+# Collections 설정
 collections:
   runbooks:
     output: true
     permalink: /runbooks/:path/
 
-# 네비게이션 설정
 defaults:
   - scope:
       path: ""
       type: "runbooks"
     values:
-      layout: single
-      author_profile: false
-      sidebar:
-        nav: "runbooks"
-
-# 사이드바 네비게이션 설정
-sidebar:
-  runbooks:
-    - title: "Runbooks"
-      children:
-        - title: "General"
-          url: /runbooks/general/
+      layout: default
+      nav_order: 2
