@@ -19,8 +19,7 @@
 		}
 	},
 	"mounts": [
-
-	    "source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind,readonly"
-
-	]
+	    "source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind"
+	],
+	"postCreateCommand": "sudo -u root bash ./.devcontainer/postCommand.sh"
 }

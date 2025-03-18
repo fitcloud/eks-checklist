@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"flag"
+	"os"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -14,7 +15,7 @@ import (
 	"k8s.io/client-go/util/homedir"
 )
 
-func getKubeconfig(kubeconfigPath string) rest.Config {
+func getKubeconfig(kubeconfigPath string, awsProfile string) rest.Config {
 	var kubeconfig *string
 
 	if home := homedir.HomeDir(); kubeconfigPath == "" {
@@ -24,6 +25,11 @@ func getKubeconfig(kubeconfigPath string) rest.Config {
 	}
 
 	flag.Parse()
+
+	// AWS_PROFILE 설정
+	if awsProfile != "" {
+		os.Setenv("AWS_PROFILE", awsProfile)
+	}
 
 	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
 	if err != nil {

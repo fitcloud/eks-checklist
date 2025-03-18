@@ -24,6 +24,7 @@ const (
 var (
 	kubeconfigPath    string
 	kubeconfigContext string
+	awsProfile        string
 )
 
 var rootCmd = &cobra.Command{
@@ -31,7 +32,7 @@ var rootCmd = &cobra.Command{
 	Short: "eks-checklist",
 	Long:  "eks-checklist",
 	Run: func(cmd *cobra.Command, args []string) {
-		kubeconfig := getKubeconfig(kubeconfigPath)
+		kubeconfig := getKubeconfig(kubeconfigPath, awsProfile)
 		cluster := getEksClusterName(kubeconfig)
 
 		fmt.Printf("Running checks on %s\n", cluster)
@@ -158,7 +159,7 @@ var rootCmd = &cobra.Command{
 
 		// 클러스터에 Horizontal Pod Autoscaler가 설정되어 있는지 확인
 		stability.CheckHpa(k8sClient)
-    
+
 		// 비용최적화 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Cost-Optimized Check]===============\n")
 
