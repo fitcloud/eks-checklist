@@ -1,0 +1,5 @@
+title: "EKS Checklist Docs"
+description: "EKS 클러스터 점검을 위한 런북 문서"
+theme: minima
+permalink: pretty
+markdown: kramdown
