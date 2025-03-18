@@ -6,9 +6,10 @@ import (
 	"path/filepath"
 	"testing"
 
+	"gopkg.in/yaml.v2"
+
 	general "eks-checklist/cmd/general"
 
-	"gopkg.in/yaml.v2"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	fakekube "k8s.io/client-go/kubernetes/fake"
@@ -21,11 +22,7 @@ type TestCase struct {
 }
 
 func loadTestCases(t *testing.T) []TestCase {
-	path, err := filepath.Abs(filepath.Join("..", "..", "testdata", "check_image_tag.yaml"))
-	if err != nil {
-		t.Fatalf("failed to get absolute path: %v", err)
-	}
-
+	path := filepath.Join("testdata", "check_image_tag.yaml")
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		t.Fatalf("failed to read test data: %v", err)
