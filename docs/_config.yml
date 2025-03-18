@@ -1,9 +1,32 @@
 title: "My Runbook"
-description: "기능별 런북 문서"
-theme: jekyll-theme-cayman
+description: "운영 가이드 문서"
+baseurl: "/eks-checklist"
+url: "https://fitcloud.github.io"
 
+# Jekyll 테마 적용
+remote_theme: mmistakes/minimal-mistakes
+
+# 컬렉션 설정 (자동 인덱스 생성을 위해 필요)
 collections:
-  general:
+  runbooks:
     output: true
-  stability:
-    output: true
+    permalink: /runbooks/:path/
+
+# 네비게이션 설정
+defaults:
+  - scope:
+      path: ""
+      type: "runbooks"
+    values:
+      layout: single
+      author_profile: false
+      sidebar:
+        nav: "runbooks"
+
+# 사이드바 네비게이션 설정
+sidebar:
+  runbooks:
+    - title: "Runbooks"
+      children:
+        - title: "General"
+          url: /general/
