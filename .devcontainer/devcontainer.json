@@ -10,6 +10,7 @@
 		}
 	},
 	"features": {
+		"python": "latest",
 		"aws-cli": "latest",
 		"terraform": {
 			"version": "1.10.5"
