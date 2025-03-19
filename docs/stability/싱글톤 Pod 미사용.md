@@ -49,17 +49,6 @@ spec:
 kubectl autoscale deployment my-app --cpu-percent=50 --min=2 --max=10
 ```
 
-- Pod Anti-Affinity 설정
-```yaml
-affinity:
-  podAntiAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchLabels:
-            app: my-app
-        topologyKey: "kubernetes.io/hostname"
-```
-
 - 수동 실행된 Singleton Pod 제거
 ```bash
 kubectl delete pod <pod-name> -n <namespace>
