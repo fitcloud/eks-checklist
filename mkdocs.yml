@@ -5,3 +5,13 @@ nav:
   - EKS Checklist: index.md
   - General:
     - checkimagetag(example) : general/checkimagetag(example).md
+  - Security:
+    - sample3 : security/sample3.md
+  - Scalability:
+    - sample2 : scalability/sample2.md
+  - Stability:
+    - sample4 : stability/sample4.md
+  - Network:
+    - sample1 : network/sample1.md
+  - Cost:
+    - sample5 : cost/sample5.md
