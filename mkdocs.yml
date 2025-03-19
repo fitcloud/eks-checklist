@@ -11,6 +11,7 @@ nav:
     - sample2 : scalability/sample2.md
   - Stability:
     - sample4 : stability/sample4.md
+    - 싱글톤 Pod 미사용 : stability/싱글톤 Pod 미사용.md
   - Network:
     - sample1 : network/sample1.md
   - Cost:
