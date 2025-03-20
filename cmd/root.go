@@ -170,7 +170,7 @@ var rootCmd = &cobra.Command{
 		if cost.GetKubecost(k8sClient) {
 			fmt.Println(Green + "✔ PASS: Kubecost is installed" + Reset)
 		} else {
-			fmt.Println(Red + "✖ FAIL: Kubecost is not installed" + Reset)
+			fmt.Println(Red + "✖ FAIL: Kubecost is not installedtest" + Reset)
 		}
 	},
 }
