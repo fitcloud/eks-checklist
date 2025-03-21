@@ -1,19 +1,21 @@
-- name: "Carpenter node group used"
+- name: "Carpenter_node_group_used"
+  node_name: "node-1"
   node_labels:
     - "karpenter.sh/provisioner-name: carpenter"
   expect_failure: false
 
-- name: "No Carpenter node group"
-  node_labels:
-    - "karpenter.sh/provisioner-name: none"
-  expect_failure: true
-
-- name: "Fargate profile used"
+- name: "Fargate_profile_used"
+  node_name: "node-2"
   node_labels:
     - "eks.amazonaws.com/fargate-profile: fargate-profile"
   expect_failure: false
 
-- name: "No Fargate profile"
-  node_labels:
-    - "eks.amazonaws.com/fargate-profile: none"
+- name: "No_Carpenter_node_group"
+  node_name: "node-3"
+  node_labels: []
+  expect_failure: true
+
+- name: "No_Fargate_profile"
+  node_name: "node-4"
+  node_labels: []
   expect_failure: true
