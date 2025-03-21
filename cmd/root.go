@@ -91,6 +91,7 @@ var rootCmd = &cobra.Command{
 
 		// Scalability 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Stability Check]===============\n")
+		scalability.CheckNodeGroupUsage(k8sClient)
 
 		// 클러스터에 Cluster Autoscaler가 설치되어 있는지 확인
 		if stability.CheckClusterAutoscalerEnabled(k8sClient) {
