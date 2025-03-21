@@ -7,6 +7,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+// 모든 namespace에서 aws-node 데몬셋을 가져와서 containers.env.key 중 ENABLE_PREFIX_DELEGATION의 값이 true 인지 false인지 확인
 func CheckVpcCniPrefixMode(client kubernetes.Interface) bool {
 	// instance가 nitro 기반인이 확인하는 로직이 필요하나 문제점에 봉착함
 	// api 중에 노드만 가져오는게 없어서 nodegroup 단위로 검색하면 karpenter node가 누락되고

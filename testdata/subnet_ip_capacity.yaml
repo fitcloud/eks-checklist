@@ -1,13 +1,13 @@
 - name: "Sufficient available IPs"
   subnet_data:
-    subnet_id: "subnet-12345678"
+    subnetid: "subnet-12345678"
     cidr_block: "192.168.1.0/24"
     available_ip_count: 50
   expect_failure: false
 
 - name: "Low available IPs"
   subnet_data:
-    subnet_id: "subnet-87654321"
+    subnetid: "subnet-87654321"
     cidr_block: "192.168.2.0/24"
     available_ip_count: 5
   expect_failure: true

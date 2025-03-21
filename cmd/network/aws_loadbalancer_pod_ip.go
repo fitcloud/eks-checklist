@@ -3,37 +3,12 @@ package network
 import (
 	"context"
 	"log"
-	"strings"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
-// EKS 클러스터가 사용하는 서브넷의 가용가능한 IP 주소가 10% 미만인 경우 SubnetId와 사용가능한 IP 개수를 반환하는 함수
-
-// 모든 namespace에서 aws-node 데몬셋을 가져와서 containers.env.key 중 ENABLE_PREFIX_DELEGATION의 값이 true 인지 false인지 확인
-
-// 모든 namespace에서 deployement를 가져와서 container.image에 aws-load-balancer-controller가 포함되어 있는지 확인
-func CheckAwsLoadBalancerController(client kubernetes.Interface) bool {
-	deploys, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	for _, deploy := range deploys.Items {
-		for _, container := range deploy.Spec.Template.Spec.Containers {
-			if strings.Contains(container.Image, "aws-load-balancer-controller") {
-				return true
-			}
-		}
-	}
-
-	return false
-}
-
 // ALB/NLB의 대상으로 Pod의 IP 주소를 사용하는지 확인
-
 func CheckAwsLoadBalancerPodIp(client kubernetes.Interface) bool {
 	// ingress class가 alb인 ingress를 모두 가져옴
 	ingress, err := client.NetworkingV1().Ingresses("").List(context.TODO(), v1.ListOptions{})
