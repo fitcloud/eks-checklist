@@ -121,8 +121,37 @@ var rootCmd = &cobra.Command{
 			fmt.Println(Red + "✖ FAIL: ReplicaSet Used one Pod" + Reset)
 		}
 
+		// Karpenter 기반 노드 생성 - Automatic
+		// if getKarpenter(k8sClient) {
+		// 	// if stability.CheckKarpenterNode(k8sClient) {
+		// 		fmt.Println(Green + "✔ PASS: Karpenter Node is created" + Reset)
+		// 	} else {
+		// 		fmt.Println(Red + "✖ FAIL: Karpenter Node is not created" + Reset)
+		// 	}
+		// } else {
+		// 	fmt.Println(Yellow + "⚠ WARNING: Karpenter is not installed" + Reset)
+		// }
+
+		// 다수의 가용 영역에 데이터 플레인 노드 배포 - Automatic
+		if stability.CheckNodeMultiAZ(k8sClient) {
+			fmt.Println(Green + "✔ PASS: Nodes are deployed across multiple availability zones" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: Nodes are not deployed across multiple availability zones" + Reset)
+		}
+
 		// 클러스터에 Horizontal Pod Autoscaler가 설정되어 있는지 확인
 		stability.CheckHpa(k8sClient)
+
+		// Karpenter 사용시 DaemonSet에 Priority Class 부여 - Automatic
+		if getKarpenter(k8sClient) {
+			if stability.CheckDaemonSetPriorityClass(k8sClient) {
+				fmt.Println(Green + "✔ PASS: DaemonSet Priority Class is set" + Reset)
+			} else {
+				fmt.Println(Red + "✖ FAIL: DaemonSet Priority Class is not set" + Reset)
+			}
+		} else {
+			fmt.Println(Yellow + "⚠ WARNING: Karpenter is not installed" + Reset)
+		}
 
 		// Network 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Network Check]===============\n" + Reset)
