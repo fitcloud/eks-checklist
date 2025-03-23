@@ -236,6 +236,13 @@ var rootCmd = &cobra.Command{
 			fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
 		}
 
+		// kube-proxy에 IPVS 모드 적용 - Automatic
+		if network.CheckKubeProxyIPVSMode(k8sClient) {
+			fmt.Println(Green + "✔ PASS: kube-proxy is in IPVS mode" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: kube-proxy is not in IPVS mode" + Reset)
+		}
+
 		// Endpoint 대신 EndpointSlices 사용 - Automatic
 		network.EndpointSlicesCheck(k8sClient)
 
