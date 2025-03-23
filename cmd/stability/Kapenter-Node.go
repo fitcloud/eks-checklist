@@ -10,7 +10,8 @@ import (
 )
 
 // CheckKarpenterNode 확인: nodeclaims.karpenter.sh 리소스를 직접 조회하여 1개 이상 있는지 확인
-// 다이나믹 클라이언트 어떻게 처리할지 고민좀 해봐야할 듯 k8s로 안되서 일단 패스
+// 지금 고려사항이 kapenter 버전에 따른 변경사항이 있을 수 있음
+// 예를 들면 v1beta1은 0.37.x 까지의 사항이므로 1.x.x 가는 경우에는 검토을 어떻게 할지 두번해야할지?
 func CheckKarpenterNode(client dynamic.Interface) bool {
 	// Karpenter NodeClaim의 GVR (GroupVersionResource) 정의
 	nodeClaimGVR := schema.GroupVersionResource{
