@@ -39,6 +39,11 @@ var rootCmd = &cobra.Command{
 
 		eksCluster := Describe(cluster)
 		k8sClient := createK8sClient(kubeconfig)
+		dynamicClient, err := CreateDynamicClient(&kubeconfig)
+		if err != nil {
+			fmt.Println("Error creating dynamic client:", err)
+			os.Exit(1)
+		}
 
 		// General 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[General Check]===============\n")
@@ -49,40 +54,51 @@ var rootCmd = &cobra.Command{
 		// Security 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Security Check]===============\n")
 
-		//컨피그맵이랑 accesslist 출력인데 정확히 어케 출력되야되는지랑, 인자로 cluster 받는거 맞는지 확인 필요
-		security.PrintAccessControl(k8sClient, cluster)
-
-		// 클러스터 엔드포인트가 public 인지 않인지 확인
+		// EKS 클러스터 API 엔드포인트 접근 제어(공인망, 사설망, IP 기반 제어) - Automatic
 		if !eksCluster.Cluster.ResourcesVpcConfig.EndpointPublicAccess {
 			fmt.Println(Green + "✔ PASS: EKS Cluster is not publicly accessible from the internet" + Reset)
 		} else {
 			fmt.Println(Red + "✖ FAIL: EKS Cluster is publicly accessible from the internet" + Reset)
 		}
 
-		// EKS Audit log 활성화 유무 확인
+		// 클러스터 접근 제어(Access entries, aws-auth 컨피그맵) - Automatic/Manual
+		// 컨피그맵이랑 accesslist 출력인데 정확히 어케 출력되야되는지랑, 인자로 cluster 받는거 맞는지 확인 필요
+		security.PrintAccessControl(k8sClient, cluster)
+
+		// 데이터 플레인 노드에 필수로 필요한 IAM 권한만 부여 - Automatic
+		security.CheckNodeIAMRoles(k8sClient)
+
+		// 루트 유저가 아닌 유저로 컨테이너 실행 - Automatic
+		security.CheckContainerExecutionUser(k8sClient)
+
+		// Audit 로그 활성화 - Automatic
 		if security.CheckAuditLoggingEnabled(&security.EksCluster{Cluster: eksCluster.Cluster}) {
 			fmt.Println(Green + "✔ PASS: Audit logging is enabled" + Reset)
 		} else {
 			fmt.Println(Red + "✖ FAIL: Audit logging is not enabled" + Reset)
 		}
 
-		// 컨테이너 이미지들이 root을 사용하면 안됨
-		security.CheckContainerExecutionUser(k8sClient)
-
-		// worker node role에는 최소환의 권한만 가져야함
-		security.CheckNodeIAMRoles(k8sClient)
+		// PV 암호화 - Automatic
+		if security.CheckPVEcryption(k8sClient) {
+			fmt.Println(Green + "✔ PASS: PV encryption is enabled" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: PV encryption is not enabled" + Reset)
+		}
 
 		// Scalability 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Scalability Check]===============\n")
 
-		// Karpenter 사용 여부 확인
+		// Karpenter 사용 - Automatic
 		if getKarpenter(k8sClient) {
 			fmt.Println(Green + "✔ PASS: Karpenter is installed" + Reset)
 		} else {
 			fmt.Println(Red + "✖ FAIL: Karpenter is not installed" + Reset)
 		}
 
-		// 클러스터의 노드 인스턴스 유형이 다양한지 확인
+		// Karpenter 전용 노드 그룹 혹은 Fargate 사용 - Automatic
+		scalability.CheckNodeGroupUsage(k8sClient)
+
+		// 다양한 인스턴스 타입 사용 - Automatic
 		if scalability.CheckInstanceTypes(k8sClient) {
 			fmt.Println(Green + "✔ PASS: Cluster has multiple instance types" + Reset)
 		} else {
@@ -91,13 +107,61 @@ var rootCmd = &cobra.Command{
 
 		// Scalability 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Stability Check]===============\n")
-		scalability.CheckNodeGroupUsage(k8sClient)
 
-		// 클러스터에 Cluster Autoscaler가 설치되어 있는지 확인
+		// 싱글톤 Pod 미사용 - Automatic
+		if stability.SingletonPodCheck(k8sClient) {
+			fmt.Println(Green + "✔ PASS: SingletonPod No Used" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: SingletonPod Used" + Reset)
+		}
+
+		// 2개 이상의 Pod 복제본 사용 - Automatic
+		if stability.PodReplicaSetCheck(k8sClient) {
+			fmt.Println(Green + "✔ PASS: ReplicaSet Used more than one Pod" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: ReplicaSet Used one Pod" + Reset)
+		}
+
+		// HPA 적용 - Automatic
+		stability.CheckHpa(k8sClient)
+
+		// Probe(Startup, Readiness, Liveness) 적용 - Automatic
+		if stability.CheckProbe(k8sClient) {
+			fmt.Println(Green + "✔ PASS: Probe is applied" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: Probe is not applied" + Reset)
+		}
+
+		// 오토스케일링 그룹 기반 관리형 노드 그룹 생성 - Automatic
+		if stability.CheckAutoScaledManagedNodeGroup(k8sClient, cluster) {
+			fmt.Println(Green + "✔ PASS: AutoScaled Managed Node Group is created" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: AutoScaled Managed Node Group is not created" + Reset)
+		}
+
+		// Cluster Autoscaler 적용 - Automatic
 		if stability.CheckClusterAutoscalerEnabled(k8sClient) {
 			fmt.Println(Green + "✔ PASS: Cluster Autoscaler is installed" + Reset)
 		} else {
 			fmt.Println(Red + "✖ FAIL: Cluster Autoscaler is not installed" + Reset)
+		}
+
+		// Karpenter 기반 노드 생성 - Automatic
+		if getKarpenter(k8sClient) {
+			if stability.CheckKarpenterNode(dynamicClient) {
+				fmt.Println(Green + "✔ PASS: Karpenter Node is created" + Reset)
+			} else {
+				fmt.Println(Red + "✖ FAIL: Karpenter Node is not created" + Reset)
+			}
+		} else {
+			fmt.Println(Yellow + "⚠ WARNING: Karpenter is not installed" + Reset)
+		}
+
+		// 다수의 가용 영역에 데이터 플레인 노드 배포 - Automatic
+		if stability.CheckNodeMultiAZ(k8sClient) {
+			fmt.Println(Green + "✔ PASS: Nodes are deployed across multiple availability zones" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: Nodes are not deployed across multiple availability zones" + Reset)
 		}
 
 		// CoreDNS의 HPA가 존재하는지 확인
@@ -107,40 +171,12 @@ var rootCmd = &cobra.Command{
 			fmt.Println(Red + "✖ FAIL: CoreDNS HPA is not installed" + Reset)
 		}
 
-		// 싱글톤 Pod 사용 중인지 확인
-		if stability.SingletonPodCheck(k8sClient) {
-			fmt.Println(Green + "✔ PASS: SingletonPod No Used" + Reset)
+		// DNS 캐시 적용 - Automatic
+		if stability.CheckCoreDNSCache(k8sClient) {
+			fmt.Println(Green + "✔ PASS: CoreDNS Cache is applied" + Reset)
 		} else {
-			fmt.Println(Red + "✖ FAIL: SingletonPod Used" + Reset)
+			fmt.Println(Red + "✖ FAIL: CoreDNS Cache is not applied" + Reset)
 		}
-
-		// POD ReplicatSet 확인
-		if stability.PodReplicaSetCheck(k8sClient) {
-			fmt.Println(Green + "✔ PASS: ReplicaSet Used more than one Pod" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: ReplicaSet Used one Pod" + Reset)
-		}
-
-		// Karpenter 기반 노드 생성 - Automatic
-		// if getKarpenter(k8sClient) {
-		// 	// if stability.CheckKarpenterNode(k8sClient) {
-		// 		fmt.Println(Green + "✔ PASS: Karpenter Node is created" + Reset)
-		// 	} else {
-		// 		fmt.Println(Red + "✖ FAIL: Karpenter Node is not created" + Reset)
-		// 	}
-		// } else {
-		// 	fmt.Println(Yellow + "⚠ WARNING: Karpenter is not installed" + Reset)
-		// }
-
-		// 다수의 가용 영역에 데이터 플레인 노드 배포 - Automatic
-		if stability.CheckNodeMultiAZ(k8sClient) {
-			fmt.Println(Green + "✔ PASS: Nodes are deployed across multiple availability zones" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Nodes are not deployed across multiple availability zones" + Reset)
-		}
-
-		// 클러스터에 Horizontal Pod Autoscaler가 설정되어 있는지 확인
-		stability.CheckHpa(k8sClient)
 
 		// Karpenter 사용시 DaemonSet에 Priority Class 부여 - Automatic
 		if getKarpenter(k8sClient) {
@@ -156,33 +192,32 @@ var rootCmd = &cobra.Command{
 		// Network 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Network Check]===============\n" + Reset)
 
-		// 클러스터가 사용하는 서브넷의 가용가능한 IP주소의 가용성 검사하는 함수, 반환값이 있을 경우 FAIL 출력 없으면 PASS 출력
+		// VPC 서브넷에 충분한 IP 대역대 확보 - Automatic/Manual
 		if ipCapacities := network.CheckVpcSubnetIpCapacity(network.EksCluster(eksCluster)); len(ipCapacities) > 0 {
 			for subnetId, ipCapacity := range ipCapacities {
 				fmt.Printf(Red+"✖ FAIL: Subnet %s has less than 10%% of available IPs remaining: %d\n", subnetId, ipCapacity)
 			}
 		} else {
-			// 해석하면 모든 서브넷에 사용가능한 IP주소가 10%이상 남아있다
 			fmt.Println(Green + "✔ PASS: All subnets have more than 10% of available IPs remaining" + Reset)
 		}
 
-		// VPC CNI에서 Prefix 모드 사용 유무 확인
+		// VPC CNI의 Prefix 모드 사용 - Automatic
 		if network.CheckVpcCniPrefixMode(k8sClient) {
 			fmt.Println(Green + "✔ PASS: VPC CNI is in prefix mode" + Reset)
 		} else {
 			fmt.Println(Red + "✖ FAIL: VPC CNI is not in prefix mode" + Reset)
 		}
 
-		// aws-loadblaancer-controller 설치 여부 확인
+		// AWS Load Balancer Controller 사용 - Automatic
 		if network.CheckAwsLoadBalancerController(k8sClient) {
 			fmt.Println(Green + "✔ PASS: AWS Load Balancer Controller is installed" + Reset)
-			// AWS Load Balancer Pod IP가 사용 중인지 확인
+			// ALB/NLB의 대상으로 Pod의 IP 사용 - Automatic
 			if network.CheckAwsLoadBalancerPodIp(k8sClient) {
 				fmt.Println(Green + "✔ PASS: AWS Load Balancer Pod IP is in use" + Reset)
 			} else {
 				fmt.Println(Red + "FAIL: AWS Load Balancer Pod IP is not in use" + Reset)
 			}
-			// Readiness Gate 활성화 유무
+			// Pod Readiness Gate 적용 - Automatic
 			if network.CheckReadinessGateEnabled(k8sClient) {
 				fmt.Println(Green + "✔ PASS: Readiness Gate is enabled" + Reset)
 			} else {
@@ -194,12 +229,13 @@ var rootCmd = &cobra.Command{
 			fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
 		}
 
+		// Endpoint 대신 EndpointSlices 사용 - Automatic
 		network.EndpointSlicesCheck(k8sClient)
 
 		// 비용최적화 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Cost-Optimized Check]===============\n")
 
-		// 클러스터에 Kubecost가 설치되어 있는지 확인
+		// EKS용 Kubecost 설치 - Automatic
 		if cost.GetKubecost(k8sClient) {
 			fmt.Println(Green + "✔ PASS: Kubecost is installed" + Reset)
 		} else {
