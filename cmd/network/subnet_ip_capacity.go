@@ -42,13 +42,12 @@ func CheckVpcSubnetIpCapacity(eksCluster EksCluster) map[string]int {
 		// 계산식: (2^bits - ones) - 5, 예를 들면 2^(32 - 24) - 5 = 251
 		ones, bits := ipNet.Mask.Size()
 		totalIPs := int(math.Pow(2, float64(bits-ones))) - 5
-		// 디버깅 용 총 IP 개수 출력
-		log.Printf("total IPs: %d", totalIPs)
 
 		// 서브넷의 사용가능한 IP 개수를 변수에 저장
 		avaliableIp := int(*subnet.Subnets[0].AvailableIpAddressCount)
-		// 디버깅 용 사용가능한 IP 개수 출력
-		log.Printf("available IPs: %d", avaliableIp)
+
+		// 디버깅 용 총 IP와 사용가능한 IP 개수 출력
+		log.Printf("Subnet:%s total IPs: %d available IPs: %d", subnetId, totalIPs, avaliableIp)
 
 		// 사용가능한 IP 개수가 총 IP 개수의 10% 미만이면 변수에 Subnet ID와 사용가능한 IP 개수 저장
 		if float64(avaliableIp) < 0.1*float64(totalIPs) {
