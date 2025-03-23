@@ -85,6 +85,13 @@ var rootCmd = &cobra.Command{
 			fmt.Println(Red + "✖ FAIL: PV encryption is not enabled" + Reset)
 		}
 
+		// Secret 객체 암호화 - Automatic
+		if security.CheckSecretEncryption(k8sClient) {
+			fmt.Println(Green + "✔ PASS: Secret encryption is enabled" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: Secret encryption is not enabled" + Reset)
+		}
+
 		// Scalability 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Scalability Check]===============\n")
 
