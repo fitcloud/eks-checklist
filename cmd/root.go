@@ -98,6 +98,13 @@ var rootCmd = &cobra.Command{
 		// Karpenter 전용 노드 그룹 혹은 Fargate 사용 - Automatic
 		scalability.CheckNodeGroupUsage(k8sClient)
 
+		// Spot 노드 사용시 Spot 중지 핸들러 적용 - Automatic
+		if scalability.CheckSpotNodeTerminationHandler(k8sClient) {
+			fmt.Println(Green + "✔ PASS: Spot Node Termination Handler is applied" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: Spot Node Termination Handler is not applied" + Reset)
+		}
+
 		// 다양한 인스턴스 타입 사용 - Automatic
 		if scalability.CheckInstanceTypes(k8sClient) {
 			fmt.Println(Green + "✔ PASS: Cluster has multiple instance types" + Reset)
