@@ -8,27 +8,29 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-// CheckProbe - 모든 Pod을 검색하여 startProbe, livenessProbe, readinessProbe 가 모두 설정되었는지 확인
+// CheckProbe - 모든 Pod을 검색하여 startupProbe, livenessProbe, readinessProbe 가 모두 설정되었는지 확인
 func CheckProbe(client kubernetes.Interface) bool {
-	// 모든 Pod을 조회하되 kube-system 네임스페이스는 제외
+	// 모든 네임스페이스의 Pod을 조회 (kube-system 제외는 필터로 직접 처리)
 	// 왜냐하면 시스템 애드온 파드들은 기본적으로 몇개씩 없음 어떻게 할지는 추후 더 고민
-	pods, err := client.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{
-		FieldSelector: "metadata.namespace!=kube-system", // kube-system 네임스페이스 제외
-	})
+
+	//기존 코드에서 수정 이유 : fake 클라이언트는 필드셀렉터가 안먹어서 일관된 동작체크를 하기 위함
+	pods, err := client.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})
 	if err != nil {
 		fmt.Println("Error retrieving pods:", err)
 		return false
 	}
 
-	// 모든 pod가 프로브를 가있는지 확인하는 변수
 	allProbesSet := true
 
-	// 각 Pod의 컨테이너에서 Probe 설정을 확인
+	// 각 Pod 확인
 	for _, pod := range pods.Items {
+		if pod.Namespace == "kube-system" {
+			continue // kube-system 네임스페이스 파드는 검사에서 제외
+		}
+
 		for _, container := range pod.Spec.Containers {
 			missingProbes := []string{}
 
-			// 각 프로브가 설정되어 있지 않으면 해당 프로브를 missingProbes 배열에 추가
 			if container.StartupProbe == nil {
 				missingProbes = append(missingProbes, "startupProbe")
 			}
@@ -39,15 +41,12 @@ func CheckProbe(client kubernetes.Interface) bool {
 				missingProbes = append(missingProbes, "readinessProbe")
 			}
 
-			// 빠진 프로브가 하나라도 있으면 해당 Pod 이름과 빠진 프로브들을 출력
 			if len(missingProbes) > 0 {
-				fmt.Printf("Pod %s is missing the following probes: %v\n", pod.Name, missingProbes)
-				// 프로브가 빠져 있으면 allProbesSet을 false로 설정
+				fmt.Printf("Pod %s in namespace %s is missing the following probes: %v\n", pod.Name, pod.Namespace, missingProbes)
 				allProbesSet = false
 			}
 		}
 	}
 
-	// 모든 Pod이 프로브를 설정했으면 true 반환, 아니면 false 반환
 	return allProbesSet
 }

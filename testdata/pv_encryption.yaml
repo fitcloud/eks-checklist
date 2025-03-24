@@ -1,0 +1,8 @@
+- name: "All_EBS_Encrypted"
+  expect_failure: false
+
+- name: "Some_EBS_Unencrypted"
+  expect_failure: true
+
+- name: "Non_EBS_PV"
+  expect_failure: true

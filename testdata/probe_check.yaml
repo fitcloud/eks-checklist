@@ -1,0 +1,14 @@
+- name: "All_Probes_Set"
+  expect_failure: false
+
+- name: "Missing_StartupProbe"
+  expect_failure: true
+
+- name: "Missing_LivenessProbe"
+  expect_failure: true
+
+- name: "Missing_ReadinessProbe"
+  expect_failure: true
+
+- name: "Pod_In_KubeSystem"
+  expect_failure: false

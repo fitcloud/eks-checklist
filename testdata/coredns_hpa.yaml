@@ -1,0 +1,5 @@
+- name: "CoreDNS_HPA_Exists"
+  expect_failure: false
+
+- name: "No_CoreDNS_HPA"
+  expect_failure: true

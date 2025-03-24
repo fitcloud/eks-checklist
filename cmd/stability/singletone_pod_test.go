@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 package stability_test
 
 import (
@@ -78,6 +77,3 @@ func TestSingletonPodCheck(t *testing.T) {
 		})
 	}
 }
-=======
-package stability_test
->>>>>>> Stashed changes
