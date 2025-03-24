@@ -1,0 +1,52 @@
+name: dev branch PR Test and Merge
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 레포 Clone
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Go 언어 설정
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.4'
+
+      # 의존성 정리
+      - name: Install Dependencies
+        run: go mod tidy
+
+      # 테스트 실행
+      - name: Test
+        run: |
+          # Go 테스트 실행
+          go test ./... -v
+
+      # 성공 시 PR 자동 머지
+      - name: Auto Merge PR on Success
+        if: success()
+        run: |
+          gh pr review --approve ${{ github.event.pull_request.number }}
+          gh pr merge --auto --squash ${{ github.event.pull_request.number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 실패 시 PR 자동 종료
+      - name: Close PR on Failure
+        if: failure()
+        run: |
+          gh pr close ${{ github.event.pull_request.number }} --comment "자동 테스트 실패로 PR Closed."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
@@ -70,4 +71,14 @@ func getKarpenter(client kubernetes.Interface) bool {
 	}
 
 	return false
+}
+
+// CreateDynamicClient: dynamic.Interface 생성
+func CreateDynamicClient(kubeconfig *rest.Config) (dynamic.Interface, error) {
+	dynamicClient, err := dynamic.NewForConfig(kubeconfig)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return dynamicClient, nil
 }
