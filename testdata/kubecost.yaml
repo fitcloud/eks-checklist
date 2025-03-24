@@ -1,0 +1,11 @@
+- name: "Kubecost_with_container"
+  node_name: "node-1"
+  node_labels:
+    - "app: kubecost"
+  expect_failure: false
+
+- name: "No_Kubecost_container"
+  node_name: "node-2"
+  node_labels:
+    - "app: nginx"
+  expect_failure: true

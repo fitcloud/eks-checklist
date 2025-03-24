@@ -1,0 +1,11 @@
+- name: "CoreDNS_with_cache"
+  expect_failure: false
+
+- name: "CoreDNS_without_cache"
+  expect_failure: true
+
+- name: "ConfigMap_missing"
+  expect_failure: true
+
+- name: "Corefile_missing"
+  expect_failure: true
