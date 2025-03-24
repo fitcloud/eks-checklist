@@ -95,6 +95,8 @@ var rootCmd = &cobra.Command{
 		// 읽기 전용 파일시스템 사용 - Automatic
 		security.ReadnonlyFilesystemCheck(k8sClient)
 
+		security.CheckIRSAAndPodIdentity(k8sClient)
+
 		// Scalability 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Scalability Check]===============\n")
 
