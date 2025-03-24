@@ -9,19 +9,54 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-// readOnlyRootFilesystem 설정 점검 결과를 담는 구조체
-type CheckResult struct {
-	Namespace string
-	Pod       string
-	Container string
-	Message   string
-	Status    string // Passed, Failed, Skipped
-}
-
 // EndpointSlicesCheck 함수는 클러스터 내 모든 Pod의 컨테이너에 대해
 // readOnlyRootFilesystem=true 설정 여부를 점검합니다.
 // 단, Windows 노드에서 실행 중이거나 kube-system 네임스페이스에 있는 경우는 제외합니다.
 func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
+	// readOnlyRootFilesystem 설정 점검 결과를 담는 구조체
+	type CheckResult struct {
+		Namespace string
+		Pod       string
+		Container string
+		Message   string
+		Status    string // Passed, Failed, Skipped
+	}
+
+	printResults := func(results []CheckResult) {
+		var failed []CheckResult
+		var skipped []CheckResult
+
+		for _, res := range results {
+			switch res.Status {
+			case "Failed":
+				failed = append(failed, res)
+			case "Skipped":
+				skipped = append(skipped, res)
+			}
+		}
+		// 실패 항목이 없다면 PASS 출력
+		if len(failed) == 0 {
+			fmt.Println(Green + "PASS: All pods use readOnlyRootFilesystem=true." + Reset)
+		} else {
+			// 실패한 컨테이너 목록 출력
+			fmt.Println(Red + "FAIL: Some containers do not use readOnlyRootFilesystem=true." + Reset)
+			fmt.Println("Affected resources:")
+			for _, res := range failed {
+				fmt.Printf("- Namespace: %s | Pod: %s | Container: %s\n", res.Namespace, res.Pod, res.Container)
+			}
+			fmt.Println("Runbook URL: https://your-runbook-url-here")
+		}
+
+		//// 생략된 항목이 있다면 출력
+		// if len(skipped) > 0 {
+		// 	fmt.Println()
+		// 	fmt.Println("SKIPPED: Some containers were skipped because they run on Windows nodes.")
+		// 	for _, res := range skipped {
+		// 		fmt.Printf("- Namespace: %s | Pod: %s | Container: %s\n", res.Namespace, res.Pod, res.Container)
+		// 	}
+		// }
+	}
+
 	var results []CheckResult
 
 	// 모든 네임스페이스의 Pod 리스트 조회
@@ -107,41 +142,5 @@ func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
 		}
 	}
 
-	PrintReadOnlyRootFSResults(results)
-}
-
-// PrintReadOnlyRootFSResults 함수는 검사 결과를 사람이 읽기 쉬운 형태로 출력합니다.
-func PrintReadOnlyRootFSResults(results []CheckResult) {
-	var failed []CheckResult
-	var skipped []CheckResult
-
-	for _, res := range results {
-		switch res.Status {
-		case "Failed":
-			failed = append(failed, res)
-		case "Skipped":
-			skipped = append(skipped, res)
-		}
-	}
-	// 실패 항목이 없다면 PASS 출력
-	if len(failed) == 0 {
-		fmt.Println(Green + "PASS: All pods use readOnlyRootFilesystem=true." + Reset)
-	} else {
-		// 실패한 컨테이너 목록 출력
-		fmt.Println(Red + "FAIL: Some containers do not use readOnlyRootFilesystem=true." + Reset)
-		fmt.Println("Affected resources:")
-		for _, res := range failed {
-			fmt.Printf("- Namespace: %s | Pod: %s | Container: %s\n", res.Namespace, res.Pod, res.Container)
-		}
-		fmt.Println("Runbook URL: https://your-runbook-url-here")
-	}
-
-	//// 생략된 항목이 있다면 출력
-	// if len(skipped) > 0 {
-	// 	fmt.Println()
-	// 	fmt.Println("SKIPPED: Some containers were skipped because they run on Windows nodes.")
-	// 	for _, res := range skipped {
-	// 		fmt.Printf("- Namespace: %s | Pod: %s | Container: %s\n", res.Namespace, res.Pod, res.Container)
-	// 	}
-	// }
+	printResults(results)
 }
