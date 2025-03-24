@@ -9,7 +9,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-// CheckResult represents the result of a readOnlyRootFilesystem check.
+// readOnlyRootFilesystem 설정 점검 결과를 담는 구조체
 type CheckResult struct {
 	Namespace string
 	Pod       string
@@ -18,25 +18,40 @@ type CheckResult struct {
 	Status    string // Passed, Failed, Skipped
 }
 
-// EndpointSlicesCheck checks whether all containers in the cluster have readOnlyRootFilesystem=true,
-// except for those running on Windows nodes.
+// EndpointSlicesCheck 함수는 클러스터 내 모든 Pod의 컨테이너에 대해
+// readOnlyRootFilesystem=true 설정 여부를 점검합니다.
+// 단, Windows 노드에서 실행 중이거나 kube-system 네임스페이스에 있는 경우는 제외합니다.
 func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
 	var results []CheckResult
 
-	// List all pods in all namespaces
+	// 모든 네임스페이스의 Pod 리스트 조회
 	pods, err := client.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})
 	if err != nil {
 		panic(err.Error())
 	}
 
-	// Cache to store node OS info
+	// 노드 OS 정보를 캐싱해두기 위한 맵 (중복 호출 방지)
 	nodeOSCache := make(map[string]string)
 
 	for _, pod := range pods.Items {
+		// kube-system 네임스페이스는 검사 대상에서 제외
+		if pod.Namespace == "kube-system" {
+			for _, container := range pod.Spec.Containers {
+				results = append(results, CheckResult{
+					Namespace: pod.Namespace,
+					Pod:       pod.Name,
+					Container: container.Name,
+					Message:   "Pod is in kube-system namespace, skipping check",
+					Status:    "Skipped",
+				})
+			}
+			continue
+		}
+
 		nodeName := pod.Spec.NodeName
 		var nodeOS string
 
-		// Get node OS from cache or fetch from cluster
+		// 캐시에 있으면 가져오고, 없으면 노드에서 조회
 		if cached, ok := nodeOSCache[nodeName]; ok {
 			nodeOS = cached
 		} else {
@@ -45,6 +60,7 @@ func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
 				log.Printf("Failed to get node %s for pod %s/%s: %v", nodeName, pod.Namespace, pod.Name, err)
 				nodeOS = "unknown"
 			} else {
+				// 노드의 OS 정보는 레이블에서 확인: kubernetes.io/os
 				if osLabel, exists := node.Labels["kubernetes.io/os"]; exists {
 					nodeOS = osLabel
 				} else {
@@ -56,6 +72,7 @@ func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
 
 		// Iterate containers
 		for _, container := range pod.Spec.Containers {
+			// Windows 노드에서 실행 중인 컨테이너는 검사 생략
 			if nodeOS == "windows" {
 				results = append(results, CheckResult{
 					Namespace: pod.Namespace,
@@ -67,6 +84,7 @@ func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
 				continue
 			}
 
+			// securityContext가 없거나 readOnlyRootFilesystem 설정이 false인 경우 실패 처리
 			sc := container.SecurityContext
 			if sc == nil || sc.ReadOnlyRootFilesystem == nil || !*sc.ReadOnlyRootFilesystem {
 				results = append(results, CheckResult{
@@ -77,6 +95,7 @@ func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
 					Status:    "Failed",
 				})
 			} else {
+				// 올바르게 설정된 경우 성공 처리
 				results = append(results, CheckResult{
 					Namespace: pod.Namespace,
 					Pod:       pod.Name,
@@ -91,7 +110,7 @@ func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
 	PrintReadOnlyRootFSResults(results)
 }
 
-// PrintReadOnlyRootFSResults prints the results in a human-readable format.
+// PrintReadOnlyRootFSResults 함수는 검사 결과를 사람이 읽기 쉬운 형태로 출력합니다.
 func PrintReadOnlyRootFSResults(results []CheckResult) {
 	var failed []CheckResult
 	var skipped []CheckResult
@@ -104,10 +123,11 @@ func PrintReadOnlyRootFSResults(results []CheckResult) {
 			skipped = append(skipped, res)
 		}
 	}
-
+	// 실패 항목이 없다면 PASS 출력
 	if len(failed) == 0 {
 		fmt.Println(Green + "PASS: All pods use readOnlyRootFilesystem=true." + Reset)
 	} else {
+		// 실패한 컨테이너 목록 출력
 		fmt.Println(Red + "FAIL: Some containers do not use readOnlyRootFilesystem=true." + Reset)
 		fmt.Println("Affected resources:")
 		for _, res := range failed {
@@ -116,6 +136,7 @@ func PrintReadOnlyRootFSResults(results []CheckResult) {
 		fmt.Println("Runbook URL: https://your-runbook-url-here")
 	}
 
+	//// 생략된 항목이 있다면 출력
 	// if len(skipped) > 0 {
 	// 	fmt.Println()
 	// 	fmt.Println("SKIPPED: Some containers were skipped because they run on Windows nodes.")
