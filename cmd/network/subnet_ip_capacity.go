@@ -6,6 +6,7 @@ import (
 	"math"
 	"net"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/eks/types"
 )
@@ -15,11 +16,10 @@ type EksCluster struct {
 }
 
 // EKS 클러스터가 사용하는 서브넷의 가용가능한 IP 주소가 10% 미만인 경우 SubnetId와 사용가능한 IP 개수를 반환하는 함수
-func CheckVpcSubnetIpCapacity(eksCluster EksCluster) map[string]int {
+func CheckVpcSubnetIpCapacity(eksCluster EksCluster, cfg aws.Config) map[string]int {
 	// EKS가 배포된 VPC의 ID 및 서브넷 가져오기
 	subnetIds := eksCluster.Cluster.ResourcesVpcConfig.SubnetIds
 
-	cfg := GetAWSConfig()
 	// AWS SDK 설정
 	ec2Client := ec2.NewFromConfig(cfg)
 
