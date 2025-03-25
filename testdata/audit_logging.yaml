@@ -1,0 +1,24 @@
+- name: "Audit_Logging_Enabled"
+  enabled: true
+  types:
+    - "audit"
+    - "api"
+  expect_failure: false
+
+- name: "Audit_Logging_Disabled"
+  enabled: false
+  types:
+    - "audit"
+  expect_failure: true
+
+- name: "No_Audit_Type"
+  enabled: true
+  types:
+    - "api"
+    - "authenticator"
+  expect_failure: true
+
+- name: "No_Logging_Config"
+  enabled: null
+  types: []
+  expect_failure: true

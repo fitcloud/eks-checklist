@@ -8,7 +8,7 @@ EKS Checklist는 Amazon Elastic Kubernetes Service(EKS) 클러스터의 상태�
 ### 1. 환경 변수 설정 (Windows)
 Windows 환경에서 `Powershell(Admin)`을 실행하고 다음 명령어를 입력하여 환경 변수를 설정합니다.
 ```powershell
-PS C:\Windows\system32> [System.Environment]::SetEnvironmentVariable('HOME', $env:USERPROFILE,[System.EnvironmentVariableTarget]::Machine)
+[System.Environment]::SetEnvironmentVariable('HOME', $env:USERPROFILE,[System.EnvironmentVariableTarget]::Machine)
 ```
 
 ### 2. 개발 도구

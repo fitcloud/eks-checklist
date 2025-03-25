@@ -1,0 +1,47 @@
+- name: "All_Containers_Use_ReadOnlyRootFS"
+  node_os:
+    - "linux"
+  pods:
+    - name: "pod-1"
+      namespace: "default"
+      node: "node-1"
+      containers:
+        - name: "container-1"
+          readOnlyRootFilesystem: true
+  expect_failure: false
+
+- name: "Missing_ReadOnlyRootFS"
+  node_os:
+    - "linux"
+  pods:
+    - name: "pod-2"
+      namespace: "default"
+      node: "node-1"
+      containers:
+        - name: "container-2"
+          readOnlyRootFilesystem: false
+  expect_failure: true
+
+- name: "Pod_In_KubeSystem_Namespace"
+  node_os:
+    - "linux"
+  pods:
+    - name: "coredns"
+      namespace: "kube-system"
+      node: "node-1"
+      containers:
+        - name: "dns"
+          readOnlyRootFilesystem: false
+  expect_failure: false
+
+- name: "Pod_On_Windows_Node"
+  node_os:
+    - "windows"
+  pods:
+    - name: "windows-pod"
+      namespace: "default"
+      node: "node-1"
+      containers:
+        - name: "win-container"
+          readOnlyRootFilesystem: false
+  expect_failure: false

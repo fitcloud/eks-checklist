@@ -102,7 +102,7 @@ var rootCmd = &cobra.Command{
 		fmt.Printf("\n===============[Scalability Check]===============\n")
 
 		// Karpenter 사용 - Automatic
-		if getKarpenter(k8sClient) {
+		if scalability.GetKarpenter(k8sClient) {
 			fmt.Println(Green + "✔ PASS: Karpenter is installed" + Reset)
 		} else {
 			fmt.Println(Red + "✖ FAIL: Karpenter is not installed" + Reset)
@@ -167,7 +167,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		// Karpenter 기반 노드 생성 - Automatic
-		if getKarpenter(k8sClient) {
+		if scalability.GetKarpenter(k8sClient) {
 			if stability.CheckKarpenterNode(dynamicClient) {
 				fmt.Println(Green + "✔ PASS: Karpenter Node is created" + Reset)
 			} else {
@@ -199,7 +199,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		// Karpenter 사용시 DaemonSet에 Priority Class 부여 - Automatic
-		if getKarpenter(k8sClient) {
+		if scalability.GetKarpenter(k8sClient) {
 			if stability.CheckDaemonSetPriorityClass(k8sClient) {
 				fmt.Println(Green + "✔ PASS: DaemonSet Priority Class is set" + Reset)
 			} else {
