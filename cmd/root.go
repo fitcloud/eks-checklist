@@ -79,6 +79,13 @@ var rootCmd = &cobra.Command{
 			fmt.Println(Red + "✖ FAIL: Audit logging is not enabled" + Reset)
 		}
 
+		// Pod-to-Pod 접근 제어 - Automatic/Manual
+		if security.CheckPodToPodNetworkPolicy(k8sClient) {
+			fmt.Println(Green + "✔ PASS: Pod-to-Pod network policy is found" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: Pod-to-Pod network policy is not found" + Reset)
+		}
+
 		// PV 암호화 - Automatic
 		if security.CheckPVEcryption(k8sClient) {
 			fmt.Println(Green + "✔ PASS: PV encryption is enabled" + Reset)
