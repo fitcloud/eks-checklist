@@ -149,6 +149,13 @@ var rootCmd = &cobra.Command{
 			fmt.Println(Red + "✖ FAIL: ReplicaSet Used one Pod" + Reset)
 		}
 
+		// 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 - Automatic
+		if stability.CheckDeploymentAntiAffinity(k8sClient) {
+			fmt.Println(Green + "✔ PASS: Pod AntiAffinity is applied" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: Pod AntiAffinity is not applied" + Reset)
+		}
+
 		// HPA 적용 - Automatic
 		stability.CheckHpa(k8sClient)
 
