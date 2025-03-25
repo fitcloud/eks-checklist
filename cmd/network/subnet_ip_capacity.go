@@ -6,6 +6,7 @@ import (
 	"math"
 	"net"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/eks/types"
 )
@@ -15,11 +16,10 @@ type EksCluster struct {
 }
 
 // EKS 클러스터가 사용하는 서브넷의 가용가능한 IP 주소가 10% 미만인 경우 SubnetId와 사용가능한 IP 개수를 반환하는 함수
-func CheckVpcSubnetIpCapacity(eksCluster EksCluster) map[string]int {
+func CheckVpcSubnetIpCapacity(eksCluster EksCluster, cfg aws.Config) map[string]int {
 	// EKS가 배포된 VPC의 ID 및 서브넷 가져오기
 	subnetIds := eksCluster.Cluster.ResourcesVpcConfig.SubnetIds
 
-	cfg := GetAWSConfig()
 	// AWS SDK 설정
 	ec2Client := ec2.NewFromConfig(cfg)
 
@@ -42,22 +42,12 @@ func CheckVpcSubnetIpCapacity(eksCluster EksCluster) map[string]int {
 		// 계산식: (2^bits - ones) - 5, 예를 들면 2^(32 - 24) - 5 = 251
 		ones, bits := ipNet.Mask.Size()
 		totalIPs := int(math.Pow(2, float64(bits-ones))) - 5
-<<<<<<< Updated upstream
 
 		// 서브넷의 사용가능한 IP 개수를 변수에 저장
 		avaliableIp := int(*subnet.Subnets[0].AvailableIpAddressCount)
 
 		// 디버깅 용 총 IP와 사용가능한 IP 개수 출력
 		log.Printf("Subnet:%s total IPs: %d available IPs: %d", subnetId, totalIPs, avaliableIp)
-=======
-		// 디버깅 용 총 IP 개수 출력
-		log.Printf("total IPs: %d", totalIPs)
-
-		// 서브넷의 사용가능한 IP 개수를 변수에 저장
-		avaliableIp := int(*subnet.Subnets[0].AvailableIpAddressCount)
-		// 디버깅 용 사용가능한 IP 개수 출력
-		log.Printf("available IPs: %d", avaliableIp)
->>>>>>> Stashed changes
 
 		// 사용가능한 IP 개수가 총 IP 개수의 10% 미만이면 변수에 Subnet ID와 사용가능한 IP 개수 저장
 		if float64(avaliableIp) < 0.1*float64(totalIPs) {

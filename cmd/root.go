@@ -39,6 +39,7 @@ var rootCmd = &cobra.Command{
 
 		eksCluster := Describe(cluster)
 		k8sClient := createK8sClient(kubeconfig)
+		cfg := GetAWSConfig()
 		dynamicClient, err := CreateDynamicClient(&kubeconfig)
 		if err != nil {
 			fmt.Println("Error creating dynamic client:", err)
@@ -212,7 +213,7 @@ var rootCmd = &cobra.Command{
 		fmt.Printf("\n===============[Network Check]===============\n" + Reset)
 
 		// VPC 서브넷에 충분한 IP 대역대 확보 - Automatic/Manual
-		if ipCapacities := network.CheckVpcSubnetIpCapacity(network.EksCluster(eksCluster)); len(ipCapacities) > 0 {
+		if ipCapacities := network.CheckVpcSubnetIpCapacity(network.EksCluster(eksCluster), cfg); len(ipCapacities) > 0 {
 			for subnetId, ipCapacity := range ipCapacities {
 				fmt.Printf(Red+"✖ FAIL: Subnet %s has less than 10%% of available IPs remaining: %d\n", subnetId, ipCapacity)
 			}
