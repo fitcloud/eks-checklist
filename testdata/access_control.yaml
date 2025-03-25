@@ -1,0 +1,8 @@
+- name: "AwsAuth_With_Roles_Users_Accounts"
+  expect_failure: false
+
+- name: "AwsAuth_Empty"
+  expect_failure: false
+
+- name: "AwsAuth_Missing"
+  expect_failure: true
