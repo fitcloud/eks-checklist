@@ -36,7 +36,7 @@ func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
 		}
 		// 실패 항목이 없다면 PASS 출력
 		if len(failed) == 0 {
-			fmt.Println(Green + "PASS: All pods use readOnlyRootFilesystem=true." + Reset)
+			fmt.Println(Green + "✔ PASS: All pods use readOnlyRootFilesystem=true." + Reset)
 		} else {
 			// 실패한 컨테이너 목록 출력
 			fmt.Println(Red + "FAIL: Some containers do not use readOnlyRootFilesystem=true." + Reset)
