@@ -9,7 +9,8 @@ import (
 )
 
 func GetKubecost(client kubernetes.Interface) bool {
-	deploys, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})
+	deploys, err := client.AppsV1().Deployments(v1.NamespaceAll).List(context.TODO(), v1.ListOptions{})
+	//	deploys, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{}) 기존 코드에서 all-namespace로 변경
 
 	if err != nil {
 		panic(err.Error())
