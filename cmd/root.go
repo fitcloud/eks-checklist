@@ -96,7 +96,20 @@ var rootCmd = &cobra.Command{
 		// 읽기 전용 파일시스템 사용 - Automatic
 		security.ReadnonlyFilesystemCheck(k8sClient)
 
+		// IRSA 또는 Pod Identity 기반 권한 부여 - Automatic
 		security.CheckIRSAAndPodIdentity(k8sClient)
+
+		// 데이터 플레인 사설망 - Automatic
+		subnets := security.DataplanePrivateCheck(security.EksCluster(eksCluster), cfg)
+		if len(subnets) == 0 {
+			fmt.Println(Green + "PASS: All subnets are private (no IGW connection)." + Reset)
+		} else {
+			fmt.Println(Red + "FAIL: Some subnets are public (connected to IGW):" + Reset)
+			for _, s := range subnets {
+				fmt.Printf("- %s\n", s)
+			}
+			fmt.Println("Runbook URL: https://your.runbook.url/irsa-or-pod-identity")
+		}
 
 		// Scalability 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Scalability Check]===============\n")
