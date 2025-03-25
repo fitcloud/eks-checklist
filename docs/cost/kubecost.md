@@ -11,7 +11,6 @@ Kubecost는 클러스터의 비용 최적화 및 리소스 사용량 분석을 �
 
 ## Diagnosis
 Kubecost가 설치되어 있는지 확인하세요
-Kubecost 관련 Pod, Deployment, Service를 검색
 
 ```bash
 kubectl get deployments -n kubecost | grep "kubecost" >/dev/null && echo "Kubecost is installed" || echo "Kubecost is not installed"
