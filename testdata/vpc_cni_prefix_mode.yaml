@@ -1,6 +1,3 @@
-# vpc_cni_prefix_mode.yaml
-# 이 파일은 CheckVpcCniPrefixMode 함수 테스트를 위한 다양한 케이스를 정의합니다.
-
 - name: "Prefix Delegation Enabled"
   expect_pass: true
   daemonsets:
