@@ -12,52 +12,19 @@ import (
 // EndpointSlicesCheck 함수는 클러스터 내 모든 Pod의 컨테이너에 대해
 // readOnlyRootFilesystem=true 설정 여부를 점검합니다.
 // 단, Windows 노드에서 실행 중이거나 kube-system 네임스페이스에 있는 경우는 제외합니다.
-func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
-	// readOnlyRootFilesystem 설정 점검 결과를 담는 구조체
-	type CheckResult struct {
-		Namespace string
-		Pod       string
-		Container string
-		Message   string
-		Status    string // Passed, Failed, Skipped
-	}
 
-	printResults := func(results []CheckResult) {
-		var failed []CheckResult
-		var skipped []CheckResult
+// readOnlyRootFilesystem 설정 점검 결과를 담는 구조체
+type CheckResult struct {
+	Namespace string
+	Pod       string
+	Container string
+	Message   string
+	Status    string // Passed, Failed, Skipped
+}
 
-		for _, res := range results {
-			switch res.Status {
-			case "Failed":
-				failed = append(failed, res)
-			case "Skipped":
-				skipped = append(skipped, res)
-			}
-		}
-		// 실패 항목이 없다면 PASS 출력
-		if len(failed) == 0 {
-			fmt.Println(Green + "✔ PASS: All pods use readOnlyRootFilesystem=true." + Reset)
-		} else {
-			// 실패한 컨테이너 목록 출력
-			fmt.Println(Red + "FAIL: Some containers do not use readOnlyRootFilesystem=true." + Reset)
-			fmt.Println("Affected resources:")
-			for _, res := range failed {
-				fmt.Printf("- Namespace: %s | Pod: %s | Container: %s\n", res.Namespace, res.Pod, res.Container)
-			}
-			fmt.Println("Runbook URL: https://your-runbook-url-here")
-		}
-
-		//// 생략된 항목이 있다면 출력
-		// if len(skipped) > 0 {
-		// 	fmt.Println()
-		// 	fmt.Println("SKIPPED: Some containers were skipped because they run on Windows nodes.")
-		// 	for _, res := range skipped {
-		// 		fmt.Printf("- Namespace: %s | Pod: %s | Container: %s\n", res.Namespace, res.Pod, res.Container)
-		// 	}
-		// }
-	}
-
+func ReadnonlyFilesystemCheck(client kubernetes.Interface) bool {
 	var results []CheckResult
+	resultIsValid := true
 
 	// 모든 네임스페이스의 Pod 리스트 조회
 	pods, err := client.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})
@@ -119,7 +86,6 @@ func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
 				continue
 			}
 
-			// securityContext가 없거나 readOnlyRootFilesystem 설정이 false인 경우 실패 처리
 			sc := container.SecurityContext
 			if sc == nil || sc.ReadOnlyRootFilesystem == nil || !*sc.ReadOnlyRootFilesystem {
 				results = append(results, CheckResult{
@@ -129,8 +95,8 @@ func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
 					Message:   "readOnlyRootFilesystem is not set to true",
 					Status:    "Failed",
 				})
+				resultIsValid = false
 			} else {
-				// 올바르게 설정된 경우 성공 처리
 				results = append(results, CheckResult{
 					Namespace: pod.Namespace,
 					Pod:       pod.Name,
@@ -143,4 +109,24 @@ func ReadnonlyFilesystemCheck(client kubernetes.Interface) {
 	}
 
 	printResults(results)
+	return resultIsValid
+}
+
+func printResults(results []CheckResult) {
+	var failed []CheckResult
+	for _, res := range results {
+		if res.Status == "Failed" {
+			failed = append(failed, res)
+		}
+	}
+
+	if len(failed) == 0 {
+		fmt.Println("✅ PASS: All pods use readOnlyRootFilesystem=true.")
+	} else {
+		fmt.Println("❌ FAIL: Some containers do not use readOnlyRootFilesystem=true.")
+		for _, res := range failed {
+			fmt.Printf("- Namespace: %s | Pod: %s | Container: %s\n", res.Namespace, res.Pod, res.Container)
+		}
+		fmt.Println("Runbook URL: https://your-runbook-url-here")
+	}
 }

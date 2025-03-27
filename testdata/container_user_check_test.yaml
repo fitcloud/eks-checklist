@@ -1,0 +1,48 @@
+# container_user_check_test.yaml
+# 이 파일은 CheckContainerExecutionUser 함수 테스트를 위한 다양한 케이스들을 정의합니다.
+
+- name: "Normal Container Test"
+  expect_failure: false
+  pods:
+    - name: "pod-normal"
+      namespace: "default"
+      containers:
+        - name: "container-normal"
+          runAsUser: 1000
+
+- name: "Root User Test"
+  expect_failure: true
+  pods:
+    - name: "pod-root"
+      namespace: "default"
+      containers:
+        - name: "container-root"
+          runAsUser: 0
+
+- name: "Windows Administrator Test"
+  expect_failure: true
+  pods:
+    - name: "pod-windows"
+      namespace: "default"
+      containers:
+        - name: "container-windows"
+          runAsUser: 1001
+          windowsUser: "Administrator"
+
+- name: "RunAsUser Not Set Test"
+  expect_failure: false
+  pods:
+    - name: "pod-no-runas"
+      namespace: "default"
+      containers:
+        - name: "container-no-runas"
+          runAsUser: null
+
+- name: "Exclude Pod Test (aws-node included)"
+  expect_failure: false
+  pods:
+    - name: "aws-node-pod"
+      namespace: "kube-system"
+      containers:
+        - name: "container-aws"
+          runAsUser: 0

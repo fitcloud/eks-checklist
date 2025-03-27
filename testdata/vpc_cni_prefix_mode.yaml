@@ -1,0 +1,34 @@
+- name: "Prefix Delegation Enabled"
+  expect_pass: true
+  daemonsets:
+    - namespace: "kube-system"
+      name: "aws-node"
+      containers:
+        - name: "aws-node-container"
+          env:
+            - name: "ENABLE_PREFIX_DELEGATION"
+              value: "true"
+
+- name: "Prefix Delegation Disabled"
+  expect_pass: false
+  daemonsets:
+    - namespace: "kube-system"
+      name: "aws-node"
+      containers:
+        - name: "aws-node-container"
+          env:
+            - name: "ENABLE_PREFIX_DELEGATION"
+              value: "false"
+
+- name: "No ENABLE_PREFIX_DELEGATION Env"
+  expect_pass: false
+  daemonsets:
+    - namespace: "kube-system"
+      name: "aws-node"
+      containers:
+        - name: "aws-node-container"
+          env: []
+
+- name: "No aws-node DaemonSet"
+  expect_pass: false
+  daemonsets: []
