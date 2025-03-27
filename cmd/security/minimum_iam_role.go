@@ -144,6 +144,6 @@ func CheckNodeIAMRoles(client kubernetes.Interface) bool {
 		}
 	}
 
-	fmt.Println(Green + "✔ PASS: All nodes have only allowed IAM policies." + Reset)
+	fmt.Println(Green + "✔ PASS: All nodes are using only allowed IAM policies" + Reset)
 	return true
 }

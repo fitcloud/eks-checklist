@@ -1,0 +1,23 @@
+- name: "All services using EndpointSlices"
+  expect_pass: true
+  endpoints:
+    - namespace: "default"
+      name: "svc1"
+    - namespace: "default"
+      name: "svc2"
+  endpointSlices:
+    - namespace: "default"
+      service_name: "svc1"
+    - namespace: "default"
+      service_name: "svc2"
+
+- name: "Missing EndpointSlices for some services"
+  expect_pass: false
+  endpoints:
+    - namespace: "default"
+      name: "svc1"
+    - namespace: "default"
+      name: "svc2"
+  endpointSlices:
+    - namespace: "default"
+      service_name: "svc1"

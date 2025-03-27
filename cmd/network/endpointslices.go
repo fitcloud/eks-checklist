@@ -16,7 +16,7 @@ const (
 )
 
 // Endpoint Slices 사용 여부 검사
-func EndpointSlicesCheck(client kubernetes.Interface) {
+func EndpointSlicesCheck(client kubernetes.Interface) bool {
 	// 모든 네임스페이스의 EndpointSlices 가져오기
 	endpointSlices, err := client.DiscoveryV1().EndpointSlices("").List(context.TODO(), v1.ListOptions{})
 	if err != nil {
@@ -53,6 +53,8 @@ func EndpointSlicesCheck(client kubernetes.Interface) {
 	// 최종 결과 출력
 	if len(affectedServices) == 0 {
 		fmt.Println(Green + "✔ PASS:  All services in this cluster are using EndpointSlices" + Reset)
+		return true
+
 	} else {
 		fmt.Println(Red + "✖ FAIL: Some services int this cluster are still using Endpoints" + Reset)
 		fmt.Println("Affectred Resources:")
@@ -60,5 +62,7 @@ func EndpointSlicesCheck(client kubernetes.Interface) {
 			fmt.Println(svc)
 		}
 		fmt.Println("Runbook URL: https://fitcloud.github.io/eks-checklist/index.html")
+		return false
+
 	}
 }

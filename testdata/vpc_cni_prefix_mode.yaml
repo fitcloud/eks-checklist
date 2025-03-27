@@ -1,0 +1,37 @@
+# vpc_cni_prefix_mode.yaml
+# 이 파일은 CheckVpcCniPrefixMode 함수 테스트를 위한 다양한 케이스를 정의합니다.
+
+- name: "Prefix Delegation Enabled"
+  expect_pass: true
+  daemonsets:
+    - namespace: "kube-system"
+      name: "aws-node"
+      containers:
+        - name: "aws-node-container"
+          env:
+            - name: "ENABLE_PREFIX_DELEGATION"
+              value: "true"
+
+- name: "Prefix Delegation Disabled"
+  expect_pass: false
+  daemonsets:
+    - namespace: "kube-system"
+      name: "aws-node"
+      containers:
+        - name: "aws-node-container"
+          env:
+            - name: "ENABLE_PREFIX_DELEGATION"
+              value: "false"
+
+- name: "No ENABLE_PREFIX_DELEGATION Env"
+  expect_pass: false
+  daemonsets:
+    - namespace: "kube-system"
+      name: "aws-node"
+      containers:
+        - name: "aws-node-container"
+          env: []
+
+- name: "No aws-node DaemonSet"
+  expect_pass: false
+  daemonsets: []

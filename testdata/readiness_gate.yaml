@@ -1,0 +1,26 @@
+# readiness_gate.yaml
+# 이 파일은 CheckReadinessGateEnabled 함수 테스트를 위한 다양한 케이스를 정의합니다.
+
+- name: "Readiness gate enabled"
+  expect_pass: true
+  namespaces:
+    - name: "default"
+      labels:
+        elbv2.k8s.aws/pod-readiness-gate-inject: "enabled"
+    - name: "kube-system"
+      labels:
+        other-label: "value"
+
+- name: "Readiness gate disabled"
+  expect_pass: false
+  namespaces:
+    - name: "default"
+      labels:
+        some-label: "some-value"
+    - name: "kube-public"
+      labels:
+        another-label: "another-value"
+
+- name: "Empty namespaces"
+  expect_pass: false
+  namespaces: []

@@ -1,0 +1,30 @@
+# irsa_pod_identity.yaml
+# 이 파일은 CheckIRSAAndPodIdentity 함수 테스트를 위한 다양한 케이스를 정의합니다.
+# expected_failure: true이면 실패가 예상됨, false이면 성공이 예상됨
+
+- name: "All service accounts configured"
+  expected_failure: false
+  serviceaccounts:
+    - namespace: "default"
+      name: "sa-1"
+      annotations:
+        eks.amazonaws.com/role-arn: "arn:aws:iam::123456789012:role/Role1"
+    - namespace: "default"
+      name: "sa-2"
+      annotations:
+        eks.amazonaws.com/identity: "some-identity"
+
+- name: "Some service accounts not configured"
+  expected_failure: true
+  serviceaccounts:
+    - namespace: "default"
+      name: "sa-1"
+      annotations: {}
+    - namespace: "default"
+      name: "sa-2"
+      annotations:
+        eks.amazonaws.com/role-arn: "arn:aws:iam::123456789012:role/Role2"
+
+- name: "No service accounts"
+  expected_failure: false
+  serviceaccounts: []
