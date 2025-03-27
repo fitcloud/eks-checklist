@@ -168,6 +168,8 @@ var rootCmd = &cobra.Command{
 		} else {
 			fmt.Println(Red + "✖ FAIL: Pod AntiAffinity is not applied" + Reset)
 		}
+		// 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 - Automatic
+		stability.CheckPodDistributionAndAffinity(k8sClient)
 
 		// HPA 적용 - Automatic
 		stability.CheckHpa(k8sClient)
@@ -235,9 +237,6 @@ var rootCmd = &cobra.Command{
 		} else {
 			fmt.Println(Yellow + "⚠ WARNING: Karpenter is not installed" + Reset)
 		}
-
-		// 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 - Automatic
-		stability.CheckPodDistributionAndAffinity(k8sClient)
 
 		// Network 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Network Check]===============\n" + Reset)
