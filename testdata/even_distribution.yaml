@@ -1,0 +1,24 @@
+- name: "All pods valid"
+  expected_failure: false
+  pods:
+    - namespace: "default"
+      name: "pod-1"
+      affinity: true
+    - namespace: "default"
+      name: "pod-2"
+      topologySpreadConstraints:
+        - maxSkew: 1
+
+- name: "Pod without valid settings"
+  expected_failure: true
+  pods:
+    - namespace: "default"
+      name: "pod-3"
+      affinity: false
+      topologySpreadConstraints:
+        - maxSkew: 2
+    - namespace: "default"
+      name: "pod-4"
+      affinity: false
+      topologySpreadConstraints:
+        - maxSkew: 1

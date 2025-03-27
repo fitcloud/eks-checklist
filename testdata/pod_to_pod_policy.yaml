@@ -1,0 +1,22 @@
+- name: "NetworkPolicy exists"
+  expected_failure: false
+  networkpolicies:
+    - namespace: "default"
+      name: "np-web"
+      podSelector:
+        matchLabels:
+          app: "web"
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: "frontend"
+      egress:
+        - to:
+            - namespaceSelector:
+                matchLabels:
+                  team: "dev"
+
+- name: "No NetworkPolicy exists"
+  expected_failure: true
+  networkpolicies: []

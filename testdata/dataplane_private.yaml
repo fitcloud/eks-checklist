@@ -1,0 +1,44 @@
+- name: "Subnet with IGW connected"
+  expected_failure: true
+  cluster:
+    resourcesVpcConfig:
+      subnetIds:
+        - "subnet-1"
+  route_tables:
+    subnet-1:
+      route_table_id: "rtb-11111"
+      routes:
+        - DestinationCidrBlock: "0.0.0.0/0"
+          GatewayId: "igw-12345"
+
+- name: "Subnet without IGW connected"
+  expected_failure: false
+  cluster:
+    resourcesVpcConfig:
+      subnetIds:
+        - "subnet-2"
+  route_tables:
+    subnet-2:
+      route_table_id: "rtb-22222"
+      routes:
+        - DestinationCidrBlock: "0.0.0.0/0"
+          GatewayId: "vgw-12345"
+
+- name: "Multiple subnets, one with IGW"
+  expected_failure: true
+  cluster:
+    resourcesVpcConfig:
+      subnetIds:
+        - "subnet-3"
+        - "subnet-4"
+  route_tables:
+    subnet-3:
+      route_table_id: "rtb-33333"
+      routes:
+        - DestinationCidrBlock: "0.0.0.0/0"
+          GatewayId: "igw-67890"
+    subnet-4:
+      route_table_id: "rtb-44444"
+      routes:
+        - DestinationCidrBlock: "0.0.0.0/0"
+          GatewayId: "vgw-67890"
