@@ -32,7 +32,7 @@ func CheckIRSAAndPodIdentity(clientset kubernetes.Interface) bool {
 			return true
 
 		} else {
-			fmt.Println(Red + "FAIL : Some service accounts are not configured with IRSA or EKS Pod Identity." + Reset)
+			fmt.Println(Red + "✖ FAIL : Some service accounts are not configured with IRSA or EKS Pod Identity." + Reset)
 			fmt.Println("Affected service accounts:")
 			for _, sa := range affected {
 				fmt.Println(sa)

@@ -109,9 +109,9 @@ var rootCmd = &cobra.Command{
 		// 데이터 플레인 사설망 - Automatic
 		subnets := security.DataplanePrivateCheck(security.EksCluster(eksCluster), cfg)
 		if len(subnets) == 0 {
-			fmt.Println(Green + "PASS: All subnets are private (no IGW connection)." + Reset)
+			fmt.Println(Green + "✔ PASS: All subnets are private (no IGW connection)." + Reset)
 		} else {
-			fmt.Println(Red + "FAIL: Some subnets are public (connected to IGW):" + Reset)
+			fmt.Println(Red + "✖ FAIL: Some subnets are public (connected to IGW):" + Reset)
 			for _, s := range subnets {
 				fmt.Printf("- %s\n", s)
 			}
@@ -168,6 +168,8 @@ var rootCmd = &cobra.Command{
 		} else {
 			fmt.Println(Red + "✖ FAIL: Pod AntiAffinity is not applied" + Reset)
 		}
+		// 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 - Automatic
+		stability.CheckPodDistributionAndAffinity(k8sClient)
 
 		// HPA 적용 - Automatic
 		stability.CheckHpa(k8sClient)
@@ -213,9 +215,9 @@ var rootCmd = &cobra.Command{
 
 		// CoreDNS의 HPA가 존재하는지 확인
 		if stability.CheckCoreDNSHpa(k8sClient) {
-			fmt.Println(Green + "✔ PASS: CoreDNS HPA is installed" + Reset)
+			fmt.Println(Green + "✔ PASS: CoreDNS HPA is Set up" + Reset)
 		} else {
-			fmt.Println(Red + "✖ FAIL: CoreDNS HPA is not installed" + Reset)
+			fmt.Println(Red + "✖ FAIL: CoreDNS HPA is not Set up" + Reset)
 		}
 
 		// DNS 캐시 적용 - Automatic
@@ -235,9 +237,6 @@ var rootCmd = &cobra.Command{
 		} else {
 			fmt.Println(Yellow + "⚠ WARNING: Karpenter is not installed" + Reset)
 		}
-
-		// 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 - Automatic
-		stability.CheckPodDistributionAndAffinity(k8sClient)
 
 		// Network 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Network Check]===============\n" + Reset)
