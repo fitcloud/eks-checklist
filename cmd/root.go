@@ -79,6 +79,13 @@ var rootCmd = &cobra.Command{
 			fmt.Println(Red + "✖ FAIL: Audit logging is not enabled" + Reset)
 		}
 
+		// Pod-to-Pod 접근 제어 - Automatic/Manual
+		if security.CheckPodToPodNetworkPolicy(k8sClient) {
+			fmt.Println(Green + "✔ PASS: Pod-to-Pod network policy is found" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: Pod-to-Pod network policy is not found" + Reset)
+		}
+
 		// PV 암호화 - Automatic
 		if security.CheckPVEcryption(k8sClient) {
 			fmt.Println(Green + "✔ PASS: PV encryption is enabled" + Reset)
@@ -96,7 +103,20 @@ var rootCmd = &cobra.Command{
 		// 읽기 전용 파일시스템 사용 - Automatic
 		security.ReadnonlyFilesystemCheck(k8sClient)
 
+		// IRSA 또는 Pod Identity 기반 권한 부여 - Automatic
 		security.CheckIRSAAndPodIdentity(k8sClient)
+
+		// 데이터 플레인 사설망 - Automatic
+		subnets := security.DataplanePrivateCheck(security.EksCluster(eksCluster), cfg)
+		if len(subnets) == 0 {
+			fmt.Println(Green + "PASS: All subnets are private (no IGW connection)." + Reset)
+		} else {
+			fmt.Println(Red + "FAIL: Some subnets are public (connected to IGW):" + Reset)
+			for _, s := range subnets {
+				fmt.Printf("- %s\n", s)
+			}
+			fmt.Println("Runbook URL: https://your.runbook.url/irsa-or-pod-identity")
+		}
 
 		// Scalability 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Scalability Check]===============\n")
@@ -140,6 +160,13 @@ var rootCmd = &cobra.Command{
 			fmt.Println(Green + "✔ PASS: ReplicaSet Used more than one Pod" + Reset)
 		} else {
 			fmt.Println(Red + "✖ FAIL: ReplicaSet Used one Pod" + Reset)
+		}
+
+		// 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 - Automatic
+		if stability.CheckDeploymentAntiAffinity(k8sClient) {
+			fmt.Println(Green + "✔ PASS: Pod AntiAffinity is applied" + Reset)
+		} else {
+			fmt.Println(Red + "✖ FAIL: Pod AntiAffinity is not applied" + Reset)
 		}
 
 		// HPA 적용 - Automatic
@@ -208,6 +235,9 @@ var rootCmd = &cobra.Command{
 		} else {
 			fmt.Println(Yellow + "⚠ WARNING: Karpenter is not installed" + Reset)
 		}
+
+		// 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 - Automatic
+		stability.CheckPodDistributionAndAffinity(k8sClient)
 
 		// Network 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Network Check]===============\n" + Reset)
