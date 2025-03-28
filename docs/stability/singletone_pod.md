@@ -15,7 +15,7 @@
 
 ```bash
 
-kubectl get pods -A -o custom-columns=NAME:.metadata.name,NAMESPACE:.metadata.namespace,OWNERREFERENCES:.metadata.ownerReferences | awk '$3 ~ "<none>" {print}'
+kubectl get pods -A -o custom-columns=NAME:.metadata.name,NAMESPACE:.metadata.namespace,OWNERREFERENCES:.metadata.ownerReferences | awk 'NR==1 || $3 ~ "<none>" {print}'
 
 ```
 <!--
