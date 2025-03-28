@@ -1,14 +1,11 @@
 package cmd
 
 import (
-	"context"
 	"flag"
 	"os"
 	"path/filepath"
 	"slices"
-	"strings"
 
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -53,24 +50,6 @@ func createK8sClient(kubeconfig rest.Config) kubernetes.Interface {
 	}
 
 	return client
-}
-
-func getKarpenter(client kubernetes.Interface) bool {
-	deploys, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	for _, deploy := range deploys.Items {
-		for _, container := range deploy.Spec.Template.Spec.Containers {
-			if strings.Contains(container.Image, "karpenter") {
-				return true
-			}
-		}
-	}
-
-	return false
 }
 
 // CreateDynamicClient: dynamic.Interface 생성

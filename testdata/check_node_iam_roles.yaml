@@ -1,0 +1,37 @@
+# check_node_iam_roles.yaml
+# 이 파일은 CheckNodeIAMRoles 함수 테스트를 위한 다양한 케이스를 정의합니다.
+# expected: true이면 함수가 true를 반환해야 하고, false이면 함수가 false를 반환해야 합니다.
+
+- name: "All nodes with allowed policies"
+  expected: true
+  nodes:
+    - namespace: "default"
+      name: "node-1"
+      provided_node_ip: "1.2.3.4"
+    - namespace: "default"
+      name: "node-2"
+      provided_node_ip: "1.2.3.5"
+  iam_roles:
+    "1.2.3.4":
+      role: "allowed-role"
+      policies:
+        - "AmazonEC2ContainerRegistryReadOnly"
+        - "AmazonEKS_CNI_Policy"
+    "1.2.3.5":
+      role: "allowed-role-2"
+      policies:
+        - "AmazonEKSWorkerNodePolicy"
+        - "AmazonEKS_CNI_Policy"
+
+- name: "One node with disallowed policy"
+  expected: false
+  nodes:
+    - namespace: "default"
+      name: "node-3"
+      provided_node_ip: "1.2.3.6"
+  iam_roles:
+    "1.2.3.6":
+      role: "disallowed-role"
+      policies:
+        - "AmazonEC2ContainerRegistryReadOnly"
+        - "UnauthorizedPolicy"

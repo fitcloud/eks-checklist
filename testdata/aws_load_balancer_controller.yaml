@@ -1,0 +1,24 @@
+# aws_load_balancer_controller.yaml
+# 이 파일은 CheckAwsLoadBalancerController 함수 테스트를 위한 다양한 케이스를 정의합니다.
+
+- name: "Deployment with AWS load balancer controller image"
+  expect_pass: true
+  deployments:
+    - namespace: "default"
+      name: "controller-deploy"
+      containers:
+        - name: "controller-container"
+          image: "123456789012.dkr.ecr.region.amazonaws.com/aws-load-balancer-controller:latest"
+
+- name: "Deployment without AWS load balancer controller image"
+  expect_pass: false
+  deployments:
+    - namespace: "default"
+      name: "other-deploy"
+      containers:
+        - name: "other-container"
+          image: "nginx:latest"
+
+- name: "No deployments present"
+  expect_pass: false
+  deployments: []

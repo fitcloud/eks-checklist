@@ -1,0 +1,44 @@
+# CheckAutoScaledManagedNodeGroup.yaml
+# 이 파일은 CheckAutoScaledManagedNodeGroup 함수 테스트를 위한 케이스들을 정의합니다.
+# expected_failure: true이면 ASG 기반 자동 확장 설정이 없으므로 함수가 false를 반환해야 함.
+# expected_failure: false이면 ASG 기반 자동 확장 설정이 있으므로 함수가 true를 반환해야 함.
+
+- name: "Auto-scaled node group"
+  expected_failure: false
+  cluster:
+    clusterName: "my-cluster"
+    resourcesVpcConfig:
+      subnetIds:
+        - "subnet-1"
+  nodes:
+    - name: "node-1"
+      provided_node_ip: "1.2.3.4"
+      nodegroup: "ng-auto"
+  eks_nodegroups:
+    "ng-auto":
+      autoscaling_groups:
+        - name: "asg-auto"
+  asg:
+    "asg-auto":
+      minSize: 1
+      maxSize: 3
+
+- name: "Static node group (no auto scaling)"
+  expected_failure: true
+  cluster:
+    clusterName: "my-cluster"
+    resourcesVpcConfig:
+      subnetIds:
+        - "subnet-2"
+  nodes:
+    - name: "node-2"
+      provided_node_ip: "1.2.3.5"
+      nodegroup: "ng-static"
+  eks_nodegroups:
+    "ng-static":
+      autoscaling_groups:
+        - name: "asg-static"
+  asg:
+    "asg-static":
+      minSize: 3
+      maxSize: 3

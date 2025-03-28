@@ -1,0 +1,32 @@
+# kubeproxy_ipvs_mode.yaml
+# 이 파일은 CheckKubeProxyIPVSMode 함수 테스트를 위한 다양한 케이스를 정의합니다.
+
+- name: "IPVS mode enabled"
+  expect_pass: true
+  config: |
+    apiVersion: kubeproxy.config.k8s.io/v1alpha1
+    kind: KubeProxyConfiguration
+    mode: "ipvs"
+    featureGates:
+      SupportIPVSProxyMode: true
+
+- name: "IPVS mode disabled - iptables"
+  expect_pass: false
+  config: |
+    apiVersion: kubeproxy.config.k8s.io/v1alpha1
+    kind: KubeProxyConfiguration
+    mode: "iptables"
+    featureGates:
+      SupportIPVSProxyMode: false
+
+- name: "Config missing mode key"
+  expect_pass: false
+  config: |
+    apiVersion: kubeproxy.config.k8s.io/v1alpha1
+    kind: KubeProxyConfiguration
+    featureGates:
+      SupportIPVSProxyMode: false
+
+- name: "Empty config"
+  expect_pass: false
+  config: ""

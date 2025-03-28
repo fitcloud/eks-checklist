@@ -8,14 +8,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-type CheckResult1 struct {
-	Namespace        string
-	ServiceAccount   string
-	UsingIRSA        bool
-	UsingPodIdentity bool
-}
-
-func CheckIRSAAndPodIdentity(clientset kubernetes.Interface) {
+func CheckIRSAAndPodIdentity(clientset kubernetes.Interface) bool {
 	// 로컬 구조체 정의
 	type CheckResult struct {
 		Namespace        string
@@ -25,7 +18,7 @@ func CheckIRSAAndPodIdentity(clientset kubernetes.Interface) {
 	}
 
 	// 내부 출력 함수 정의
-	printResults := func(results []CheckResult) {
+	printResults := func(results []CheckResult) bool {
 		var affected []string
 
 		for _, res := range results {
@@ -36,13 +29,17 @@ func CheckIRSAAndPodIdentity(clientset kubernetes.Interface) {
 
 		if len(affected) == 0 {
 			fmt.Println(Green + "PASS : All service accounts in this cluster are using either IRSA or EKS Pod Identity." + Reset)
+			return true
+
 		} else {
-			fmt.Println(Red + "FAIL : Some service accounts are not configured with IRSA or EKS Pod Identity." + Reset)
+			fmt.Println(Red + "✖ FAIL : Some service accounts are not configured with IRSA or EKS Pod Identity." + Reset)
 			fmt.Println("Affected service accounts:")
 			for _, sa := range affected {
 				fmt.Println(sa)
 			}
 			fmt.Println("Runbook URL: https://your.runbook.url/irsa-or-pod-identity")
+			return false
+
 		}
 	}
 
@@ -72,5 +69,6 @@ func CheckIRSAAndPodIdentity(clientset kubernetes.Interface) {
 		})
 	}
 
-	printResults(results)
+	return printResults(results)
+
 }
