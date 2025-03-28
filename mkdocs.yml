@@ -13,7 +13,7 @@ nav:
     - karpenter : scalability/karpenter.md 
   - Stability:
     - sample4 : stability/sample4.md
-    - 싱글톤 Pod 미사용 : stability/싱글톤 Pod 미사용.md
+    - 싱글톤 Pod 미사용 : stability/singletone_pod.md
     - clusterautoscaler : stability/clusterautoscaler.md
     - coreDNSHPA : stability/coreDNSHPA.md
     - HorizontalPodAutoscaler : stability/HorizontalPodAutoscaler.md
