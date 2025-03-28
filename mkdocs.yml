@@ -13,8 +13,8 @@ nav:
   - Stability:
     - sample4 : stability/sample4.md
     - 싱글톤 Pod 미사용 : stability/싱글톤 Pod 미사용.md
-    - clusterautoscaler : stability/cluster-autoscaler.md
-    - coreDNSPA : stability/coreDNSPA.md
+    - clusterautoscaler : stability/clusterautoscaler.md
+    - coreDNSHPA : stability/coreDNSHPA.md
     - HorizontalPodAutoscaler : stability/HorizontalPodAutoscaler.md
   - Network:
     - sample1 : network/sample1.md
