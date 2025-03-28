@@ -19,7 +19,10 @@ kubectl get deployments -A --no-headers | awk '{print $1, $2}' | while read name
 
 ## Mitigation
 
+example
 HPA 적용 - Deployment에 HPA를 설정하여 autosacle를 설정합니다
 ```bash
 kubectl autoscale deployment <deployment-name> --cpu-percent=50 --min=2 --max=10
 ```
+
+https://kubernetes.io/ko/docs/tasks/run-application/horizontal-pod-autoscale/

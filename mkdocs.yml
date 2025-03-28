@@ -7,12 +7,17 @@ nav:
     - checkimagetag(example) : general/checkimagetag(example).md
   - Security:
     - sample3 : security/sample3.md
+    - auditlog : security/auditlog.md
   - Scalability:
     - sample2 : scalability/sample2.md
   - Stability:
     - sample4 : stability/sample4.md
     - 싱글톤 Pod 미사용 : stability/싱글톤 Pod 미사용.md
+    - clusterautoscaler : stability/cluster-autoscaler.md
+    - coreDNSPA : stability/coreDNSPA.md
+    - HorizontalPodAutoscaler : stability/HorizontalPodAutoscaler.md
   - Network:
     - sample1 : network/sample1.md
   - Cost:
     - sample5 : cost/sample5.md
+    - kubecost : cost/kubecost.md
