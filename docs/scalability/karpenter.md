@@ -31,5 +31,5 @@ helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --vers
   --wait
 ```
 ### [Karpenter 설치](https://karpenter.sh/docs/getting-started/getting-started-with-karpenter/#4-install-karpenter)
-### [AWS 모번사례 Karpenter](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/karpenter.html)
+### [AWS 모범사례 Karpenter](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/karpenter.html)
 
