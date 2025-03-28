@@ -10,6 +10,7 @@ nav:
     - auditlog : security/auditlog.md
   - Scalability:
     - sample2 : scalability/sample2.md
+    - karpenter : scalability/karpenter.md 
   - Stability:
     - sample4 : stability/sample4.md
     - 싱글톤 Pod 미사용 : stability/싱글톤 Pod 미사용.md
