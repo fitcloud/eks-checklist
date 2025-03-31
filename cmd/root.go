@@ -98,115 +98,55 @@ var rootCmd = &cobra.Command{
 		fmt.Printf("\n===============[Scalability Check]===============\n")
 
 		// Karpenter 사용 - Automatic
-		if scalability.GetKarpenter(k8sClient) {
-			fmt.Println(Green + "✔ PASS: Karpenter is installed" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Karpenter is not installed" + Reset)
-		}
+		common.PrintResult(scalability.GetKarpenter(k8sClient))
 
 		// Karpenter 전용 노드 그룹 혹은 Fargate 사용 - Automatic
-		scalability.CheckNodeGroupUsage(k8sClient)
+		common.PrintResult(scalability.CheckNodeGroupUsage(k8sClient))
 
 		// Spot 노드 사용시 Spot 중지 핸들러 적용 - Automatic
-		if scalability.CheckSpotNodeTerminationHandler(k8sClient) {
-			fmt.Println(Green + "✔ PASS: Spot Node Termination Handler is applied" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Spot Node Termination Handler is not applied" + Reset)
-		}
+		common.PrintResult(scalability.CheckSpotNodeTerminationHandler(k8sClient))
 
 		// 다양한 인스턴스 타입 사용 - Automatic
-		if scalability.CheckInstanceTypes(k8sClient) {
-			fmt.Println(Green + "✔ PASS: Cluster has multiple instance types" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Cluster does not have multiple instance types" + Reset)
-		}
+		common.PrintResult(scalability.CheckInstanceTypes(k8sClient))
 
 		// Scalability 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Stability Check]===============\n")
 
 		// 싱글톤 Pod 미사용 - Automatic
-		if stability.SingletonPodCheck(k8sClient) {
-			fmt.Println(Green + "✔ PASS: SingletonPod No Used" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: SingletonPod Used" + Reset)
-		}
+		common.PrintResult(stability.SingletonPodCheck(k8sClient))
 
 		// 2개 이상의 Pod 복제본 사용 - Automatic
-		if stability.PodReplicaSetCheck(k8sClient) {
-			fmt.Println(Green + "✔ PASS: ReplicaSet Used more than one Pod" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: ReplicaSet Used one Pod" + Reset)
-		}
+		common.PrintResult(stability.PodReplicaSetCheck(k8sClient))
 
 		// 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 - Automatic
-		stability.CheckPodDistributionAndAffinity(k8sClient)
+		common.PrintResult(stability.CheckPodDistributionAndAffinity(k8sClient))
 
 		// HPA 적용 - Automatic
-		stability.CheckHpa(k8sClient)
+		common.PrintResult(stability.CheckHpa(k8sClient))
 
 		// Probe(Startup, Readiness, Liveness) 적용 - Automatic
-		if stability.CheckProbe(k8sClient) {
-			fmt.Println(Green + "✔ PASS: Probe is applied" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Probe is not applied" + Reset)
-		}
+		common.PrintResult(stability.CheckProbe(k8sClient))
 
 		// 오토스케일링 그룹 기반 관리형 노드 그룹 생성 - Automatic
-		if stability.CheckAutoScaledManagedNodeGroup(k8sClient, cluster) {
-			fmt.Println(Green + "✔ PASS: AutoScaled Managed Node Group is created" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: AutoScaled Managed Node Group is not created" + Reset)
-		}
+		common.PrintResult(stability.CheckAutoScaledManagedNodeGroup(k8sClient, cluster))
 
 		// Cluster Autoscaler 적용 - Automatic
-		if stability.CheckClusterAutoscalerEnabled(k8sClient) {
-			fmt.Println(Green + "✔ PASS: Cluster Autoscaler is installed" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Cluster Autoscaler is not installed" + Reset)
-		}
+		common.PrintResult(stability.CheckClusterAutoscalerEnabled(k8sClient))
 
 		// Karpenter 기반 노드 생성 - Automatic
-		if scalability.GetKarpenter(k8sClient) {
-			if stability.CheckKarpenterNode(dynamicClient) {
-				fmt.Println(Green + "✔ PASS: Karpenter Node is created" + Reset)
-			} else {
-				fmt.Println(Red + "✖ FAIL: Karpenter Node is not created" + Reset)
-			}
-		} else {
-			fmt.Println(Yellow + "⚠ WARNING: Karpenter is not installed" + Reset)
-		}
+		common.PrintResult(stability.CheckKarpenterNode(scalability.GetKarpenter(k8sClient), dynamicClient))
 
 		// 다수의 가용 영역에 데이터 플레인 노드 배포 - Automatic
-		if stability.CheckNodeMultiAZ(k8sClient) {
-			fmt.Println(Green + "✔ PASS: Nodes are deployed across multiple availability zones" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Nodes are not deployed across multiple availability zones" + Reset)
-		}
+		common.PrintResult(stability.CheckNodeMultiAZ(k8sClient))
 
-		// CoreDNS의 HPA가 존재하는지 확인
-		if stability.CheckCoreDNSHpa(k8sClient) {
-			fmt.Println(Green + "✔ PASS: CoreDNS HPA is Set up" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: CoreDNS HPA is not Set up" + Reset)
-		}
+		// CoreDNS에 HPA 적용 - Automatic
+		common.PrintResult(stability.CheckCoreDNSHpa(k8sClient))
 
 		// DNS 캐시 적용 - Automatic
-		if stability.CheckCoreDNSCache(k8sClient) {
-			fmt.Println(Green + "✔ PASS: CoreDNS Cache is applied" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: CoreDNS Cache is not applied" + Reset)
-		}
+		common.PrintResult(stability.CheckCoreDNSCache(k8sClient))
 
-		// Karpenter 사용시 DaemonSet에 Priority Class 부여 - Automatic
-		if scalability.GetKarpenter(k8sClient) {
-			if stability.CheckDaemonSetPriorityClass(k8sClient) {
-				fmt.Println(Green + "✔ PASS: DaemonSet Priority Class is set" + Reset)
-			} else {
-				fmt.Println(Red + "✖ FAIL: DaemonSet Priority Class is not set" + Reset)
-			}
-		} else {
-			fmt.Println(Yellow + "⚠ WARNING: Karpenter is not installed" + Reset)
-		}
+		// // Karpenter 사용시 DaemonSet에 Priority Class 부여 - Automatic
+		common.PrintResult(stability.CheckDaemonSetPriorityClass(scalability.GetKarpenter(k8sClient), k8sClient))
 
 		// Network 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Network Check]===============\n" + Reset)
