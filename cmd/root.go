@@ -1,15 +1,15 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
-
+	"eks-checklist/cmd/common"
 	"eks-checklist/cmd/cost"
 	"eks-checklist/cmd/general"
 	"eks-checklist/cmd/network"
 	"eks-checklist/cmd/scalability"
 	"eks-checklist/cmd/security"
 	"eks-checklist/cmd/stability"
+	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -49,36 +49,32 @@ var rootCmd = &cobra.Command{
 		// General 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[General Check]===============\n")
 
-		// latest 태그를 가진 이미지를 사용해서는 안됨
-		general.CheckImageTag(k8sClient)
+		// 컨테이너 이미지 태그에 latest 미사용
+		common.PrintResult(general.CheckImageTag(k8sClient))
 
 		// Security 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Security Check]===============\n")
 
 		// EKS 클러스터 API 엔드포인트 접근 제어(공인망, 사설망, IP 기반 제어) - Automatic
-		if !eksCluster.Cluster.ResourcesVpcConfig.EndpointPublicAccess {
-			fmt.Println(Green + "✔ PASS: EKS Cluster is not publicly accessible from the internet" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: EKS Cluster is publicly accessible from the internet" + Reset)
-		}
+		common.PrintResult(security.CheckEndpointPublicAccess(security.EksCluster(eksCluster)))
 
 		// 클러스터 접근 제어(Access entries, aws-auth 컨피그맵) - Automatic/Manual
 		// 컨피그맵이랑 accesslist 출력인데 정확히 어케 출력되야되는지랑, 인자로 cluster 받는거 맞는지 확인 필요
-		security.PrintAccessControl(k8sClient, cluster)
+		common.PrintResult(security.CheckAccessControl(k8sClient, cluster))
+
+		// IRSA 또는 Pod Identity 기반 권한 부여 - Automatic
+		common.PrintResult(security.CheckIRSAAndPodIdentity(k8sClient))
 
 		// 데이터 플레인 노드에 필수로 필요한 IAM 권한만 부여 - Automatic
-		security.CheckNodeIAMRoles(k8sClient)
+		common.PrintResult(security.CheckNodeIAMRoles(k8sClient))
 
 		// 루트 유저가 아닌 유저로 컨테이너 실행 - Automatic
-		security.CheckContainerExecutionUser(k8sClient)
+		common.PrintResult(security.CheckContainerExecutionUser(k8sClient))
 
 		// Audit 로그 활성화 - Automatic
-		if security.CheckAuditLoggingEnabled(&security.EksCluster{Cluster: eksCluster.Cluster}) {
-			fmt.Println(Green + "✔ PASS: Audit logging is enabled" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Audit logging is not enabled" + Reset)
-		}
+		common.PrintResult(security.CheckAuditLoggingEnabled(&security.EksCluster{Cluster: eksCluster.Cluster}))
 
+		// Manual 포함된 기능이라 출력 템플릿 스킵 - 검토 필요
 		// Pod-to-Pod 접근 제어 - Automatic/Manual
 		if security.CheckPodToPodNetworkPolicy(k8sClient) {
 			fmt.Println(Green + "✔ PASS: Pod-to-Pod network policy is found" + Reset)
@@ -87,36 +83,16 @@ var rootCmd = &cobra.Command{
 		}
 
 		// PV 암호화 - Automatic
-		if security.CheckPVEcryption(k8sClient) {
-			fmt.Println(Green + "✔ PASS: PV encryption is enabled" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: PV encryption is not enabled" + Reset)
-		}
+		common.PrintResult(security.CheckPVEcryption(k8sClient))
 
 		// Secret 객체 암호화 - Automatic
-		if security.CheckSecretEncryption(k8sClient) {
-			fmt.Println(Green + "✔ PASS: Secret encryption is enabled" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Secret encryption is not enabled" + Reset)
-		}
-
-		// 읽기 전용 파일시스템 사용 - Automatic
-		security.ReadnonlyFilesystemCheck(k8sClient)
-
-		// IRSA 또는 Pod Identity 기반 권한 부여 - Automatic
-		security.CheckIRSAAndPodIdentity(k8sClient)
+		common.PrintResult(security.CheckSecretEncryption(k8sClient))
 
 		// 데이터 플레인 사설망 - Automatic
-		subnets := security.DataplanePrivateCheck(security.EksCluster(eksCluster), cfg)
-		if len(subnets) == 0 {
-			fmt.Println(Green + "✔ PASS: All subnets are private (no IGW connection)." + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Some subnets are public (connected to IGW):" + Reset)
-			for _, s := range subnets {
-				fmt.Printf("- %s\n", s)
-			}
-			fmt.Println("Runbook URL: https://your.runbook.url/irsa-or-pod-identity")
-		}
+		common.PrintResult(security.DataplanePrivateCheck(security.EksCluster(eksCluster), cfg))
+
+		// 읽기 전용 파일시스템 사용 - Automatic
+		common.PrintResult(security.ReadnonlyFilesystemCheck(k8sClient))
 
 		// Scalability 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Scalability Check]===============\n")
