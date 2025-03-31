@@ -40,9 +40,9 @@ func PrintResult(r CheckResult) {
 }
 
 func PrintSummary() {
-	fmt.Println("\n=========== 🛡️ Checklist Summary 🛡️ ===========")
-	fmt.Printf(Green+"✅ PASS: %d\n"+Reset, PassedCount)
-	fmt.Printf(Red+"❌ FAIL: %d\n"+Reset, FailedCount)
+	fmt.Println("\n===========  Checklist Summary  ===========")
+	fmt.Printf(Green+"✔ PASS: %d\n"+Reset, PassedCount)
+	fmt.Printf(Red+"✖ FAIL: %d\n"+Reset, FailedCount)
 	fmt.Printf(Yellow+"⚠ Manual: %d\n"+Reset, ManualCount)
 	fmt.Println("======================================")
 }

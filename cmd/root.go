@@ -149,64 +149,56 @@ var rootCmd = &cobra.Command{
 		common.PrintResult(stability.CheckDaemonSetPriorityClass(scalability.GetKarpenter(k8sClient), k8sClient))
 
 		// Network 항목 체크 기능은 하단 항목에 추가
-		fmt.Printf("\n===============[Network Check]===============\n" + Reset)
+		fmt.Printf("\n===============[Network Check]===============\n")
 
 		// VPC 서브넷에 충분한 IP 대역대 확보 - Automatic/Manual
-		if ipCapacities := network.CheckVpcSubnetIpCapacity(network.EksCluster(eksCluster), cfg); len(ipCapacities) > 0 {
-			for subnetId, ipCapacity := range ipCapacities {
-				fmt.Printf(Red+"✖ FAIL: Subnet %s has less than 10%% of available IPs remaining: %d\n", subnetId, ipCapacity)
-			}
-		} else {
-			fmt.Println(Green + "✔ PASS: All subnets have more than 10% of available IPs remaining" + Reset)
-		}
+		common.PrintResult(network.CheckVpcSubnetIpCapacity(network.EksCluster(eksCluster), cfg))
 
 		// VPC CNI의 Prefix 모드 사용 - Automatic
-		if network.CheckVpcCniPrefixMode(k8sClient) {
-			fmt.Println(Green + "✔ PASS: VPC CNI is in prefix mode" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: VPC CNI is not in prefix mode" + Reset)
-		}
+		common.PrintResult(network.CheckVpcCniPrefixMode(k8sClient))
 
 		// AWS Load Balancer Controller 사용 - Automatic
-		if network.CheckAwsLoadBalancerController(k8sClient) {
-			fmt.Println(Green + "✔ PASS: AWS Load Balancer Controller is installed" + Reset)
-			// ALB/NLB의 대상으로 Pod의 IP 사용 - Automatic
-			if network.CheckAwsLoadBalancerPodIp(k8sClient) {
-				fmt.Println(Green + "✔ PASS: AWS Load Balancer Pod IP is in use" + Reset)
-			} else {
-				fmt.Println(Red + "FAIL: AWS Load Balancer Pod IP is not in use" + Reset)
-			}
-			// Pod Readiness Gate 적용 - Automatic
-			if network.CheckReadinessGateEnabled(k8sClient) {
-				fmt.Println(Green + "✔ PASS: Readiness Gate is enabled" + Reset)
-			} else {
-				fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
-			}
-		} else {
-			fmt.Println(Red + "✖ FAIL: AWS Load Balancer Controller is not installed" + Reset)
-			fmt.Println(Red + "✖ FAIL: AWS Load Balancer Pod IP is not in use" + Reset)
-			fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
-		}
+		// if network.CheckAwsLoadBalancerController(k8sClient) {
+		// 	fmt.Println(Green + "✔ PASS: AWS Load Balancer Controller is installed" + Reset)
+		// 	// ALB/NLB의 대상으로 Pod의 IP 사용 - Automatic
+		// 	if network.CheckAwsLoadBalancerPodIp(k8sClient) {
+		// 		fmt.Println(Green + "✔ PASS: AWS Load Balancer Pod IP is in use" + Reset)
+		// 	} else {
+		// 		fmt.Println(Red + "FAIL: AWS Load Balancer Pod IP is not in use" + Reset)
+		// 	}
+		// 	// Pod Readiness Gate 적용 - Automatic
+		// 	if network.CheckReadinessGateEnabled(k8sClient) {
+		// 		fmt.Println(Green + "✔ PASS: Readiness Gate is enabled" + Reset)
+		// 	} else {
+		// 		fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
+		// 	}
+		// } else {
+		// 	fmt.Println(Red + "✖ FAIL: AWS Load Balancer Controller is not installed" + Reset)
+		// 	fmt.Println(Red + "✖ FAIL: AWS Load Balancer Pod IP is not in use" + Reset)
+		// 	fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
+		// }
+		common.PrintResult(network.CheckAwsLoadBalancerController(k8sClient))
+
+		// ALB/NLB의 대상으로 Pod의 IP 사용 - Automatic
+		common.PrintResult(network.CheckAwsLoadBalancerPodIp(network.CheckAwsLoadBalancerController(k8sClient), k8sClient))
+
+		// Pod Readiness Gate 적용 - Automatic
+		common.PrintResult(network.CheckReadinessGateEnabled(network.CheckAwsLoadBalancerController(k8sClient), k8sClient))
 
 		// kube-proxy에 IPVS 모드 적용 - Automatic
-		if network.CheckKubeProxyIPVSMode(k8sClient) {
-			fmt.Println(Green + "✔ PASS: kube-proxy is in IPVS mode" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: kube-proxy is not in IPVS mode" + Reset)
-		}
+		common.PrintResult(network.CheckKubeProxyIPVSMode(k8sClient))
 
 		// Endpoint 대신 EndpointSlices 사용 - Automatic
-		network.EndpointSlicesCheck(k8sClient)
+		common.PrintResult(network.EndpointSlicesCheck(k8sClient))
 
 		// 비용최적화 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[Cost-Optimized Check]===============\n")
 
 		// EKS용 Kubecost 설치 - Automatic
-		if cost.GetKubecost(k8sClient) {
-			fmt.Println(Green + "✔ PASS: Kubecost is installed" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Kubecost is not installed" + Reset)
-		}
+		common.PrintResult(cost.GetKubecost(k8sClient))
+
+		// 요약본
+		common.PrintSummary()
 	},
 }
 
