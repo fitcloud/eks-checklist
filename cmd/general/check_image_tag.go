@@ -16,7 +16,7 @@ func CheckImageTag(client kubernetes.Interface) common.CheckResult {
 		Passed:     true,
 		SuccessMsg: "모든 컨테이너 이미지는 latest 태그를 사용 중이지 않습니다.",
 		FailureMsg: "일부 컨테이터 이미지가 latest 태그를 사용 중입니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/컨테이너_이미지_태그에_latest_미사용/",
 	}
 
 	pods, err := client.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})
