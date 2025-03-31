@@ -1,28 +1,71 @@
+// 기존 코드
+// package scalability
+
+// import (
+// 	"context"
+// 	"strings"
+
+// 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+// 	"k8s.io/client-go/kubernetes"
+// )
+
+// // 함수 분리
+// func GetKarpenter(client kubernetes.Interface) bool {
+// 	deploys, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})
+
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+
+// 	for _, deploy := range deploys.Items {
+// 		for _, container := range deploy.Spec.Template.Spec.Containers {
+// 			if strings.Contains(container.Image, "karpenter") {
+// 				return true
+// 			}
+// 		}
+// 	}
+
+// 	return false
+// }
+
 package scalability
 
 import (
 	"context"
 	"strings"
 
+	"eks-checklist/cmd/common"
+
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
-// 함수 분리
-func GetKarpenter(client kubernetes.Interface) bool {
-	deploys, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})
+// GetKarpenter checks if the Karpenter deployment is installed in the cluster.
+func GetKarpenter(client kubernetes.Interface) common.CheckResult {
+	result := common.CheckResult{
+		CheckName:  "Karpenter 사용",
+		Manual:     false,
+		Passed:     true,
+		FailureMsg: "Karpenter 관련 이미지가 포함된 Deployment를 찾을 수 없습니다.",
+		Runbook:    "https://your.runbook.url/latest-tag-image",
+	}
 
+	deploys, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})
 	if err != nil {
-		panic(err.Error())
+		result.Passed = false
+		result.FailureMsg = result.CheckName + " 검사 실패 : " + err.Error()
+		return result
 	}
 
 	for _, deploy := range deploys.Items {
 		for _, container := range deploy.Spec.Template.Spec.Containers {
 			if strings.Contains(container.Image, "karpenter") {
-				return true
+				result.Passed = true
+				return result
 			}
 		}
 	}
 
-	return false
+	result.Passed = false
+	return result
 }

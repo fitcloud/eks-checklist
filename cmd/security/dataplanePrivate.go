@@ -1,24 +1,87 @@
+// 기존 코드
+
+// package security
+
+// import (
+// 	"context"
+// 	"log"
+// 	"strings"
+
+// 	"github.com/aws/aws-sdk-go-v2/aws"
+// 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+// 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+// )
+
+// // 각 서브넷이 IGW에 연결되어 있다면 반환하는 함수
+// func DataplanePrivateCheck(eksCluster EksCluster, cfg aws.Config) []string {
+// 	subnetIds := eksCluster.Cluster.ResourcesVpcConfig.SubnetIds
+// 	ec2Client := ec2.NewFromConfig(cfg)
+
+// 	var publicSubnets []string
+
+// 	for _, subnetId := range subnetIds {
+// 		// 라우트 테이블 조회
+// 		rtOut, err := ec2Client.DescribeRouteTables(context.TODO(), &ec2.DescribeRouteTablesInput{
+// 			Filters: []ec2types.Filter{
+// 				{
+// 					Name:   aws.String("association.subnet-id"),
+// 					Values: []string{subnetId},
+// 				},
+// 			},
+// 		})
+// 		if err != nil {
+// 			log.Printf("Failed to describe route table for subnet %s: %v", subnetId, err)
+// 			continue
+// 		}
+
+// 		// IGW 연결 여부 확인
+// 		for _, rt := range rtOut.RouteTables {
+// 			for _, route := range rt.Routes {
+// 				if route.DestinationCidrBlock != nil && *route.DestinationCidrBlock == "0.0.0.0/0" {
+// 					if route.GatewayId != nil && strings.HasPrefix(*route.GatewayId, "igw-") {
+// 						publicSubnets = append(publicSubnets, subnetId)
+// 						log.Printf("Subnet %s is connected to IGW via route table %s", subnetId, *rt.RouteTableId)
+// 						break
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	return publicSubnets
+// }
+
+// 변경 후 코드
 package security
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"strings"
+
+	"eks-checklist/cmd/common"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
 
-// 각 서브넷이 IGW에 연결되어 있다면 반환하는 함수
-func DataplanePrivateCheck(eksCluster EksCluster, cfg aws.Config) []string {
+// DataplanePrivateCheck checks whether all subnets used by the EKS data plane are private.
+func DataplanePrivateCheck(eksCluster EksCluster, cfg aws.Config) common.CheckResult {
+	result := common.CheckResult{
+		CheckName:  "데이터 플레인 사설망",
+		Manual:     false,
+		Passed:     true,
+		FailureMsg: "일부 서브넷이 IGW(인터넷 게이트웨이)와 연결되어 있어 퍼블릭 상태입니다.",
+		Runbook:    "https://your.runbook.url/latest-tag-image",
+	}
+
 	subnetIds := eksCluster.Cluster.ResourcesVpcConfig.SubnetIds
 	ec2Client := ec2.NewFromConfig(cfg)
 
 	var publicSubnets []string
 
 	for _, subnetId := range subnetIds {
-		// 라우트 테이블 조회
 		rtOut, err := ec2Client.DescribeRouteTables(context.TODO(), &ec2.DescribeRouteTablesInput{
 			Filters: []ec2types.Filter{
 				{
@@ -28,17 +91,16 @@ func DataplanePrivateCheck(eksCluster EksCluster, cfg aws.Config) []string {
 			},
 		})
 		if err != nil {
-			log.Printf("Failed to describe route table for subnet %s: %v", subnetId, err)
-			continue
+			result.Passed = false
+			result.FailureMsg = result.CheckName + " 검사 실패 : " + err.Error()
+			return result
 		}
 
-		// IGW 연결 여부 확인
 		for _, rt := range rtOut.RouteTables {
 			for _, route := range rt.Routes {
 				if route.DestinationCidrBlock != nil && *route.DestinationCidrBlock == "0.0.0.0/0" {
 					if route.GatewayId != nil && strings.HasPrefix(*route.GatewayId, "igw-") {
 						publicSubnets = append(publicSubnets, subnetId)
-						log.Printf("Subnet %s is connected to IGW via route table %s", subnetId, *rt.RouteTableId)
 						break
 					}
 				}
@@ -46,5 +108,12 @@ func DataplanePrivateCheck(eksCluster EksCluster, cfg aws.Config) []string {
 		}
 	}
 
-	return publicSubnets
+	if len(publicSubnets) > 0 {
+		result.Passed = false
+		for _, subnet := range publicSubnets {
+			result.Resources = append(result.Resources, fmt.Sprintf("Public Subnet: %s", subnet))
+		}
+	}
+
+	return result
 }

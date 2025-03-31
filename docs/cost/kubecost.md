@@ -26,4 +26,4 @@ helm repo update
 helm install kubecost kubecost/cost-analyzer --namespace kubecost --create-namespace
 kubectl get deployments -n kubecost | grep "kubecost"
 ```
-
+### [Kubecost 설치](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/cost-monitoring-kubecost.html)
