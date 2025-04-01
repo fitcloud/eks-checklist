@@ -6,6 +6,8 @@ nav:
   - General:
     - 컨테이너 이미지 태그에 latest 미사용 : general/컨테이너_이미지_태그에_latest_미사용.md
   - Security:
+    - EKS 클러스터 API 엔드포인트 접근 제어 : security/EKS_클러스터_API_엔드포인트_접근_제어.md
+    - IRSA 또는 EKS Pod Identity 기반 권한 부여 : security/IRSA_또는_EKS_Pod_Identity_기반_권한_부여.md
     - sample3 : security/sample3.md
     - auditlog : security/auditlog.md
   - Scalability:
