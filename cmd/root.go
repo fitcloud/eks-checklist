@@ -74,13 +74,13 @@ var rootCmd = &cobra.Command{
 		// Audit 로그 활성화 - Automatic
 		common.PrintResult(security.CheckAuditLoggingEnabled(&security.EksCluster{Cluster: eksCluster.Cluster}))
 
-		// Manual 포함된 기능이라 출력 템플릿 스킵 - 검토 필요
 		// Pod-to-Pod 접근 제어 - Automatic/Manual
-		if security.CheckPodToPodNetworkPolicy(k8sClient) {
-			fmt.Println(Green + "✔ PASS: Pod-to-Pod network policy is found" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Pod-to-Pod network policy is not found" + Reset)
-		}
+		// if security.CheckPodToPodNetworkPolicy(k8sClient) {
+		// 	fmt.Println(Green + "✔ PASS: Pod-to-Pod network policy is found" + Reset)
+		// } else {
+		// 	fmt.Println(Red + "✖ FAIL: Pod-to-Pod network policy is not found" + Reset)
+		// }
+		common.PrintResult(security.CheckPodToPodNetworkPolicy(k8sClient, cluster))
 
 		// PV 암호화 - Automatic
 		common.PrintResult(security.CheckPVEcryption(k8sClient))
