@@ -128,7 +128,7 @@ package security_test
 
 // 			// 함수 실행 및 반환값 비교
 // 			result := security.CheckNodeIAMRoles(client)
-// 			if result != expected {
+// 			if result.Passed != expected {
 // 				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expected, result)
 // 			}
 // 		})

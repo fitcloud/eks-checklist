@@ -3,7 +3,7 @@
     - "t3.medium"
   provider_ids:
     - "aws:///us-west-2a/i-abc123"
-  expect_failure: true
+  expect_pass: false
 
 - name: "Multiple_Instance_Types"
   instance_types:
@@ -12,7 +12,7 @@
   provider_ids:
     - "aws:///us-west-2a/i-abc123"
     - "aws:///us-west-2a/i-def456"
-  expect_failure: false
+  expect_pass: true
 
 - name: "Includes_Fargate_Node"
   instance_types:
@@ -21,4 +21,4 @@
   provider_ids:
     - "aws:///us-west-2a/i-abc123"
     - "fargate://task/xyz"
-  expect_failure: false
+  expect_pass: true

@@ -79,7 +79,7 @@ package security_test
 
 // 			// CheckIRSAAndPodIdentity 함수 실행 및 반환값 검증
 // 			result := security.CheckIRSAAndPodIdentity(client)
-// 			if result != expected {
+// 			if result.Passed != expected {
 // 				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expected, result)
 // 			}
 // 		})

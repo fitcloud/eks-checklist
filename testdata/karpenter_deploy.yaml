@@ -1,7 +1,7 @@
 - name: "Karpenter_Deployment_Exists"
   pod_images: "karpenter/controller:v0.32.0"
-  expect_failure: false
+  expect_pass: true
 
 - name: "No_Karpenter_Deployment"
   pod_images: "nginx:latest"
-  expect_failure: true
+  expect_pass: false

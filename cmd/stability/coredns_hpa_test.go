@@ -17,12 +17,12 @@ package stability_test
 
 // 	for _, tc := range testCases {
 // 		name := tc["name"].(string)
-// 		expectFailure := tc["expect_failure"].(bool)
+// 		expectPass := tc["expect_pass"].(bool)
 
 // 		t.Run(name, func(t *testing.T) {
 // 			client := fake.NewSimpleClientset()
 
-// 			if !expectFailure {
+// 			if !expectPass {
 // 				// CoreDNS용 HPA 생성
 // 				_, err := client.AutoscalingV1().HorizontalPodAutoscalers("kube-system").Create(context.TODO(), &autoscalingv1.HorizontalPodAutoscaler{
 // 					ObjectMeta: metav1.ObjectMeta{
@@ -44,8 +44,8 @@ package stability_test
 
 // 			result := stability.CheckCoreDNSHpa(client)
 
-// 			if result != !expectFailure {
-// 				t.Errorf("Test '%s' failed: expected %v, got %v", name, !expectFailure, result)
+// 			if result.Passed != !expectPass {
+// 				t.Errorf("Test '%s' failed: expected %v, got %v", name, !expectPass, result.Passed)
 // 			}
 // 		})
 // 	}

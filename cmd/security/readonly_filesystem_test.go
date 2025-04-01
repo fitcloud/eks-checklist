@@ -21,7 +21,7 @@ package security_test
 
 // 	for _, tc := range testCases {
 // 		name := tc["name"].(string)
-// 		expectFailure := tc["expect_failure"].(bool)
+// 		expectPass := tc["expect_pass"].(bool)
 // 		nodeOSList := tc["node_os"].([]interface{})
 // 		pods := tc["pods"].([]interface{})
 
@@ -87,8 +87,8 @@ package security_test
 
 // 			// 테스트 실행 및 결과 검증
 // 			result := security.ReadnonlyFilesystemCheck(client)
-// 			shouldPass := !expectFailure
-// 			if result != shouldPass {
+// 			shouldPass := !expectPass
+// 			if result.Passed != shouldPass {
 // 				t.Errorf("Test '%s' failed: expected pass = %v, got %v", name, shouldPass, result)
 // 			}
 // 		})

@@ -30,13 +30,13 @@ package stability_test
 
 // 	for _, tc := range testCases {
 // 		name := tc["name"].(string)
-// 		expectFailure := tc["expect_failure"].(bool)
+// 		expectPass := tc["expect_pass"].(bool)
 
 // 		t.Run(name, func(t *testing.T) {
 // 			var objects []runtime.Object
 
 // 			// NodeClaim 리소스를 생성할 케이스라면 unstructured 객체 생성
-// 			if !expectFailure {
+// 			if !expectPass {
 // 				nodeClaim := &unstructured.Unstructured{
 // 					Object: map[string]interface{}{
 // 						"apiVersion": "karpenter.k8s.aws/v1beta1",
@@ -60,8 +60,8 @@ package stability_test
 // 			result := stability.CheckKarpenterNode(client)
 
 // 			// 기대 결과와 비교
-// 			if result != !expectFailure {
-// 				t.Errorf("Test '%s' failed: expected %v, got %v", name, !expectFailure, result)
+// 			if result.Passed != !expectPass {
+// 				t.Errorf("Test '%s' failed: expected %v, got %v", name, !expectPass, result.Passed)
 // 			}
 // 		})
 // 	}

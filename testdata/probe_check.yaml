@@ -1,14 +1,14 @@
 - name: "All_Probes_Set"
-  expect_failure: false
+  expect_pass: true
 
 - name: "Missing_StartupProbe"
-  expect_failure: true
+  expect_pass: false
 
 - name: "Missing_LivenessProbe"
-  expect_failure: true
+  expect_pass: false
 
 - name: "Missing_ReadinessProbe"
-  expect_failure: true
+  expect_pass: false
 
 - name: "Pod_In_KubeSystem"
-  expect_failure: false
+  expect_pass: true

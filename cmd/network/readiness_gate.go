@@ -11,18 +11,12 @@ import (
 )
 
 // CheckReadinessGateEnabled checks if any namespace has pod readiness gate enabled.
-func CheckReadinessGateEnabled(controller_installed common.CheckResult, client kubernetes.Interface) common.CheckResult {
+func CheckReadinessGateEnabled(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
 		CheckName: "Pod Readiness Gate 적용",
 		Manual:    false,
 		Passed:    true,
 		Runbook:   "https://your.runbook.url/latest-tag-image",
-	}
-
-	if !controller_installed.Passed {
-		result.Passed = false
-		result.FailureMsg = "AWS Load Balancer Controller가 설치되어 있지 않습니다"
-		return result
 	}
 
 	namespaces, err := client.CoreV1().Namespaces().List(context.TODO(), v1.ListOptions{})

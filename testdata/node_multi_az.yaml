@@ -1,8 +1,8 @@
 - name: "Single_AZ"
-  expect_failure: true
+  expect_pass: false
 
 - name: "Multi_AZ"
-  expect_failure: false
+  expect_pass: true
 
 - name: "No_Zone_Label"
-  expect_failure: true
+  expect_pass: false

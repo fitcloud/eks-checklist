@@ -1,130 +1,70 @@
 package network_test
 
-// import (
-// 	"context"
-// 	"fmt"
-// 	"math"
-// 	"net"
-// 	"reflect"
-// 	"testing"
+import (
+	"context"
+	"testing"
 
-// 	"eks-checklist/cmd/network"
-// 	"eks-checklist/cmd/testutils"
+	"eks-checklist/cmd/network"
+	"eks-checklist/cmd/testutils"
 
-// 	"bou.ke/monkey"
-// 	"github.com/aws/aws-sdk-go-v2/aws"
-// 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-// 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
-// 	eksTypes "github.com/aws/aws-sdk-go-v2/service/eks/types"
-// )
+	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1" // Container 등 사용
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes/fake"
+)
 
-// // FakeSubnet holds fake data for a subnet.
-// type FakeSubnet struct {
-// 	CidrBlock               string
-// 	AvailableIpAddressCount int64
-// 	SubnetId                string
-// }
+func TestCheckAwsLoadBalancerController(t *testing.T) {
+	// YAML 파일 "aws_loadbalancer_controller.yaml"에서 테스트 케이스를 로드합니다.
+	testCases := testutils.LoadTestCases(t, "aws_loadbalancer_controller.yaml")
+	for _, tc := range testCases {
+		testName := tc["name"].(string)
+		expectPass := tc["expect_pass"].(bool)
+		deploymentsRaw := tc["deployments"].([]interface{})
 
-// func TestCheckVpcSubnetIpCapacity_YAML(t *testing.T) {
-// 	// YAML 파일 "subnet_ip_capacity.yaml"에서 테스트 케이스 로드
-// 	testCases := testutils.LoadTestCases(t, "subnet_ip_capacity.yaml")
-// 	for _, tc := range testCases {
-// 		testName := tc["name"].(string)
-// 		// expected_result는 YAML에서 mapping으로 주어짐 (예: { "subnet-1": 10 })
-// 		expectedResultRaw := tc["expected_result"].(map[string]interface{})
-// 		expectedResult := make(map[string]int)
-// 		for k, v := range expectedResultRaw {
-// 			switch val := v.(type) {
-// 			case float64:
-// 				expectedResult[k] = int(val)
-// 			case int:
-// 				expectedResult[k] = val
-// 			default:
-// 				t.Fatalf("expected_result value is of unexpected type: %T", val)
-// 			}
-// 		}
+		t.Run(testName, func(t *testing.T) {
+			client := fake.NewSimpleClientset()
 
-// 		// cluster 정보 생성
-// 		clusterMap := tc["cluster"].(map[string]interface{})
-// 		resourcesVpcConfig := clusterMap["resourcesVpcConfig"].(map[string]interface{})
-// 		subnetIdsRaw := resourcesVpcConfig["subnetIds"].([]interface{})
-// 		var subnetIds []string
-// 		for _, id := range subnetIdsRaw {
-// 			subnetIds = append(subnetIds, id.(string))
-// 		}
-// 		eksCluster := network.EksCluster{
-// 			Cluster: &eksTypes.Cluster{
-// 				ResourcesVpcConfig: &eksTypes.VpcConfigResponse{
-// 					SubnetIds: subnetIds,
-// 				},
-// 			},
-// 		}
+			// YAML에 정의된 Deployment 객체들을 생성합니다.
+			for _, d := range deploymentsRaw {
+				dMap := d.(map[string]interface{})
+				ns := dMap["namespace"].(string)
+				name := dMap["name"].(string)
 
-// 		// 테스트 케이스에서 fake 서브넷 데이터를 생성 (mapping: subnet_id → FakeSubnet)
-// 		fakeSubnets := make(map[string]FakeSubnet)
-// 		subnetsRaw := tc["subnets"].([]interface{})
-// 		for _, s := range subnetsRaw {
-// 			sMap := s.(map[string]interface{})
-// 			subnetId := sMap["subnet_id"].(string)
-// 			cidrBlock := sMap["cidr_block"].(string)
+				containersRaw := dMap["containers"].([]interface{})
+				var containers []corev1.Container
+				for _, c := range containersRaw {
+					cMap := c.(map[string]interface{})
+					containers = append(containers, corev1.Container{
+						Name:  cMap["name"].(string),
+						Image: cMap["image"].(string),
+					})
+				}
 
-// 			var availableIp int64
-// 			switch v := sMap["available_ip"].(type) {
-// 			case float64:
-// 				availableIp = int64(v)
-// 			case int:
-// 				availableIp = int64(v)
-// 			default:
-// 				t.Fatalf("available_ip is of unexpected type: %T", v)
-// 			}
+				deployObj := &appsv1.Deployment{
+					ObjectMeta: metav1.ObjectMeta{
+						Name:      name,
+						Namespace: ns,
+					},
+					Spec: appsv1.DeploymentSpec{
+						Template: corev1.PodTemplateSpec{
+							Spec: corev1.PodSpec{
+								Containers: containers,
+							},
+						},
+					},
+				}
 
-// 			fakeSubnets[subnetId] = FakeSubnet{
-// 				CidrBlock:               cidrBlock,
-// 				AvailableIpAddressCount: availableIp,
-// 				SubnetId:                subnetId,
-// 			}
-// 		}
+				_, err := client.AppsV1().Deployments(ns).Create(context.TODO(), deployObj, metav1.CreateOptions{})
+				if err != nil {
+					t.Fatalf("Failed to create Deployment %s/%s: %v", ns, name, err)
+				}
+			}
 
-// 		t.Run(testName, func(t *testing.T) {
-// 			// Patch ec2.NewFromConfig를 사용해 EC2 클라이언트를 생성한 후 DescribeSubnets 메서드를 monkey patch 합니다.
-// 			patch := monkey.PatchInstanceMethod(reflect.TypeOf(new(ec2.Client)), "DescribeSubnets",
-// 				func(c *ec2.Client, ctx context.Context, input *ec2.DescribeSubnetsInput, optFns ...func(*ec2.Options)) (*ec2.DescribeSubnetsOutput, error) {
-// 					if len(input.SubnetIds) == 0 {
-// 						return nil, fmt.Errorf("no subnet id provided")
-// 					}
-// 					id := input.SubnetIds[0]
-// 					fakeSub, ok := fakeSubnets[id]
-// 					if !ok {
-// 						return nil, fmt.Errorf("subnet not found: %s", id)
-// 					}
-// 					// CIDR 블록을 파싱하여 총 IP 개수를 계산하는 로직과 동일하게 동작하도록 함
-// 					_, ipNet, err := net.ParseCIDR(fakeSub.CidrBlock)
-// 					if err != nil {
-// 						return nil, fmt.Errorf("CIDR parsing failed for %s: %v", fakeSub.CidrBlock, err)
-// 					}
-// 					ones, bits := ipNet.Mask.Size()
-// 					totalIPs := int(math.Pow(2, float64(bits-ones))) - 5
-// 					_ = totalIPs
-// 					// 여기서는 fakeSub.AvailableIpAddressCount를 사용
-// 					return &ec2.DescribeSubnetsOutput{
-// 						Subnets: []ec2types.Subnet{
-// 							{
-// 								CidrBlock:               aws.String(fakeSub.CidrBlock),
-// 								AvailableIpAddressCount: aws.Int32(int32(fakeSub.AvailableIpAddressCount)),
-// 								SubnetId:                aws.String(fakeSub.SubnetId),
-// 							},
-// 						},
-// 					}, nil
-// 				})
-// 			defer patch.Unpatch()
-
-// 			// 더미 AWS 구성(내용은 필요 없음)
-// 			cfg := aws.Config{}
-
-// 			result := network.CheckVpcSubnetIpCapacity(eksCluster, cfg)
-// 			if !reflect.DeepEqual(result, expectedResult) {
-// 				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectedResult, result)
-// 			}
-// 		})
-// 	}
-// }
+			// CheckAwsLoadBalancerController 함수 실행 후 반환값 검증
+			result := network.CheckAwsLoadBalancerController(client)
+			if result.Passed != expectPass {
+				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectPass, result.Passed)
+			}
+		})
+	}
+}

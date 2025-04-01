@@ -2,7 +2,7 @@
 # 이 파일은 CheckContainerExecutionUser 함수 테스트를 위한 다양한 케이스들을 정의합니다.
 
 - name: "Normal Container Test"
-  expect_failure: false
+  expect_pass: true
   pods:
     - name: "pod-normal"
       namespace: "default"
@@ -11,7 +11,7 @@
           runAsUser: 1000
 
 - name: "Root User Test"
-  expect_failure: true
+  expect_pass: false
   pods:
     - name: "pod-root"
       namespace: "default"
@@ -20,7 +20,7 @@
           runAsUser: 0
 
 - name: "Windows Administrator Test"
-  expect_failure: true
+  expect_pass: false
   pods:
     - name: "pod-windows"
       namespace: "default"
@@ -30,7 +30,7 @@
           windowsUser: "Administrator"
 
 - name: "RunAsUser Not Set Test"
-  expect_failure: false
+  expect_pass: true
   pods:
     - name: "pod-no-runas"
       namespace: "default"
@@ -39,7 +39,7 @@
           runAsUser: null
 
 - name: "Exclude Pod Test (aws-node included)"
-  expect_failure: false
+  expect_pass: true
   pods:
     - name: "aws-node-pod"
       namespace: "kube-system"

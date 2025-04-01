@@ -2,11 +2,11 @@
   pod_images:
     - "nginx:1.21"
     - "alpine:3.14"
-  expect_failure: false
+  expect_pass: true
 
 - name: "Contains latest tag"
   pod_images:
     - "nginx:latest"
     - "alpine:3.14"
-  expect_failure: true
+  expect_pass: false
 

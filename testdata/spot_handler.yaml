@@ -1,5 +1,5 @@
 - name: "SpotHandler_Installed"
-  expect_failure: false
+  expect_pass: true
 
 - name: "SpotHandler_Not_Installed"
-  expect_failure: true
+  expect_pass: false

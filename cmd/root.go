@@ -180,10 +180,10 @@ var rootCmd = &cobra.Command{
 		common.PrintResult(network.CheckAwsLoadBalancerController(k8sClient))
 
 		// ALB/NLB의 대상으로 Pod의 IP 사용 - Automatic
-		common.PrintResult(network.CheckAwsLoadBalancerPodIp(network.CheckAwsLoadBalancerController(k8sClient), k8sClient))
+		common.PrintResult(network.CheckAwsLoadBalancerPodIp(k8sClient))
 
 		// Pod Readiness Gate 적용 - Automatic
-		common.PrintResult(network.CheckReadinessGateEnabled(network.CheckAwsLoadBalancerController(k8sClient), k8sClient))
+		common.PrintResult(network.CheckReadinessGateEnabled(k8sClient))
 
 		// kube-proxy에 IPVS 모드 적용 - Automatic
 		common.PrintResult(network.CheckKubeProxyIPVSMode(k8sClient))

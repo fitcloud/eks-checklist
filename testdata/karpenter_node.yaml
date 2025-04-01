@@ -1,5 +1,5 @@
 - name: "Karpenter_NodeClaims_Exist"
-  expect_failure: false
+  expect_pass: true
 
 - name: "No_Karpenter_NodeClaims"
-  expect_failure: true
+  expect_pass: false

@@ -228,7 +228,7 @@ package stability_test
 // 			defer patch2.Unpatch()
 
 // 			result := stability.CheckAutoScaledManagedNodeGroup(client, clusterName)
-// 			if result != expected {
+// 			if result.Passed != expected {
 // 				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expected, result)
 // 			}
 // 		})

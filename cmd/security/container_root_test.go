@@ -31,7 +31,7 @@ package security_test
 // 	for _, tc := range testCases {
 // 		name := tc["name"].(string)
 // 		// expect_failure 값은 "루트 사용자(또는 Administrator) 감지 시" true여야 함.
-// 		expectFailure := tc["expect_failure"].(bool)
+// 		expectPass := tc["expect_pass"].(bool)
 // 		pods := tc["pods"].([]interface{})
 
 // 		t.Run(name, func(t *testing.T) {
@@ -98,8 +98,8 @@ package security_test
 
 // 			// 함수 결과와 YAML의 기대값(expect_failure)이 일치하는지 검증합니다.
 // 			// (expect_failure가 true면 루트 사용자가 감지되어야 하므로 result도 true여야 함)
-// 			if result != expectFailure {
-// 				t.Errorf("테스트 '%s' 실패: 기대값 = %v, 실제값 = %v", name, expectFailure, result)
+// 			if result.Passed != expectPass {
+// 				t.Errorf("테스트 '%s' 실패: 기대값 = %v, 실제값 = %v", name, expectPass, result.Passed)
 // 			}
 // 		})
 // 	}

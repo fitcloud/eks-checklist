@@ -1,8 +1,8 @@
 - name: "All_EBS_Encrypted"
-  expect_failure: false
+  expect_pass: true
 
 - name: "Some_EBS_Unencrypted"
-  expect_failure: true
+  expect_pass: false
 
 - name: "Non_EBS_PV"
-  expect_failure: true
+  expect_pass: false
