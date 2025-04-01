@@ -59,7 +59,6 @@ var rootCmd = &cobra.Command{
 		common.PrintResult(security.CheckEndpointPublicAccess(security.EksCluster(eksCluster)))
 
 		// 클러스터 접근 제어(Access entries, aws-auth 컨피그맵) - Automatic/Manual
-		// 컨피그맵이랑 accesslist 출력인데 정확히 어케 출력되야되는지랑, 인자로 cluster 받는거 맞는지 확인 필요
 		common.PrintResult(security.CheckAccessControl(k8sClient, cfg, cluster))
 
 		// IRSA 또는 Pod Identity 기반 권한 부여 - Automatic
@@ -71,15 +70,15 @@ var rootCmd = &cobra.Command{
 		// 루트 유저가 아닌 유저로 컨테이너 실행 - Automatic
 		common.PrintResult(security.CheckContainerExecutionUser(k8sClient))
 
+		// 불필요한 OS 권한 비부여 - Automatic
+
+		// 멀티 태넌시 적용 유무 - Manual
+		common.PrintResult(security.CheckMultitenancy(k8sClient, cfg, cluster))
+
 		// Audit 로그 활성화 - Automatic
 		common.PrintResult(security.CheckAuditLoggingEnabled(&security.EksCluster{Cluster: eksCluster.Cluster}))
 
 		// Pod-to-Pod 접근 제어 - Automatic/Manual
-		// if security.CheckPodToPodNetworkPolicy(k8sClient) {
-		// 	fmt.Println(Green + "✔ PASS: Pod-to-Pod network policy is found" + Reset)
-		// } else {
-		// 	fmt.Println(Red + "✖ FAIL: Pod-to-Pod network policy is not found" + Reset)
-		// }
 		common.PrintResult(security.CheckPodToPodNetworkPolicy(k8sClient, cluster))
 
 		// PV 암호화 - Automatic
@@ -158,25 +157,6 @@ var rootCmd = &cobra.Command{
 		common.PrintResult(network.CheckVpcCniPrefixMode(k8sClient))
 
 		// AWS Load Balancer Controller 사용 - Automatic
-		// if network.CheckAwsLoadBalancerController(k8sClient) {
-		// 	fmt.Println(Green + "✔ PASS: AWS Load Balancer Controller is installed" + Reset)
-		// 	// ALB/NLB의 대상으로 Pod의 IP 사용 - Automatic
-		// 	if network.CheckAwsLoadBalancerPodIp(k8sClient) {
-		// 		fmt.Println(Green + "✔ PASS: AWS Load Balancer Pod IP is in use" + Reset)
-		// 	} else {
-		// 		fmt.Println(Red + "FAIL: AWS Load Balancer Pod IP is not in use" + Reset)
-		// 	}
-		// 	// Pod Readiness Gate 적용 - Automatic
-		// 	if network.CheckReadinessGateEnabled(k8sClient) {
-		// 		fmt.Println(Green + "✔ PASS: Readiness Gate is enabled" + Reset)
-		// 	} else {
-		// 		fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
-		// 	}
-		// } else {
-		// 	fmt.Println(Red + "✖ FAIL: AWS Load Balancer Controller is not installed" + Reset)
-		// 	fmt.Println(Red + "✖ FAIL: AWS Load Balancer Pod IP is not in use" + Reset)
-		// 	fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
-		// }
 		common.PrintResult(network.CheckAwsLoadBalancerController(k8sClient))
 
 		// ALB/NLB의 대상으로 Pod의 IP 사용 - Automatic
