@@ -60,7 +60,7 @@ var rootCmd = &cobra.Command{
 
 		// 클러스터 접근 제어(Access entries, aws-auth 컨피그맵) - Automatic/Manual
 		// 컨피그맵이랑 accesslist 출력인데 정확히 어케 출력되야되는지랑, 인자로 cluster 받는거 맞는지 확인 필요
-		common.PrintResult(security.CheckAccessControl(k8sClient, cluster))
+		common.PrintResult(security.CheckAccessControl(k8sClient, cfg, cluster))
 
 		// IRSA 또는 Pod Identity 기반 권한 부여 - Automatic
 		common.PrintResult(security.CheckIRSAAndPodIdentity(k8sClient))
