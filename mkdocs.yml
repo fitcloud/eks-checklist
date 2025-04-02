@@ -21,6 +21,7 @@ nav:
     - HorizontalPodAutoscaler : stability/HorizontalPodAutoscaler.md
   - Network:
     - sample1 : network/sample1.md
+    - awsLoadBalancerController : network/awsLoadBalancerController.md
   - Cost:
     - sample5 : cost/sample5.md
     - kubecost : cost/kubecost.md
