@@ -135,6 +135,9 @@ var rootCmd = &cobra.Command{
 		// Probe(Startup, Readiness, Liveness) 적용 - Automatic
 		common.PrintResult(stability.CheckProbe(k8sClient))
 
+		// 애플리케이션에 적절한 CPU/RAM 할당 - Automatic/Manual
+		common.PrintResult(stability.CheckResourceAllocation(k8sClient, cfg, cluster))
+
 		// 오토스케일링 그룹 기반 관리형 노드 그룹 생성 - Automatic
 		common.PrintResult(stability.CheckAutoScaledManagedNodeGroup(k8sClient, cluster))
 
