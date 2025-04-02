@@ -36,12 +36,21 @@ func CheckPVEcryption(client kubernetes.Interface) common.CheckResult {
 			} else {
 				// 암호화되지 않음 - FAIL
 				result.Passed = false
-				result.Resources = append(result.Resources, fmt.Sprintf("PV: %s (EBS 미암호화)", pv.Name))
+				result.Resources = append(result.Resources,
+					fmt.Sprintf("PV: %s (EBS 미암호화)", pv.Name))
 			}
 		} else {
-			// EBS가 아닌 PV의 경우 암호화 상태 판단 불가, Manual 확인 필요
+			// CSI 정보가 nil인 경우엔 "N/A"로 처리
+			var driver string
+			if pv.Spec.CSI != nil {
+				driver = pv.Spec.CSI.Driver
+			} else {
+				driver = "N/A"
+			}
+			// EBS가 아닌 PV의 경우 암호화 상태 판단 불가, 수동 확인 필요
 			result.Passed = false
-			result.Resources = append(result.Resources, fmt.Sprintf("PV: %s (암호화 여부를 수동 확인 필요, CSI Driver: %s)", pv.Name, pv.Spec.CSI.Driver))
+			result.Resources = append(result.Resources,
+				fmt.Sprintf("PV: %s (암호화 여부를 수동 확인 필요, CSI Driver: %s)", pv.Name, driver))
 		}
 	}
 

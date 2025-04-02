@@ -4,7 +4,7 @@
 # expected_failure: false이면 모든 ReplicaSet의 복제본이 1보다 크므로 함수가 true를 반환해야 함.
 
 - name: "All ReplicaSets have multiple pods"
-  expected_failure: false
+  expected_pass: true
   replicasets:
     - namespace: "default"
       name: "rs-1"
@@ -14,7 +14,7 @@
       replicas: 2
 
 - name: "One ReplicaSet has only one pod"
-  expected_failure: true
+  expected_pass: false
   replicasets:
     - namespace: "default"
       name: "rs-1"

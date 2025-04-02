@@ -1,5 +1,5 @@
 - name: "Subnet with IGW connected"
-  expected_failure: true
+  expected_pass: false
   cluster:
     resourcesVpcConfig:
       subnetIds:
@@ -12,7 +12,7 @@
           GatewayId: "igw-12345"
 
 - name: "Subnet without IGW connected"
-  expected_failure: false
+  expected_pass: true
   cluster:
     resourcesVpcConfig:
       subnetIds:
@@ -25,7 +25,7 @@
           GatewayId: "vgw-12345"
 
 - name: "Multiple subnets, one with IGW"
-  expected_failure: true
+  expected_pass: false
   cluster:
     resourcesVpcConfig:
       subnetIds:

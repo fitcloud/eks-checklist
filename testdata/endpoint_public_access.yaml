@@ -1,0 +1,7 @@
+- name: "Public_Access"
+  endpoint_public_access: true
+  expect_pass: false
+
+- name: "Private_Access"
+  endpoint_public_access: false
+  expect_pass: true

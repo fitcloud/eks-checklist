@@ -17,7 +17,7 @@ func CheckAccessControl(client kubernetes.Interface, cfg aws.Config, eksCluster 
 	result := common.CheckResult{
 		CheckName:  "클러스터 접근 제어(Access entries, aws-auth 컨피그맵)",
 		Manual:     true,
-		Passed:     false,
+		Passed:     true,
 		FailureMsg: "클러스터 접근 제어 설정이 되어 있으나, 적합한 설정이 되어 있는지 수동으로 확인해야 합니다.",
 		Runbook:    "https://your.runbook.url/latest-tag-image",
 	}

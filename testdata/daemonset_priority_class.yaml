@@ -4,7 +4,7 @@
 # expected_failure: false → 모든 DaemonSet에 PriorityClassName이 설정되어 있으므로 함수가 true를 반환해야 함.
 
 - name: "All DaemonSets have PriorityClass"
-  expected_failure: false
+  expected_pass: true
   daemonsets:
     - namespace: "default"
       name: "ds-1"
@@ -14,7 +14,7 @@
       priorityClassName: "system-critical"
 
 - name: "Some DaemonSets missing PriorityClass"
-  expected_failure: true
+  expected_pass: false
   daemonsets:
     - namespace: "default"
       name: "ds-1"

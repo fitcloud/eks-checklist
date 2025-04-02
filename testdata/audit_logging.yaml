@@ -1,4 +1,5 @@
 - name: "Audit_Logging_Enabled"
+  #sdk LogSetup에 있기때문에 enabled 필드가 반드시 필요함
   enabled: true
   types:
     - "audit"

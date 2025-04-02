@@ -40,6 +40,7 @@ func CheckAuditLoggingEnabled(eksCluster *EksCluster) common.CheckResult {
 	}
 
 	if !auditLoggingEnabled {
+		result.Passed = false
 		result.Resources = append(result.Resources, "Cluster: "+*eksCluster.Cluster.Name)
 	}
 

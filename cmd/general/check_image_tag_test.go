@@ -18,10 +18,7 @@ func TestCheckImageTag(t *testing.T) {
 
 	// 각 테스트 케이스에 대해 반복
 	for _, tc := range cases {
-		// 'testName' 필드를 가져와서 string 타입으로 처리
 		testName := tc["name"].(string)
-
-		// 'expect_failure' 필드를 가져와서 bool 타입으로 처리
 		expectPass := tc["expect_pass"].(bool)
 
 		// 'pod_images' 필드를 가져오고, []interface{}로 받은 후 []string으로 변환
