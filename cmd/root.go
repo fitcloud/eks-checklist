@@ -90,6 +90,9 @@ var rootCmd = &cobra.Command{
 		// 데이터 플레인 사설망 - Automatic
 		common.PrintResult(security.DataplanePrivateCheck(security.EksCluster(eksCluster), cfg))
 
+		// 컨테이너 이미지 정적 분석 - Manual
+		common.PrintResult(security.CheckImageStaticAnalysis(k8sClient, cfg, cluster))
+
 		// 읽기 전용 파일시스템 사용 - Automatic
 		common.PrintResult(security.ReadnonlyFilesystemCheck(k8sClient))
 
