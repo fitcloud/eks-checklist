@@ -108,6 +108,9 @@ var rootCmd = &cobra.Command{
 		// Spot 노드 사용시 Spot 중지 핸들러 적용 - Automatic
 		common.PrintResult(scalability.CheckSpotNodeTerminationHandler(k8sClient))
 
+		// 중요 Pod에 노드 삭제 방지용 Label 부여 - Manual
+		common.PrintResult(scalability.CheckImportantPodProtection(k8sClient, cfg, cluster))
+
 		// Application에 Graceful shutdown 적용 - Manual
 		common.PrintResult(scalability.CheckGracefulShutdown(k8sClient, cfg, cluster))
 
