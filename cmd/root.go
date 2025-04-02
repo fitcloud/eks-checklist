@@ -108,6 +108,9 @@ var rootCmd = &cobra.Command{
 		// Spot 노드 사용시 Spot 중지 핸들러 적용 - Automatic
 		common.PrintResult(scalability.CheckSpotNodeTerminationHandler(k8sClient))
 
+		// Application에 Graceful shutdown 적용 - Manual
+		common.PrintResult(scalability.CheckGracefulShutdown(k8sClient, cfg, cluster))
+
 		// 다양한 인스턴스 타입 사용 - Automatic
 		common.PrintResult(scalability.CheckInstanceTypes(k8sClient))
 
