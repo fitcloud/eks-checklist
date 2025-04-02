@@ -11,14 +11,14 @@ AWS Load Balancer Controller는 Amazon Web Services(AWS) 환경에서 Kubernetes
 - 보안 설정 번거로움: TLS 인증서나 보안 정책 등을 수동으로 설정해야 해서 보안 관리가 어려워질 수 있습니다.
 
 ## Diagnosis
-AWS Load Balancer Controller가 설치되어 있는지 확인하세요.
+AWS Load Balancer Controller가 설치되어 있는지 확인하세요
 
 ```bash
 kubectl get deployments.apps -A -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name" | grep "aws-load-balancer-controller" && echo "PASS" || echo "FAIL"
 ```
 
 ## Mitigation
-AWS Load Balancer Controller를 설치하세요.
+AWS Load Balancer Controller를 설치하세요
 
 example
 ```bash 
