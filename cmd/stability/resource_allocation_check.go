@@ -17,7 +17,7 @@ import (
 
 func CheckResourceAllocation(client kubernetes.Interface, cfg aws.Config, eksCluster string) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "애플리케이션에 적절한 CPU/RAM 할당 - Manual",
+		CheckName:  "애플리케이션에 적절한 CPU/RAM 할당",
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "일부 Pod에 Request/Limit 설정이 없거나, 값의 적정성은 수동 확인이 필요합니다.",
@@ -25,12 +25,12 @@ func CheckResourceAllocation(client kubernetes.Interface, cfg aws.Config, eksClu
 	}
 
 	baseDir := filepath.Join(".", "result", eksCluster+"-resource-allocation")
-	yamlDir := filepath.Join(baseDir, "yamls")
-	if err := os.MkdirAll(yamlDir, os.ModePerm); err != nil {
+	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
 		return result
 	}
 
+	yamlDir := filepath.Join(baseDir, "yamls")
 	ctx := context.TODO()
 	podList, err := client.CoreV1().Pods("").List(ctx, v1.ListOptions{})
 	if err != nil {
@@ -51,6 +51,7 @@ func CheckResourceAllocation(client kubernetes.Interface, cfg aws.Config, eksClu
 	}
 
 	var incomplete []ResourceInfo
+	ExistSetting := false
 
 	for _, pod := range podList.Items {
 		if pod.Namespace == "kube-system" {
@@ -88,8 +89,15 @@ func CheckResourceAllocation(client kubernetes.Interface, cfg aws.Config, eksClu
 				incomplete = append(incomplete, info)
 			}
 
-			if res.Requests != nil {
-				// YAML 파일로 저장
+			// request, limits 설정이 되어 있는 Pod 일 경우, 설정값을 YAML 파일로 저장
+			if res.Requests != nil && res.Limits != nil {
+				ExistSetting = true
+
+				if err := os.MkdirAll(yamlDir, os.ModePerm); err != nil {
+					result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
+					return result
+				}
+
 				containerSpec := map[string]interface{}{
 					"spec": map[string]interface{}{
 						"containers": []interface{}{
@@ -112,12 +120,17 @@ func CheckResourceAllocation(client kubernetes.Interface, cfg aws.Config, eksClu
 			}
 		}
 	}
+	if ExistSetting {
+		result.Resources = append(result.Resources, "Pod별 리소스 설정 YAML 디렉토리: "+yamlDir)
+	} else {
+		result.Manual = false
+		result.FailureMsg = "모든 Pod에 Request/Limit 설정이 되어있지 않습니다."
+	}
 
 	// JSON으로 미설정 정보 저장
 	jsonPath := filepath.Join(baseDir, "resource_allocation_check.json")
 	if err := common.SaveAsJSON(incomplete, jsonPath); err == nil {
 		result.Resources = append(result.Resources, "리소스 미설정/불완전 설정 목록: "+jsonPath)
-		result.Resources = append(result.Resources, "Pod별 리소스 설정 YAML 디렉토리: "+yamlDir)
 	}
 
 	return result
