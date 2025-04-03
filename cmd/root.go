@@ -14,13 +14,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	Red    = "\033[31m" // 빨간색
-	Green  = "\033[32m" // 초록색
-	Yellow = "\033[33m" // 노란색
-	Reset  = "\033[0m"  // 기본 색상으로 리셋
-)
-
 var (
 	kubeconfigPath    string
 	kubeconfigContext string
