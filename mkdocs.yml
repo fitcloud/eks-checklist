@@ -10,6 +10,7 @@ nav:
     - IRSA 또는 EKS Pod Identity 기반 권한 부여 : security/IRSA_또는_EKS_Pod_Identity_기반_권한_부여.md
     - sample3 : security/sample3.md
     - auditlog : security/auditlog.md
+    - dataplaneprivate : security/dataplanePrivate.md
   - Scalability:
     - sample2 : scalability/sample2.md
     - karpenter : scalability/karpenter.md 
@@ -21,7 +22,7 @@ nav:
     - HorizontalPodAutoscaler : stability/HorizontalPodAutoscaler.md
   - Network:
     - sample1 : network/sample1.md
-    - awsLoadBalancerController : network/awsLoadBalancerController.md
+    - awsLoadBalancerController : network/awsloadbalancercontroller.md
   - Cost:
     - sample5 : cost/sample5.md
     - kubecost : cost/kubecost.md
