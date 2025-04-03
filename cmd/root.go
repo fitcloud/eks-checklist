@@ -146,6 +146,9 @@ var rootCmd = &cobra.Command{
 		// 다수의 가용 영역에 데이터 플레인 노드 배포 - Automatic
 		common.PrintResult(stability.CheckNodeMultiAZ(k8sClient))
 
+		// PV 사용시 volume affinity 위반 사항 체크 - Manual (PV 어피니티 전부다 출력)
+		common.PrintResult(stability.CheckVolumeAffinity(k8sClient, cfg, cluster))
+
 		// CoreDNS에 HPA 적용 - Automatic
 		common.PrintResult(stability.CheckCoreDNSHpa(k8sClient))
 
