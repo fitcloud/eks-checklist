@@ -88,25 +88,27 @@ func CheckResourceAllocation(client kubernetes.Interface, cfg aws.Config, eksClu
 				incomplete = append(incomplete, info)
 			}
 
-			// YAML 파일로 저장
-			containerSpec := map[string]interface{}{
-				"spec": map[string]interface{}{
-					"containers": []interface{}{
-						map[string]interface{}{
-							"name": container.Name,
-							"resources": map[string]interface{}{
-								"requests": res.Requests,
-								"limits":   res.Limits,
+			if res.Requests != nil {
+				// YAML 파일로 저장
+				containerSpec := map[string]interface{}{
+					"spec": map[string]interface{}{
+						"containers": []interface{}{
+							map[string]interface{}{
+								"name": container.Name,
+								"resources": map[string]interface{}{
+									"requests": res.Requests,
+									"limits":   res.Limits,
+								},
 							},
 						},
 					},
-				},
-			}
+				}
 
-			yamlBytes, err := yaml.Marshal(containerSpec)
-			if err == nil {
-				yamlPath := filepath.Join(yamlDir, pod.Namespace+"-"+pod.Name+".yaml")
-				os.WriteFile(yamlPath, yamlBytes, 0644)
+				yamlBytes, err := yaml.Marshal(containerSpec)
+				if err == nil {
+					yamlPath := filepath.Join(yamlDir, pod.Namespace+"-"+pod.Name+".yaml")
+					os.WriteFile(yamlPath, yamlBytes, 0644)
+				}
 			}
 		}
 	}
