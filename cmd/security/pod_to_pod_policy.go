@@ -2,74 +2,60 @@ package security
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
+
+	"eks-checklist/cmd/common"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
-// CheckPodToPodNetworkPolicy는 네트워크 정책이 존재하는지 확인하고, selector와 ingress/egress의 정보를 JSON 형식으로 출력합니다.
-func CheckPodToPodNetworkPolicy(client kubernetes.Interface) bool {
-	// 모든 네임스페이스의 NetworkPolicy를 조회
+// CheckPodToPodNetworkPolicy checks whether NetworkPolicies exist for pod-to-pod communication.
+func CheckPodToPodNetworkPolicy(client kubernetes.Interface, eksCluster string) common.CheckResult {
+	result := common.CheckResult{
+		CheckName:  "Pod-to-Pod 접근 제어",
+		Manual:     true,
+		Passed:     false,
+		FailureMsg: "Pod 간 접근 제어를 위한 NetworkPolicy가 설정되어 있지만 정책이 적합하게 설정되어 있는지 수동으로 확인해야합니다.",
+		Runbook:    "https://your.runbook.url/latest-tag-image",
+	}
+
+	// 1. NetworkPolicy 목록 조회
 	npList, err := client.NetworkingV1().NetworkPolicies("").List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		fmt.Printf("네트워크 정책을 가져오는 중 오류 발생: %v\n", err)
-		return false
+		result.Passed = false
+		result.FailureMsg = result.CheckName + " 검사 실패 : " + err.Error()
+		return result
 	}
 
-	// NetworkPolicy가 하나라도 존재하면 접근 제어가 설정되었다고 판단
-	if len(npList.Items) > 0 {
-		fmt.Println("발견된 Network Policies:")
-		for _, np := range npList.Items {
-			// NetworkPolicy의 podSelector 출력
-			npOutput := map[string]interface{}{
-				"NetworkPolicyName": np.Name,
-				"PodSelector": map[string]interface{}{
-					"MatchLabels":      np.Spec.PodSelector.MatchLabels,
-					"MatchExpressions": np.Spec.PodSelector.MatchExpressions,
-				},
-				"Ingress": []interface{}{},
-				"Egress":  []interface{}{},
-			}
+	if len(npList.Items) == 0 {
+		result.Passed = false
+		result.FailureMsg = "Pod 간 접근 제어를 위한 NetworkPolicy가 존재하지 않습니다."
+		return result
+	}
 
-			// Ingress 규칙에 출력
-			for _, ingress := range np.Spec.Ingress {
-				if len(ingress.From) > 0 {
-					ingressFrom := []map[string]interface{}{}
-					for _, from := range ingress.From {
-						ingressFrom = append(ingressFrom, map[string]interface{}{
-							"PodSelector":       from.PodSelector,
-							"NamespaceSelector": from.NamespaceSelector,
-						})
-					}
-					npOutput["Ingress"] = ingressFrom
-				}
-			}
+	// 2. 결과 저장 디렉토리 생성
+	baseDir := filepath.Join(".", "result", eksCluster+"-pod-network-policy")
+	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
+		result.Passed = false
+		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
+		return result
+	}
 
-			// Egress 규칙에 출력
-			for _, egress := range np.Spec.Egress {
-				if len(egress.To) > 0 {
-					egressTo := []map[string]interface{}{}
-					for _, to := range egress.To {
-						egressTo = append(egressTo, map[string]interface{}{
-							"PodSelector":       to.PodSelector,
-							"NamespaceSelector": to.NamespaceSelector,
-						})
-					}
-					npOutput["Egress"] = egressTo
-				}
-			}
+	// 3. 각 NetworkPolicy를 YAML로 저장
+	for _, np := range npList.Items {
+		filename := fmt.Sprintf("%s-%s.yaml", np.Namespace, np.Name)
+		filePath := filepath.Join(baseDir, filename)
 
-			// JSON 형식으로 출력
-			npJSON, err := json.MarshalIndent(npOutput, "", "  ")
-			if err != nil {
-				fmt.Printf("JSON 출력 오류: %v\n", err)
-			} else {
-				fmt.Println(string(npJSON))
-			}
+		err := common.SaveK8sResourceAsYAML(&np, filePath)
+		if err != nil {
+			result.Resources = append(result.Resources, fmt.Sprintf("저장 실패: %s/%s (%v)", np.Namespace, np.Name, err))
+		} else {
+			result.Resources = append(result.Resources, fmt.Sprintf("저장됨: %s", filePath))
 		}
 	}
-	// NetworkPolicy가 하나라도 존재하면 접근 제어가 설정되었다고 판단
-	return len(npList.Items) > 0
+
+	return result
 }

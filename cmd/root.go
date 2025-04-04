@@ -14,13 +14,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	Red    = "\033[31m" // 빨간색
-	Green  = "\033[32m" // 초록색
-	Yellow = "\033[33m" // 노란색
-	Reset  = "\033[0m"  // 기본 색상으로 리셋
-)
-
 var (
 	kubeconfigPath    string
 	kubeconfigContext string
@@ -49,6 +42,9 @@ var rootCmd = &cobra.Command{
 		// General 항목 체크 기능은 하단 항목에 추가
 		fmt.Printf("\n===============[General Check]===============\n")
 
+		// 코드형 인프라 (EKS 클러스터, 애플리케이션 배포)
+		common.PrintResult(general.CheckIAC())
+
 		// 컨테이너 이미지 태그에 latest 미사용
 		common.PrintResult(general.CheckImageTag(k8sClient))
 
@@ -59,7 +55,6 @@ var rootCmd = &cobra.Command{
 		common.PrintResult(security.CheckEndpointPublicAccess(security.EksCluster(eksCluster)))
 
 		// 클러스터 접근 제어(Access entries, aws-auth 컨피그맵) - Automatic/Manual
-		// 컨피그맵이랑 accesslist 출력인데 정확히 어케 출력되야되는지랑, 인자로 cluster 받는거 맞는지 확인 필요
 		common.PrintResult(security.CheckAccessControl(k8sClient, cfg, cluster))
 
 		// IRSA 또는 Pod Identity 기반 권한 부여 - Automatic
@@ -71,16 +66,16 @@ var rootCmd = &cobra.Command{
 		// 루트 유저가 아닌 유저로 컨테이너 실행 - Automatic
 		common.PrintResult(security.CheckContainerExecutionUser(k8sClient))
 
+		// 불필요한 OS 권한 비부여 - Automatic
+
+		// 멀티 태넌시 적용 유무 - Manual
+		common.PrintResult(security.CheckMultitenancy(k8sClient, cfg, cluster))
+
 		// Audit 로그 활성화 - Automatic
 		common.PrintResult(security.CheckAuditLoggingEnabled(&security.EksCluster{Cluster: eksCluster.Cluster}))
 
-		// Manual 포함된 기능이라 출력 템플릿 스킵 - 검토 필요
 		// Pod-to-Pod 접근 제어 - Automatic/Manual
-		if security.CheckPodToPodNetworkPolicy(k8sClient) {
-			fmt.Println(Green + "✔ PASS: Pod-to-Pod network policy is found" + Reset)
-		} else {
-			fmt.Println(Red + "✖ FAIL: Pod-to-Pod network policy is not found" + Reset)
-		}
+		common.PrintResult(security.CheckPodToPodNetworkPolicy(k8sClient, cluster))
 
 		// PV 암호화 - Automatic
 		common.PrintResult(security.CheckPVEcryption(k8sClient))
@@ -90,6 +85,9 @@ var rootCmd = &cobra.Command{
 
 		// 데이터 플레인 사설망 - Automatic
 		common.PrintResult(security.DataplanePrivateCheck(security.EksCluster(eksCluster), cfg))
+
+		// 컨테이너 이미지 정적 분석 - Manual
+		common.PrintResult(security.CheckImageStaticAnalysis(k8sClient, cfg, cluster))
 
 		// 읽기 전용 파일시스템 사용 - Automatic
 		common.PrintResult(security.ReadnonlyFilesystemCheck(k8sClient))
@@ -105,6 +103,12 @@ var rootCmd = &cobra.Command{
 
 		// Spot 노드 사용시 Spot 중지 핸들러 적용 - Automatic
 		common.PrintResult(scalability.CheckSpotNodeTerminationHandler(k8sClient))
+
+		// 중요 Pod에 노드 삭제 방지용 Label 부여 - Manual
+		common.PrintResult(scalability.CheckImportantPodProtection(k8sClient, cfg, cluster))
+
+		// Application에 Graceful shutdown 적용 - Manual
+		common.PrintResult(scalability.CheckGracefulShutdown(k8sClient, cfg, cluster))
 
 		// 다양한 인스턴스 타입 사용 - Automatic
 		common.PrintResult(scalability.CheckInstanceTypes(k8sClient))
@@ -127,6 +131,12 @@ var rootCmd = &cobra.Command{
 		// Probe(Startup, Readiness, Liveness) 적용 - Automatic
 		common.PrintResult(stability.CheckProbe(k8sClient))
 
+		// 애플리케이션에 적절한 CPU/RAM 할당 - Automatic/Manual
+		common.PrintResult(stability.CheckResourceAllocation(k8sClient, cfg, cluster))
+
+		// 애플리케이션 중요도에 따른 QoS 적용 - Automatic/Manual
+		common.PrintResult(stability.CheckQoSClass(k8sClient, cfg, cluster))
+
 		// 오토스케일링 그룹 기반 관리형 노드 그룹 생성 - Automatic
 		common.PrintResult(stability.CheckAutoScaledManagedNodeGroup(k8sClient, cluster))
 
@@ -138,6 +148,9 @@ var rootCmd = &cobra.Command{
 
 		// 다수의 가용 영역에 데이터 플레인 노드 배포 - Automatic
 		common.PrintResult(stability.CheckNodeMultiAZ(k8sClient))
+
+		// PV 사용시 volume affinity 위반 사항 체크 - Manual (PV 어피니티 전부다 출력)
+		common.PrintResult(stability.CheckVolumeAffinity(k8sClient, cfg, cluster))
 
 		// CoreDNS에 HPA 적용 - Automatic
 		common.PrintResult(stability.CheckCoreDNSHpa(k8sClient))
@@ -157,26 +170,10 @@ var rootCmd = &cobra.Command{
 		// VPC CNI의 Prefix 모드 사용 - Automatic
 		common.PrintResult(network.CheckVpcCniPrefixMode(k8sClient))
 
+		// 사용 사례에 맞는 로드밸런서 사용(ALB or NLB) - Manual
+		common.PrintResult(network.CheckLoadBalancerUsage(k8sClient, cfg, cluster))
+
 		// AWS Load Balancer Controller 사용 - Automatic
-		// if network.CheckAwsLoadBalancerController(k8sClient) {
-		// 	fmt.Println(Green + "✔ PASS: AWS Load Balancer Controller is installed" + Reset)
-		// 	// ALB/NLB의 대상으로 Pod의 IP 사용 - Automatic
-		// 	if network.CheckAwsLoadBalancerPodIp(k8sClient) {
-		// 		fmt.Println(Green + "✔ PASS: AWS Load Balancer Pod IP is in use" + Reset)
-		// 	} else {
-		// 		fmt.Println(Red + "FAIL: AWS Load Balancer Pod IP is not in use" + Reset)
-		// 	}
-		// 	// Pod Readiness Gate 적용 - Automatic
-		// 	if network.CheckReadinessGateEnabled(k8sClient) {
-		// 		fmt.Println(Green + "✔ PASS: Readiness Gate is enabled" + Reset)
-		// 	} else {
-		// 		fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
-		// 	}
-		// } else {
-		// 	fmt.Println(Red + "✖ FAIL: AWS Load Balancer Controller is not installed" + Reset)
-		// 	fmt.Println(Red + "✖ FAIL: AWS Load Balancer Pod IP is not in use" + Reset)
-		// 	fmt.Println(Red + "✖ FAIL: Readiness Gate is not enabled" + Reset)
-		// }
 		common.PrintResult(network.CheckAwsLoadBalancerController(k8sClient))
 
 		// ALB/NLB의 대상으로 Pod의 IP 사용 - Automatic
