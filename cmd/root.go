@@ -140,6 +140,9 @@ var rootCmd = &cobra.Command{
 		// Probe(Startup, Readiness, Liveness) 적용 - Automatic
 		common.PrintResult(stability.CheckProbe(k8sClient))
 
+		// 중요 워크로드에 대한 PDB(Pod Distruption Budget) 적용 - Automatic/Manual
+		common.PrintResult(stability.CheckPDB())
+
 		// 애플리케이션에 적절한 CPU/RAM 할당 - Automatic/Manual
 		common.PrintResult(stability.CheckResourceAllocation(k8sClient, cfg, cluster))
 
