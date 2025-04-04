@@ -77,6 +77,9 @@ var rootCmd = &cobra.Command{
 		// Audit 로그 활성화 - Automatic
 		common.PrintResult(security.CheckAuditLoggingEnabled(&security.EksCluster{Cluster: eksCluster.Cluster}))
 
+		// 비정상 접근에 대한 알림 설정 - Manual
+		common.PrintResult(security.CheckAccessAlarm())
+
 		// Pod-to-Pod 접근 제어 - Automatic/Manual
 		common.PrintResult(security.CheckPodToPodNetworkPolicy(k8sClient, cluster))
 
