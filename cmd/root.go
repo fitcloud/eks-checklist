@@ -45,6 +45,9 @@ var rootCmd = &cobra.Command{
 		// 코드형 인프라 (EKS 클러스터, 애플리케이션 배포)
 		common.PrintResult(general.CheckIAC())
 
+		// GitOps 적용
+		common.PrintResult(general.CheckGitOps())
+
 		// 컨테이너 이미지 태그에 latest 미사용
 		common.PrintResult(general.CheckImageTag(k8sClient))
 
