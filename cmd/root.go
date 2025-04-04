@@ -116,6 +116,9 @@ var rootCmd = &cobra.Command{
 		// Application에 Graceful shutdown 적용 - Manual
 		common.PrintResult(scalability.CheckGracefulShutdown(k8sClient, cfg, cluster))
 
+		// 노드 확장/축소 정책 적용 - Manual
+		common.PrintResult(scalability.CheckNodeScalingPolicy())
+
 		// 다양한 인스턴스 타입 사용 - Automatic
 		common.PrintResult(scalability.CheckInstanceTypes(k8sClient))
 
