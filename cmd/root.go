@@ -167,6 +167,9 @@ var rootCmd = &cobra.Command{
 		// VPC CNI의 Prefix 모드 사용 - Automatic
 		common.PrintResult(network.CheckVpcCniPrefixMode(k8sClient))
 
+		// 사용 사례에 맞는 로드밸런서 사용(ALB or NLB) - Manual
+		common.PrintResult(network.CheckLoadBalancerUsage(k8sClient, cfg, cluster))
+
 		// AWS Load Balancer Controller 사용 - Automatic
 		common.PrintResult(network.CheckAwsLoadBalancerController(k8sClient))
 
