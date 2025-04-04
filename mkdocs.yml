@@ -23,6 +23,7 @@ nav:
   - Network:
     - sample1 : network/sample1.md
     - awsLoadBalancerController : network/awsloadbalancercontroller.md
+    - subnetipcapacity : network/subnet_ip_capacity.md
   - Cost:
     - sample5 : cost/sample5.md
     - kubecost : cost/kubecost.md
