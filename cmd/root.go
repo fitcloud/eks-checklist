@@ -149,6 +149,12 @@ var rootCmd = &cobra.Command{
 		// 애플리케이션 중요도에 따른 QoS 적용 - Automatic/Manual
 		common.PrintResult(stability.CheckQoSClass(k8sClient, cfg, cluster))
 
+		// 인프라 및 애플리케이션 모니터링 스택 적용 - Manual
+		common.PrintResult(stability.CheckNodeScalingPolicy())
+
+		// 반영구 저장소에 애플리케이션 로그 저장 - Manual
+		common.PrintResult(stability.CheckApplicationLogs())
+
 		// 오토스케일링 그룹 기반 관리형 노드 그룹 생성 - Automatic
 		common.PrintResult(stability.CheckAutoScaledManagedNodeGroup(k8sClient, cluster))
 
@@ -178,6 +184,9 @@ var rootCmd = &cobra.Command{
 
 		// VPC 서브넷에 충분한 IP 대역대 확보 - Automatic/Manual
 		common.PrintResult(network.CheckVpcSubnetIpCapacity(network.EksCluster(eksCluster), cfg))
+
+		// Pod에 부여할 IP 부족시 알림 설정 - Manual
+		common.PrintResult(network.CheckPodIPAlarm())
 
 		// VPC CNI의 Prefix 모드 사용 - Automatic
 		common.PrintResult(network.CheckVpcCniPrefixMode(k8sClient))
