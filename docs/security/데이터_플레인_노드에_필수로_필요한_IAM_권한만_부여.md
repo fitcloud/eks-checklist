@@ -11,7 +11,6 @@
 
 ## Diagnosis
 
-
 ```bash
 node_ips=($(kubectl get nodes -o custom-columns="NAME:.metadata.name,IP:.metadata.annotations.alpha\.kubernetes\.io/provided-node-ip" | tail -n +2 | awk '{print $2}'))
 echo "Node IPs: ${node_ips[@]}"
