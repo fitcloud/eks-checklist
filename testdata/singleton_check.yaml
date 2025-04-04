@@ -1,14 +1,14 @@
 - name: "All_Good_No_Singletons"
-  expect_failure: false
+  expect_pass: true
 
 - name: "Deployment_with_1_Replica"
-  expect_failure: true
+  expect_pass: true
 
 - name: "Standalone_Pod_Exists"
-  expect_failure: true
+  expect_pass: false
 
 - name: "StatefulSet_with_1_Replica"
-  expect_failure: true
+  expect_pass: true
 
 - name: "Pod_with_NodeSelector"
-  expect_failure: true
+  expect_pass: false

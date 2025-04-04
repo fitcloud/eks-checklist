@@ -1,10 +1,6 @@
-# CheckDaemonSetPriorityClass.yaml
-# 이 파일은 CheckDaemonSetPriorityClass 함수 테스트를 위한 케이스들을 정의합니다.
-# expected_failure: true → 하나 이상의 DaemonSet에 PriorityClassName이 없으므로 함수가 false를 반환해야 함.
-# expected_failure: false → 모든 DaemonSet에 PriorityClassName이 설정되어 있으므로 함수가 true를 반환해야 함.
-
 - name: "All DaemonSets have PriorityClass"
-  expected_failure: false
+  expect_pass: true
+  karpenter_installed: true
   daemonsets:
     - namespace: "default"
       name: "ds-1"
@@ -14,7 +10,8 @@
       priorityClassName: "system-critical"
 
 - name: "Some DaemonSets missing PriorityClass"
-  expected_failure: true
+  expect_pass: false
+  karpenter_installed: true
   daemonsets:
     - namespace: "default"
       name: "ds-1"
@@ -22,3 +19,14 @@
     - namespace: "default"
       name: "ds-3"
       priorityClassName: "normal-priority"
+
+- name: "Karpenter not installed"
+  expect_pass: false
+  karpenter_installed: false
+  daemonsets:
+    - namespace: "default"
+      name: "ds-1"
+      priorityClassName: "high-priority"
+    - namespace: "kube-system"
+      name: "ds-2"
+      priorityClassName: "system-critical"

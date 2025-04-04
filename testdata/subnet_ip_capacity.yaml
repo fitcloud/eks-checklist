@@ -4,6 +4,7 @@
 - name: "Subnet with low capacity"
   expected_result:
     subnet-1: 10
+  expect_pass: false
   cluster:
     resourcesVpcConfig:
       subnetIds:
@@ -12,18 +13,19 @@
   subnets:
     - subnet_id: "subnet-1"
       cidr_block: "192.168.0.0/24"   # /24: 총 IP = 2^(32-24)-5 = 251
-      available_ip: 10               # 10 < 10% of 251 (약 25)이므로 용량 부족
+      available_ip: 10               # 10 < 약 10% (약 25) 이므로 용량 부족
     - subnet_id: "subnet-2"
       cidr_block: "192.168.1.0/24"
       available_ip: 100              # 100는 충분하다고 가정
 
 - name: "All subnets with sufficient capacity"
   expected_result: {}
+  expect_pass: true
   cluster:
     resourcesVpcConfig:
       subnetIds:
         - "subnet-3"
   subnets:
     - subnet_id: "subnet-3"
-      cidr_block: "10.0.0.0/24"       # /24: 총 IP = 251
-      available_ip: 230              # 230 > 25이므로 용량 충분
+      cidr_block: "10.0.0.0/24"       # /24: 총 IP = 2^(32-24)-5 = 251
+      available_ip: 230              # 230 > 약 10% (약 25) 이므로 용량 충분

@@ -1,24 +1,25 @@
 - name: "Audit_Logging_Enabled"
+  #sdk LogSetup에 있기때문에 enabled 필드가 반드시 필요함
   enabled: true
   types:
     - "audit"
     - "api"
-  expect_failure: false
+  expect_pass: true
 
 - name: "Audit_Logging_Disabled"
   enabled: false
   types:
     - "audit"
-  expect_failure: true
+  expect_pass: false
 
 - name: "No_Audit_Type"
   enabled: true
   types:
     - "api"
     - "authenticator"
-  expect_failure: true
+  expect_pass: false
 
 - name: "No_Logging_Config"
   enabled: null
   types: []
-  expect_failure: true
+  expect_pass: false

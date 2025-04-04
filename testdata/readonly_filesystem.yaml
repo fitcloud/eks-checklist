@@ -8,7 +8,7 @@
       containers:
         - name: "container-1"
           readOnlyRootFilesystem: true
-  expect_failure: false
+  expect_pass: true
 
 - name: "Missing_ReadOnlyRootFS"
   node_os:
@@ -20,7 +20,7 @@
       containers:
         - name: "container-2"
           readOnlyRootFilesystem: false
-  expect_failure: true
+  expect_pass: false
 
 - name: "Pod_In_KubeSystem_Namespace"
   node_os:
@@ -32,7 +32,7 @@
       containers:
         - name: "dns"
           readOnlyRootFilesystem: false
-  expect_failure: false
+  expect_pass: true
 
 - name: "Pod_On_Windows_Node"
   node_os:
@@ -44,4 +44,4 @@
       containers:
         - name: "win-container"
           readOnlyRootFilesystem: false
-  expect_failure: false
+  expect_pass: true

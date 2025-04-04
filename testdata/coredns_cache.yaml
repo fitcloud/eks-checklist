@@ -1,11 +1,11 @@
 - name: "CoreDNS_with_cache"
-  expect_failure: false
+  expect_pass: true
 
 - name: "CoreDNS_without_cache"
-  expect_failure: true
+  expect_pass: false
 
 - name: "ConfigMap_missing"
-  expect_failure: true
+  expect_pass: false
 
 - name: "Corefile_missing"
-  expect_failure: true
+  expect_pass: false

@@ -1,5 +1,19 @@
-- name: "Karpenter_NodeClaims_Exist"
-  expect_failure: false
+- name: "Karpenter_installed_NodeClaim_exists"
+  expect_pass: true
+  karpenter_installed: true
+  node_claim_present: true
 
-- name: "No_Karpenter_NodeClaims"
-  expect_failure: true
+- name: "Karpenter_installed_No_NodeClaim"
+  expect_pass: false
+  karpenter_installed: true
+  node_claim_present: false
+
+- name: "Karpenter_not_installed_NodeClaim_exists"
+  expect_pass: false
+  karpenter_installed: false
+  node_claim_present: true
+
+- name: "Karpenter_not_installed_No_NodeClaim"
+  expect_pass: false
+  karpenter_installed: false
+  node_claim_present: false

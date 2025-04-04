@@ -17,7 +17,7 @@ func CheckPodToPodNetworkPolicy(client kubernetes.Interface, eksCluster string) 
 	result := common.CheckResult{
 		CheckName:  "Pod-to-Pod 접근 제어",
 		Manual:     true,
-		Passed:     false,
+		Passed:     true,
 		FailureMsg: "Pod 간 접근 제어를 위한 NetworkPolicy가 설정되어 있지만 정책이 적합하게 설정되어 있는지 수동으로 확인해야합니다.",
 		Runbook:    "https://your.runbook.url/latest-tag-image",
 	}

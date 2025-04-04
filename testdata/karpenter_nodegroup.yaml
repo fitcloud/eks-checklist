@@ -2,20 +2,21 @@
   node_name: "node-1"
   node_labels:
     - "karpenter.sh/provisioner-name: carpenter"
-  expect_failure: false
+    #노드 레이블이 이게 맞는지 확인 필요
+  expect_pass: true
 
 - name: "Fargate_profile_used"
   node_name: "node-2"
   node_labels:
     - "eks.amazonaws.com/fargate-profile: fargate-profile"
-  expect_failure: false
+  expect_pass: true
 
 - name: "No_Carpenter_node_group"
   node_name: "node-3"
   node_labels: []
-  expect_failure: true
+  expect_pass: false
 
 - name: "No_Fargate_profile"
   node_name: "node-4"
   node_labels: []
-  expect_failure: true
+  expect_pass: false

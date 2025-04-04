@@ -1,0 +1,24 @@
+- name: "All Deployments have HPA"
+  expect_pass: true
+  deployments:
+    - namespace: "default"
+      name: "deploy-1"
+    - namespace: "prod"
+      name: "deploy-2"
+  hpas:
+    - namespace: "default"
+      scale_target: "deploy-1"
+    - namespace: "prod"
+      name: "deploy-2"   # scale_target 필드 대신 Deployment 이름 사용
+      scale_target: "deploy-2"
+
+- name: "Some Deployments missing HPA"
+  expect_pass: false
+  deployments:
+    - namespace: "default"
+      name: "deploy-1"
+    - namespace: "prod"
+      name: "deploy-2"
+  hpas:
+    - namespace: "default"
+      scale_target: "deploy-1"

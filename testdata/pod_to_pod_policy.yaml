@@ -1,5 +1,5 @@
 - name: "NetworkPolicy exists"
-  expected_failure: false
+  expect_pass: true
   networkpolicies:
     - namespace: "default"
       name: "np-web"
@@ -18,5 +18,5 @@
                   team: "dev"
 
 - name: "No NetworkPolicy exists"
-  expected_failure: true
+  expect_pass: false
   networkpolicies: []
