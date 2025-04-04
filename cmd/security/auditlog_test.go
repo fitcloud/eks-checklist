@@ -19,7 +19,6 @@ func TestCheckAuditLoggingEnabled(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			var logSetup types.LogSetup
 
-			// types 필드를 YAML에서 읽어와 []types.LogType으로 변환
 			typesList := []types.LogType{}
 			if tc["types"] != nil {
 				for _, tRaw := range tc["types"].([]interface{}) {

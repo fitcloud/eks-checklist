@@ -1,10 +1,5 @@
-# PodReplicaSetCheck.yaml
-# 이 파일은 PodReplicaSetCheck 함수 테스트 케이스를 정의합니다.
-# expected_failure: true이면 하나 이상의 ReplicaSet에 복제본이 1개뿐이어서 함수가 false를 반환해야 함.
-# expected_failure: false이면 모든 ReplicaSet의 복제본이 1보다 크므로 함수가 true를 반환해야 함.
-
 - name: "All ReplicaSets have multiple pods"
-  expected_pass: true
+  expect_pass: true
   replicasets:
     - namespace: "default"
       name: "rs-1"
@@ -14,7 +9,7 @@
       replicas: 2
 
 - name: "One ReplicaSet has only one pod"
-  expected_pass: false
+  expect_pass: false
   replicasets:
     - namespace: "default"
       name: "rs-1"

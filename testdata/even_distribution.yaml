@@ -1,5 +1,5 @@
 - name: "All pods valid"
-  expected_pass: true
+  expect_pass: true
   pods:
     - namespace: "default"
       name: "pod-1"
@@ -10,7 +10,7 @@
         - maxSkew: 1
 
 - name: "Pod without valid settings"
-  expected_pass: false
+  expect_pass: false
   pods:
     - namespace: "default"
       name: "pod-3"

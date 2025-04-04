@@ -3,7 +3,7 @@
 # expected_failure: true이면 실패가 예상됨, false이면 성공이 예상됨
 
 - name: "All service accounts configured"
-  expected_pass: true
+  expect_pass: true
   serviceaccounts:
     - namespace: "default"
       name: "sa-1"
@@ -15,7 +15,7 @@
         eks.amazonaws.com/identity: "some-identity"
 
 - name: "Some service accounts not configured"
-  expected_pass: false
+  expect_pass: false
   serviceaccounts:
     - namespace: "default"
       name: "sa-1"
@@ -26,5 +26,5 @@
         eks.amazonaws.com/role-arn: "arn:aws:iam::123456789012:role/Role2"
 
 - name: "No service accounts"
-  expected_pass: true
+  expect_pass: true
   serviceaccounts: []

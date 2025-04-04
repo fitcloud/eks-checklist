@@ -17,8 +17,8 @@ func TestCheckIRSAAndPodIdentity_YAML(t *testing.T) {
 	testCases := testutils.LoadTestCases(t, "irsa_pod_identity.yaml")
 	for _, tc := range testCases {
 		testName := tc["name"].(string)
-		// YAML의 "expected_pass" 필드를 그대로 사용
-		expectedPass := tc["expected_pass"].(bool)
+		// YAML의 "expect_pass" 필드를 그대로 사용
+		expectedPass := tc["expect_pass"].(bool)
 
 		serviceAccountsRaw, ok := tc["serviceaccounts"].([]interface{})
 		if !ok {

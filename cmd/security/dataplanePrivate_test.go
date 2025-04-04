@@ -20,7 +20,7 @@ func TestDataplanePrivateCheck(t *testing.T) {
 	testCases := testutils.LoadTestCases(t, "dataplane_private.yaml")
 	for _, tc := range testCases {
 		testName := tc["name"].(string)
-		expectedPass := tc["expected_pass"].(bool)
+		expectedPass := tc["expect_pass"].(bool)
 
 		clusterMap := tc["cluster"].(map[string]interface{})
 		resVpcCfg := clusterMap["resourcesVpcConfig"].(map[string]interface{})

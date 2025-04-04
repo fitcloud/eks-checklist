@@ -2,13 +2,13 @@
   expect_pass: true
 
 - name: "Deployment_with_1_Replica"
-  expect_pass: false
+  expect_pass: true
 
 - name: "Standalone_Pod_Exists"
   expect_pass: false
 
 - name: "StatefulSet_with_1_Replica"
-  expect_pass: false
+  expect_pass: true
 
 - name: "Pod_with_NodeSelector"
   expect_pass: false

@@ -17,7 +17,7 @@ func TestCheckPodToPodNetworkPolicy(t *testing.T) {
 	testCases := testutils.LoadTestCases(t, "pod_to_pod_policy.yaml")
 	for _, tc := range testCases {
 		testName := tc["name"].(string)
-		expectPass := tc["expected_pass"].(bool)
+		expectPass := tc["expect_pass"].(bool)
 
 		npListRaw, ok := tc["networkpolicies"].([]interface{})
 		if !ok {

@@ -4,7 +4,7 @@
 # expected_failure: false이면 ASG 기반 자동 확장 설정이 있으므로 함수가 true를 반환해야 함.
 
 - name: "Auto-scaled node group"
-  expected_pass: true
+  expect_pass: true
   cluster:
     clusterName: "my-cluster"
     resourcesVpcConfig:
@@ -24,7 +24,7 @@
       maxSize: 3
 
 - name: "Static node group (no auto scaling)"
-  expected_pass: false
+  expect_pass: false
   cluster:
     clusterName: "my-cluster"
     resourcesVpcConfig:
