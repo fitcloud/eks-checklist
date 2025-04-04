@@ -13,8 +13,12 @@ import (
 )
 
 func TestCheckPodToPodNetworkPolicy(t *testing.T) {
-	// YAML 파일 "CheckPodToPodNetworkPolicy.yaml"에서 테스트 케이스를 로드
+	// YAML 파일 "pod_to_pod_policy.yaml"에서 테스트 케이스 로드
 	testCases := testutils.LoadTestCases(t, "pod_to_pod_policy.yaml")
+	// 예시로 eksCluster 이름을 "test-cluster"로 사용합니다.
+	eksClusterName := "test-cluster"
+	t.Logf("Loaded %d test cases", len(testCases))
+
 	for _, tc := range testCases {
 		testName := tc["name"].(string)
 		expectPass := tc["expect_pass"].(bool)
@@ -114,7 +118,7 @@ func TestCheckPodToPodNetworkPolicy(t *testing.T) {
 					}
 				}
 
-				// Egress 규칙은 테스트 단순화를 위해 빈 배열로 사용
+				// Egress 규칙은 테스트 단순화를 위해 빈 배열 사용
 				npObj := &networkingv1.NetworkPolicy{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      name,
@@ -133,11 +137,11 @@ func TestCheckPodToPodNetworkPolicy(t *testing.T) {
 				}
 			}
 
-			// CheckPodToPodNetworkPolicy 함수 실행 및 반환값 비교
-			result := security.CheckPodToPodNetworkPolicy(client)
+			// CheckPodToPodNetworkPolicy 함수 실행 (eksCluster 이름을 인자로 전달)
+			result := security.CheckPodToPodNetworkPolicy(client, eksClusterName)
 
-			if result != expectPass {
-				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectPass, result)
+			if result.Passed != expectPass {
+				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectPass, result.Passed)
 			}
 		})
 	}

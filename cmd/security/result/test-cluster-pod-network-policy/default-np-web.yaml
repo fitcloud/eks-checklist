@@ -1,0 +1,13 @@
+metadata:
+  creationTimestamp: null
+  name: np-web
+  namespace: default
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: frontend
+  podSelector:
+    matchLabels:
+      app: web
