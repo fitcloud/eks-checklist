@@ -9,6 +9,7 @@ nav:
     - EKS 클러스터 API 엔드포인트 접근 제어 : security/EKS_클러스터_API_엔드포인트_접근_제어.md
     - IRSA 또는 EKS Pod Identity 기반 권한 부여 : security/IRSA_또는_EKS_Pod_Identity_기반_권한_부여.md
     - 데이터 플레인 노드에 필수로 필요한 IAM 권한만 부여: security/데이터_플레인_노드에_필수로_필요한_IAM_권한만_부여.md
+    - 루트 유저가 아닌 유저로 컨테이너 실행: security/루트_유저가_아닌_유저로_컨테이너_실행.md
     - sample3 : security/sample3.md
     - auditlog : security/auditlog.md
     - dataplaneprivate : security/dataplanePrivate.md
