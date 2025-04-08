@@ -19,6 +19,7 @@ nav:
   - Stability:
     - sample4 : stability/sample4.md
     - 싱글톤 Pod 미사용 : stability/singletone_pod.md
+    - replicasetpod : stability/replicasetpod.md
     - clusterautoscaler : stability/clusterautoscaler.md
     - coreDNSHPA : stability/coreDNSHPA.md
     - HorizontalPodAutoscaler : stability/HorizontalPodAutoscaler.md
