@@ -33,12 +33,13 @@ nav:
   - Scalability:
     - sample2 : scalability/sample2.md
     - karpenter : scalability/karpenter.md 
+    - 다양한 인스턴스트 사용 : scalability/various_instance_type.md
   - Stability:
     - sample4 : stability/sample4.md
     - 싱글톤 Pod 미사용 : stability/singletone_pod.md
     - replicasetpod : stability/replicasetpod.md
     - clusterautoscaler : stability/clusterautoscaler.md
-    - coreDNSHPA : stability/coreDNSHPA.md
+    - coreDNSHPA : stability/coredns_hpa.md
     - HorizontalPodAutoscaler : stability/HorizontalPodAutoscaler.md
   - Network:
     - sample1 : network/sample1.md
