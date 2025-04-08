@@ -20,9 +20,13 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Install dependencies
+      - name: Install mkdocs-material
         run: pip install mkdocs-material
+      
+      - name: Install pymdown-extensions
         run: pip install pymdown-extensions
+      
+      - name: Install Pygments
         run: pip install Pygments
 
       - name: Deploy to GitHub Pages
