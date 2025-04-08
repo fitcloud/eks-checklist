@@ -1,6 +1,21 @@
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+extra_css:
+  - assets/css/custom.css
+
 site_name: "EKS Checklist Runbooks"
 theme:
   name: "material"
+  features:
+    - content.code.copy
+    - content.code.select
 nav:
   - EKS Checklist: index.md
   - General:
