@@ -40,12 +40,14 @@ nav:
     - replicasetpod : stability/replicasetpod.md
     - clusterautoscaler : stability/clusterautoscaler.md
     - coreDNSHPA : stability/coredns_hpa.md
+    - coredns_cache : stability/coredns_cache.md
     - HorizontalPodAutoscaler : stability/HorizontalPodAutoscaler.md
   - Network:
     - sample1 : network/sample1.md
     - awsLoadBalancerController : network/awsloadbalancercontroller.md
     - subnetipcapacity : network/subnet_ip_capacity.md
     - podreadinessgate : network/podreadinessgate.md
+    - kube-proxy에 IPVS 모드 적용 : network/kube-proxy_IPVS_모드_적용.md
   - Cost:
     - sample5 : cost/sample5.md
     - kubecost : cost/kubecost.md
