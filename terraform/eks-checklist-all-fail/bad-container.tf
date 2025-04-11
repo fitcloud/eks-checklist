@@ -58,6 +58,9 @@ resource "kubernetes_persistent_volume_claim" "nginx_pvc" {
 resource "kubernetes_pod" "nginx" {
   metadata {
     name = "nginx"
+    labels = {
+      app = "nginx"
+    }
   }
 
   spec {
@@ -78,5 +81,29 @@ resource "kubernetes_pod" "nginx" {
         claim_name = "nginx-pvc"
       }
     }
+  }
+}
+
+## endpoint slice을 사용하지 않는 서비스
+resource "kubernetes_service" "nginx_service" {
+  metadata {
+    name = "nginx-svc"
+    annotations = {
+      "endpoints.kubernetes.io/skip-mirror" = "true"
+    }
+  }
+
+  spec {
+    selector = {
+      app = "nginx"
+    }
+
+    port {
+      name        = "http"
+      port        = 80
+      target_port = 80
+    }
+
+    type = "ClusterIP"
   }
 }
