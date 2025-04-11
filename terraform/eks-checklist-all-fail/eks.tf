@@ -32,21 +32,39 @@ module "eks" {
   enable_auto_mode_custom_tags = false
 
   # EKS Addons 추가
-  cluster_addons = {
-    coredns                = {}
-    eks-pod-identity-agent = {}
-    kube-proxy             = {}
-    vpc-cni = {
-      // before_compute = true
-      configuration_values = jsonencode({
-        env = {
-          #  Prefix 모드 사용 
-          ENABLE_PREFIX_DELEGATION = "false"
+cluster_addons = {
+  coredns = {
+    configuration_values = jsonencode({
+      corefile = <<-EOT
+        .:53 {
+            errors
+            health
+            ready
+            kubernetes cluster.local in-addr.arpa ip6.arpa {
+              pods insecure
+              fallthrough in-addr.arpa ip6.arpa
+            }
+            prometheus :9153
+            forward . /etc/resolv.conf
+            loop
+            reload
+            loadbalance
         }
-      })
-    }
-    aws-ebs-csi-driver = {}
+      EOT
+    })
   }
+  eks-pod-identity-agent = {}
+  kube-proxy             = {}
+  vpc-cni = {
+    configuration_values = jsonencode({
+      env = {
+        ENABLE_PREFIX_DELEGATION = "false"
+      }
+    })
+  }
+  aws-ebs-csi-driver = {}
+}
+
 
   # EKS 노드 그룹 t3.medium 인스턴스 타입 단 1개 생성
   eks_managed_node_groups = {
@@ -56,7 +74,7 @@ module "eks" {
       min_size         = 1
       max_size         = 1
       volume_size      = 20
-      subnet_ids       = module.vpc.private_subnets
+      subnet_ids       = module.vpc.public_subnets
       iam_role_additional_policies = {
         AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
       }
