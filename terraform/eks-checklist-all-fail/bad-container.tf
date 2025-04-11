@@ -37,46 +37,46 @@ resource "kubernetes_annotations" "default_storageclass" {
   ]
 }
 
-# resource "kubernetes_persistent_volume_claim" "nginx_pvc" {
-#   metadata {
-#     name = "nginx-pvc"
-#   }
+resource "kubernetes_persistent_volume_claim" "nginx_pvc" {
+  metadata {
+    name = "nginx-pvc"
+  }
 
-#   spec {
-#     access_modes = ["ReadWriteOnce"]
+  spec {
+    access_modes = ["ReadWriteOnce"]
 
-#     resources {
-#       requests = {
-#         storage = "5Gi"
-#       }
-#     }
+    resources {
+      requests = {
+        storage = "5Gi"
+      }
+    }
 
-#     storage_class_name = "ebs-sc"
-#   }
-# }
+    storage_class_name = "ebs-sc"
+  }
+}
 
-# resource "kubernetes_pod" "nginx" {
-#   metadata {
-#     name = "nginx"
-#   }
+resource "kubernetes_pod" "nginx" {
+  metadata {
+    name = "nginx"
+  }
 
-#   spec {
-#     container {
-#       name  = "nginx"
-#       image = "nginx:latest"
+  spec {
+    container {
+      name  = "nginx"
+      image = "nginx:latest"
 
-#       volume_mount {
-#         name       = "nginx-storage"
-#         mount_path = "/usr/share/nginx/html"
-#       }
-#     }
+      volume_mount {
+        name       = "nginx-storage"
+        mount_path = "/usr/share/nginx/html"
+      }
+    }
 
-#     volume {
-#       name = "nginx-storage"
+    volume {
+      name = "nginx-storage"
 
-#       persistent_volume_claim {
-#         claim_name = kubernetes_persistent_volume_claim.nginx_pvc.metadata[0].name
-#       }
-#     }
-#   }
-# }
+      persistent_volume_claim {
+        claim_name = "nginx-pvc"
+      }
+    }
+  }
+}
