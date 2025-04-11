@@ -41,10 +41,11 @@ module "eks" {
       configuration_values = jsonencode({
         env = {
           #  Prefix 모드 사용 
-          ENABLE_PREFIX_DELEGATION = "true"
+          ENABLE_PREFIX_DELEGATION = "false"
         }
       })
     }
+    aws-ebs-csi-driver = {}
   }
 
   # EKS 노드 그룹 t3.medium 인스턴스 타입 단 1개 생성
@@ -53,10 +54,12 @@ module "eks" {
       instance_types   = ["t3.medium"]
       desired_capacity = 1
       min_size         = 1
-      max_size         = 3
+      max_size         = 1
       volume_size      = 20
       subnet_ids       = module.vpc.private_subnets
-
+      iam_role_additional_policies = {
+        AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      }
       tags = {
         "Name" = "${local.project}-nodegroup-1"
       }
