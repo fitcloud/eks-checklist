@@ -31,7 +31,7 @@ func PodReplicaSetCheck(client kubernetes.Interface) common.CheckResult {
 		if rs.Namespace == "kube-system" {
 			continue // kube-system 네임스페이스는 검사 제외
 		}
-		if rs.Spec.Replicas != nil && *rs.Spec.Replicas == 1 {
+		if *rs.Spec.Replicas == 1 {
 			result.Passed = false
 			resource := fmt.Sprintf("Namespace: %s | ReplicaSet: %s (Replicas: 1)", rs.Namespace, rs.Name)
 			result.Resources = append(result.Resources, resource)
