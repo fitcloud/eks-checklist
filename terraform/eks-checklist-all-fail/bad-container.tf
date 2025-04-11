@@ -37,6 +37,7 @@ resource "kubernetes_annotations" "default_storageclass" {
   ]
 }
 
+# 암호화 안됬으며 읽기 쓰기 둘다 하는 EBS 볼륨을 사용하는 PVC
 resource "kubernetes_persistent_volume_claim" "nginx_pvc" {
   metadata {
     name = "nginx-pvc"
@@ -55,6 +56,7 @@ resource "kubernetes_persistent_volume_claim" "nginx_pvc" {
   }
 }
 
+## 볼륨 사용하는 레플리카 1인 nginx
 resource "kubernetes_deployment" "nginx" {
   metadata {
     name = "nginx"
@@ -102,6 +104,26 @@ resource "kubernetes_deployment" "nginx" {
   }
 }
 
+## 싱글톤 파드 아파치
+resource "kubernetes_pod" "apache_singleton" {
+  metadata {
+    name = "apache-singleton"
+    labels = {
+      app = "apache"
+    }
+  }
+
+  spec {
+    container {
+      name  = "apache"
+      image = "httpd:2.4" # Apache Docker 이미지
+
+      port {
+        container_port = 80
+      }
+    }
+  }
+}
 
 # ## endpoint slice을 사용하지 않는 서비스
 # resource "kubernetes_service" "nginx" {
