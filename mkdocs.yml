@@ -30,6 +30,7 @@ nav:
     - sample3 : security/sample3.md
     - auditlog : security/auditlog.md
     - dataplaneprivate : security/dataplanePrivate.md
+    - 클러스터 접근 제어(Access entries, aws-auth 컨피그맵) : security/클러스터_접근_제어(Access_entries_aws-auth_컨피그맵).md
   - Scalability:
     - sample2 : scalability/sample2.md
     - karpenter : scalability/karpenter.md 
