@@ -55,7 +55,7 @@ resource "kubernetes_persistent_volume_claim" "nginx_pvc" {
   }
 }
 
-resource "kubernetes_pod" "nginx" {
+resource "kubernetes_deployment" "nginx" {
   metadata {
     name = "nginx"
     labels = {
@@ -64,25 +64,44 @@ resource "kubernetes_pod" "nginx" {
   }
 
   spec {
-    container {
-      name  = "nginx"
-      image = "nginx:latest"
+    replicas = 1
 
-      volume_mount {
-        name       = "nginx-storage"
-        mount_path = "/usr/share/nginx/html"
+    selector {
+      match_labels = {
+        app = "nginx"
       }
     }
 
-    volume {
-      name = "nginx-storage"
+    template {
+      metadata {
+        labels = {
+          app = "nginx"
+        }
+      }
 
-      persistent_volume_claim {
-        claim_name = "nginx-pvc"
+      spec {
+        container {
+          name  = "nginx"
+          image = "nginx:latest"
+
+          volume_mount {
+            name       = "nginx-storage"
+            mount_path = "/usr/share/nginx/html"
+          }
+        }
+
+        volume {
+          name = "nginx-storage"
+
+          persistent_volume_claim {
+            claim_name = "nginx-pvc"
+          }
+        }
       }
     }
   }
 }
+
 
 # ## endpoint slice을 사용하지 않는 서비스
 # resource "kubernetes_service" "nginx" {
