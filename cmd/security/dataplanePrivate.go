@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	"github.com/aws/aws-sdk-go-v2/service/eks"
 )
 
 // DataplanePrivateCheck checks whether all subnets used by the EKS data plane are private.
@@ -22,33 +23,107 @@ func DataplanePrivateCheck(eksCluster EksCluster, cfg aws.Config) common.CheckRe
 		Runbook:    "https://your.runbook.url/latest-tag-image",
 	}
 
-	subnetIds := eksCluster.Cluster.ResourcesVpcConfig.SubnetIds
+	eksClient := eks.NewFromConfig(cfg)
 	ec2Client := ec2.NewFromConfig(cfg)
 
-	var publicSubnets []string
+	// 노드 그룹 목록 조회
+	nodeGroupsOutput, err := eksClient.ListNodegroups(context.TODO(), &eks.ListNodegroupsInput{
+		ClusterName: aws.String(*eksCluster.Cluster.Name),
+	})
+	if err != nil {
+		result.Passed = false
+		result.FailureMsg = fmt.Sprintf("노드 그룹 목록 조회 실패: %v", err)
+		return result
+	}
 
-	for _, subnetId := range subnetIds {
-		rtOut, err := ec2Client.DescribeRouteTables(context.TODO(), &ec2.DescribeRouteTablesInput{
-			Filters: []ec2types.Filter{
-				{
-					Name:   aws.String("association.subnet-id"),
-					Values: []string{subnetId},
-				},
-			},
+	subnetIDSet := make(map[string]struct{})
+	var vpcID string
+
+	// 각 노드 그룹의 서브넷 ID 수집
+	for _, nodeGroupName := range nodeGroupsOutput.Nodegroups {
+		nodeGroupOutput, err := eksClient.DescribeNodegroup(context.TODO(), &eks.DescribeNodegroupInput{
+			ClusterName:   aws.String(*eksCluster.Cluster.Name),
+			NodegroupName: aws.String(nodeGroupName),
 		})
 		if err != nil {
 			result.Passed = false
-			result.FailureMsg = result.CheckName + " 검사 실패 : " + err.Error()
+			result.FailureMsg = fmt.Sprintf("노드 그룹 '%s' 상세 정보 조회 실패: %v", nodeGroupName, err)
 			return result
 		}
 
-		for _, rt := range rtOut.RouteTables {
-			for _, route := range rt.Routes {
-				if route.DestinationCidrBlock != nil && *route.DestinationCidrBlock == "0.0.0.0/0" {
-					if route.GatewayId != nil && strings.HasPrefix(*route.GatewayId, "igw-") {
-						publicSubnets = append(publicSubnets, subnetId)
+		for _, subnetID := range nodeGroupOutput.Nodegroup.Subnets {
+			subnetIDSet[subnetID] = struct{}{}
+		}
+	}
+
+	// 서브넷 ID 목록 생성
+	var subnetIDs []string
+	for id := range subnetIDSet {
+		subnetIDs = append(subnetIDs, id)
+	}
+
+	// VPC ID가 설정되지 않은 경우 클러스터의 VPC ID 사용
+	if vpcID == "" {
+		vpcID = *eksCluster.Cluster.ResourcesVpcConfig.VpcId
+	}
+
+	// VPC의 모든 라우트 테이블 조회
+	rtOut, err := ec2Client.DescribeRouteTables(context.TODO(), &ec2.DescribeRouteTablesInput{
+		Filters: []ec2types.Filter{
+			{
+				Name:   aws.String("vpc-id"),
+				Values: []string{vpcID},
+			},
+		},
+	})
+	if err != nil {
+		result.Passed = false
+		result.FailureMsg = fmt.Sprintf("라우트 테이블 조회 실패: %v", err)
+		return result
+	}
+
+	// 서브넷 ID -> 연결된 라우트 테이블 매핑
+	subnetToRouteTable := make(map[string]ec2types.RouteTable)
+
+	for _, rt := range rtOut.RouteTables {
+		for _, assoc := range rt.Associations {
+			if assoc.SubnetId != nil {
+				subnetToRouteTable[*assoc.SubnetId] = rt
+			}
+		}
+	}
+
+	var publicSubnets []string
+
+	for _, subnetID := range subnetIDs {
+		rt, exists := subnetToRouteTable[subnetID]
+
+		// 서브넷에 직접 연결된 라우트 테이블이 없으면, 메인 라우트 테이블 사용
+		if !exists {
+			for _, rtCandidate := range rtOut.RouteTables {
+				for _, assoc := range rtCandidate.Associations {
+					if assoc.Main != nil && *assoc.Main {
+						rt = rtCandidate
+						exists = true
 						break
 					}
+				}
+				if exists {
+					break
+				}
+			}
+		}
+
+		// IGW로 가는 0.0.0.0/0 경로가 있는지 확인
+		for _, route := range rt.Routes {
+			if route.DestinationCidrBlock != nil && *route.DestinationCidrBlock == "0.0.0.0/0" {
+				if route.GatewayId != nil {
+					if strings.HasPrefix(*route.GatewayId, "igw-") {
+						publicSubnets = append(publicSubnets, subnetID)
+						break
+					}
+				} else {
+					fmt.Printf("서브넷 %s의 0.0.0.0/0 경로에 GatewayId가 없습니다.\n", subnetID)
 				}
 			}
 		}
