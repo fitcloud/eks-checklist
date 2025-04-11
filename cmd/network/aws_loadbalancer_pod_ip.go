@@ -11,13 +11,21 @@ import (
 )
 
 // CheckAwsLoadBalancerPodIp checks whether ALB/NLB uses Pod IP as its target.
-func CheckAwsLoadBalancerPodIp(client kubernetes.Interface) common.CheckResult {
+func CheckAwsLoadBalancerPodIp(controller_installed common.CheckResult, client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
 		CheckName: "ALB/NLB의 대상으로 Pod의 IP 사용",
 		Manual:    false,
 		Passed:    true,
 		Runbook:   "https://your.runbook.url/latest-tag-image",
 	}
+
+	if !controller_installed.Passed {
+		result.Passed = false
+		result.FailureMsg = "AWS Load Balancer Controller가 설치되어 있지 않습니다"
+		return result
+	}
+
+	hasFailure := false
 
 	// 1. Ingress 체크 (ALB)
 	ingresses, err := client.NetworkingV1().Ingresses("").List(context.TODO(), v1.ListOptions{})
@@ -27,7 +35,6 @@ func CheckAwsLoadBalancerPodIp(client kubernetes.Interface) common.CheckResult {
 		return result
 	}
 
-	hasFailure := false
 	for _, ing := range ingresses.Items {
 		targetType := ing.Annotations["alb.ingress.kubernetes.io/target-type"]
 		if targetType == "" || targetType == "instance" {
