@@ -27,9 +27,11 @@ func CheckSecretEncryption(client kubernetes.Interface) common.CheckResult {
 		return result
 	}
 
-	// Secret 객체가 없으면 PASS 처리 (암호화 우려 없음)
+	// Secret 객체가 없으면 Manual 처리
 	if len(secrets.Items) == 0 {
-		result.Passed = true
+		result.Passed = false
+		result.Manual = true
+		result.FailureMsg = "아무런 Secret 객체가 없습니다."
 		return result
 	}
 
