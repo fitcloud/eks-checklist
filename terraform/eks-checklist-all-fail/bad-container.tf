@@ -84,26 +84,23 @@ resource "kubernetes_pod" "nginx" {
   }
 }
 
-## endpoint slice을 사용하지 않는 서비스
-resource "kubernetes_service" "nginx_service" {
-  metadata {
-    name = "nginx-svc"
-    annotations = {
-      "endpoints.kubernetes.io/skip-mirror" = "true"
-    }
-  }
+# ## endpoint slice을 사용하지 않는 서비스
+# resource "kubernetes_service" "nginx" {
+#   metadata {
+#     name = "nginx"
+#   }
 
-  spec {
-    selector = {
-      app = "nginx"
-    }
+#   spec {
+#     selector = {
+#       app = kubernetes_pod.nginx.metadata[0].labels["app"]
+#     }
+#     port {
+#       port     = 80
+#       protocol = "TCP"
+#     }
+#     type = "NodePort"
 
-    port {
-      name        = "http"
-      port        = 80
-      target_port = 80
-    }
-
-    type = "ClusterIP"
-  }
-}
+#     # endpoint slice을 사용하지 않는 서비스
+#     publish_not_ready_addresses = true
+#   }
+# }
