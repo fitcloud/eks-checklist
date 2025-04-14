@@ -44,12 +44,14 @@ nav:
     - coredns_cache : stability/coredns_cache.md
     - HorizontalPodAutoscaler : stability/HorizontalPodAutoscaler.md
     - 다수의 가용 영역에 데이터 플레인 노드 배포 : stability/다수의_가용_영역에_데이터_플레인_노드_배포.md
+    - Probe(Startup, Readiness, Liveness) 적용 : stability/Probe_Startup_Readiness_Liveness_적용.md
   - Network:
     - sample1 : network/sample1.md
     - awsLoadBalancerController : network/awsloadbalancercontroller.md
     - subnetipcapacity : network/subnet_ip_capacity.md
     - podreadinessgate : network/podreadinessgate.md
     - kube-proxy에 IPVS 모드 적용 : network/kube-proxy_IPVS_모드_적용.md
+    - ALB_NLB의 대상으로 Pod의 IP 사용 : network/ALB_NLB의_대상으로_Pod의_IP_사용.md
   - Cost:
     - sample5 : cost/sample5.md
     - kubecost : cost/kubecost.md
