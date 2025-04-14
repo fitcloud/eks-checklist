@@ -43,6 +43,7 @@ nav:
     - coreDNSHPA : stability/coredns_hpa.md
     - coredns_cache : stability/coredns_cache.md
     - HorizontalPodAutoscaler : stability/HorizontalPodAutoscaler.md
+    - 다수의 가용 영역에 데이터 플레인 노드 배포 : stability/다수의_가용_영역에_데이터_플레인_노드_배포.md
   - Network:
     - sample1 : network/sample1.md
     - awsLoadBalancerController : network/awsloadbalancercontroller.md
