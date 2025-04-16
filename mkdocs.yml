@@ -29,7 +29,6 @@ nav:
     - IRSA 또는 EKS Pod Identity 기반 권한 부여 : security/IRSA_또는_EKS_Pod_Identity_기반_권한_부여.md
     - 데이터 플레인 노드에 필수로 필요한 IAM 권한만 부여: security/데이터_플레인_노드에_필수로_필요한_IAM_권한만_부여.md
     - 루트 유저가 아닌 유저로 컨테이너 실행: security/루트_유저가_아닌_유저로_컨테이너_실행.md
-    - sample3 : security/sample3.md
     - Audit 로그 활성화 : security/Audit_로그_활성화.md
     - 데이터 플레인 사설망 : security/데이터_플레인_사설망.md
     - 클러스터 접근 제어(Access entries, aws-auth 컨피그맵) : security/클러스터_접근_제어(Access_entries_aws-auth_컨피그맵).md
@@ -41,7 +40,6 @@ nav:
     - Secret 객체 암호화 : security/Secret_객체_암호화.md
     - 비정상 접근에 대한 알림 설정 : security/비정상_접근에_대한_알림_설정.md
   - Scalability:
-    - sample2 : scalability/sample2.md
     - karpenter 사용 : scalability/karpenter_사용.md
     - 다양한 인스턴스트 사용 : scalability/다양한_인스턴스_사용.md
     - Application에 Graceful shutdown 적용 : scalability/Application에_Graceful_shutdown_적용.md
@@ -49,14 +47,7 @@ nav:
     - 중요 Pod에 노드 삭제 방지용 Label 부여 : scalability/중요_Pod에_노드_삭제_방지용_Label_부여.md
     - 노드 확장/축소 정책 적용 : scalability/노드_확장_축소_정책_적용.md
     - Spot 노드 사용시 Spot 중지 핸들러 적용 : scalability/Spot_노드_사용시_Spot_중지_핸들러_적용.md
-    - Karpenter 기반 노드 생성 : scalability/Karpenter_기반_노드_생성.md
-    - 인프라 및 애플리케이션 모니터링 스택 적용 : scalability/인프라_및_애플리케이션_모니터링_스택_적용.md
-    - 중요 워크로드에 대한 PDB(Pod Distruption Budget) 적용 : scalability/중요_워크로드에_대한_PDB(Pod_Distruption_Budget)_적용.md
-    - PV 사용시 volume affinity 위반 사항 체크 : scalability/PV_사용시_volume_affinity_위반_사항_체크.md
-    - 애플리케이션에 적절한 CPU/RAM 할당 : scalability/애플리케이션에_적절한_CPU_RAM_할당.md
-    - 애플리케이션 중요도에 따른 QoS 적용 : scalability/애플리케이션_중요도에_따른_QoS_적용.md
   - Stability:
-    - sample4 : stability/sample4.md
     - 싱글톤 Pod 미사용 : stability/싱글톤_Pod_미사용.md
     - 2개 이상의 Pod 복제본 사용 : stability/2개_이상의_Pod_복제본_사용.md
     - Cluster Autoscaler 적용 : stability/Cluster_Autoscaler_적용.md
@@ -69,8 +60,14 @@ nav:
     - 오토스케일링 그룹 기반 관리형 노드 그룹 생성 : stability/오토스케일링_그룹_기반_관리형_노드_그룹_생성.md
     - Karpenter 사용시 DaemonSet에 Priority Class 부여 : stability/Karpenter_사용시_DaemonSet에_Priority_Class_부여.md
     - 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 : stability/동일한_역할을_하는_Pod를_다수의_노드에_분산_배포.md
+    - 애플플케이션 중요도에 따른 QoS 적용 : stability/애플리케이션_중요도에_따른_QoS_적용.md
+    - 애플리케이션에 적절한 CPU/RAM 할당 : stability/애플리케이션에_적절한_CPU_RAM_할당.md
+    - PV 사용시 volume affinity 위반 사항 체크 : stability/PV_사용시_volume_affinity_위반_사항_체크.md
+    - 인프라 및 애플리케이션 모니터링 스택 적용 : stability/인프라_및_애플리케이션_모니터링_스택_적용.md
+    - 중요 워크로드에 대한 PDB(Pod Distruption Budget) 적용 : stability/중요_워크로드에_대한_PDB(Pod_Distruption_Budget)_적용.md
+    - 인프라 및 애플리케이션 모니터링 스택 적용: stability/인프라_및_애플리케이션_모니터링_스택_적용.md
+    - Karpenter 기반 노드 생성 : stability/Karpenter_기반_노드_생성.md
   - Network:
-    - sample1 : network/sample1.md
     - AWS Load Balancer Controller 사용 : network/AWS_Load_Balancer_Controller_사용.md
     - VPC 서브넷에 충분한 IP 대역대 확보 : network/VPC_서브넷에_충분한_IP_대역대_확보.md
     - Pod Readiness Gate 적용 : network/Pod_Readiness_Gate_적용.md
@@ -78,5 +75,4 @@ nav:
     - ALB_NLB의 대상으로 Pod의 IP 사용 : network/ALB_NLB의_대상으로_Pod의_IP_사용.md
     - VPC CNI의 Prefix 모드 사용 : network/VPC_CNI의_Prefix_모드_사용.md
   - Cost:
-    - sample5 : cost/sample5.md
     - kubecost : cost/kubecost.md
