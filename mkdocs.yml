@@ -22,6 +22,8 @@ nav:
   - EKS Checklist: index.md
   - General:
     - 컨테이너 이미지 태그에 latest 미사용 : general/컨테이너_이미지_태그에_latest_미사용.md
+    - GitOps 적용 : general/GitOps_적용.md
+    - 코드형 인프라 : general/코드형_인프라.md
   - Security:
     - EKS 클러스터 API 엔드포인트 접근 제어 : security/EKS_클러스터_API_엔드포인트_접근_제어.md
     - IRSA 또는 EKS Pod Identity 기반 권한 부여 : security/IRSA_또는_EKS_Pod_Identity_기반_권한_부여.md
@@ -31,11 +33,28 @@ nav:
     - Audit 로그 활성화 : security/Audit_로그_활성화.md
     - 데이터 플레인 사설망 : security/데이터_플레인_사설망.md
     - 클러스터 접근 제어(Access entries, aws-auth 컨피그맵) : security/클러스터_접근_제어(Access_entries_aws-auth_컨피그맵).md
+    - 컨테이너 이미지 정적 분석 : security/컨테이너_이미지_정적_분석.md
     - 읽기 전용 파일시스템 사용 : security/읽기_전용_파일시스템_사용.md
+    - 멀티 태넌시 적용 유무 : security/멀티_태넌시_적용_유무.md
+    - Pod-to-Pod 접근 제어 : security/Pod-to-Pod_접근_제어.md
+    - PV 암호화 : security/PV_암호화.md
+    - Secret 객체 암호화 : security/Secret_객체_암호화.md
+    - 비정상 접근에 대한 알림 설정 : security/비정상_접근에_대한_알림_설정.md
   - Scalability:
     - sample2 : scalability/sample2.md
     - karpenter 사용 : scalability/karpenter_사용.md
     - 다양한 인스턴스트 사용 : scalability/다양한_인스턴스_사용.md
+    - Application에 Graceful shutdown 적용 : scalability/Application에_Graceful_shutdown_적용.md
+    - Karpenter 전용 노드 그룹 혹은 Fargate 사용 : scalability/Karpenter_전용_노드_그룹_혹은_Fargate_사용.md
+    - 중요 Pod에 노드 삭제 방지용 Label 부여 : scalability/중요_Pod에_노드_삭제_방지용_Label_부여.md
+    - 노드 확장/축소 정책 적용 : scalability/노드_확장_축소_정책_적용.md
+    - Spot 노드 사용시 Spot 중지 핸들러 적용 : scalability/Spot_노드_사용시_Spot_중지_핸들러_적용.md
+    - Karpenter 기반 노드 생성 : scalability/Karpenter_기반_노드_생성.md
+    - 인프라 및 애플리케이션 모니터링 스택 적용 : scalability/인프라_및_애플리케이션_모니터링_스택_적용.md
+    - 중요 워크로드에 대한 PDB(Pod Distruption Budget) 적용 : scalability/중요_워크로드에_대한_PDB(Pod_Distruption_Budget)_적용.md
+    - PV 사용시 volume affinity 위반 사항 체크 : scalability/PV_사용시_volume_affinity_위반_사항_체크.md
+    - 애플리케이션에 적절한 CPU/RAM 할당 : scalability/애플리케이션에_적절한_CPU_RAM_할당.md
+    - 애플리케이션 중요도에 따른 QoS 적용 : scalability/애플리케이션_중요도에_따른_QoS_적용.md
   - Stability:
     - sample4 : stability/sample4.md
     - 싱글톤 Pod 미사용 : stability/싱글톤_Pod_미사용.md
@@ -46,6 +65,10 @@ nav:
     - HPA 적용 : stability/HPA_적용.md
     - 다수의 가용 영역에 데이터 플레인 노드 배포 : stability/다수의_가용_영역에_데이터_플레인_노드_배포.md
     - Probe(Startup, Readiness, Liveness) 적용 : stability/Probe_Startup_Readiness_Liveness_적용.md
+    - 반영구 저장소에 애플리케이션 로그 저장 : stability/반영구_저장소에_애플리케이션_로그_저장.md
+    - 오토스케일링 그룹 기반 관리형 노드 그룹 생성 : stability/오토스케일링_그룹_기반_관리형_노드_그룹_생성.md
+    - Karpenter 사용시 DaemonSet에 Priority Class 부여 : stability/Karpenter_사용시_DaemonSet에_Priority_Class_부여.md
+    - 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 : stability/동일한_역할을_하는_Pod를_다수의_노드에_분산_배포.md
   - Network:
     - sample1 : network/sample1.md
     - AWS Load Balancer Controller 사용 : network/AWS_Load_Balancer_Controller_사용.md
