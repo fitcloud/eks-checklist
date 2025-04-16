@@ -53,6 +53,7 @@ nav:
     - Pod Readiness Gate 적용 : network/Pod_Readiness_Gate_적용.md
     - kube-proxy에 IPVS 모드 적용 : network/kube-proxy_IPVS_모드_적용.md
     - ALB_NLB의 대상으로 Pod의 IP 사용 : network/ALB_NLB의_대상으로_Pod의_IP_사용.md
+    - VPC CNI의 Prefix 모드 사용 : network/VPC_CNI의_Prefix_모드_사용.md
   - Cost:
     - sample5 : cost/sample5.md
     - kubecost : cost/kubecost.md
