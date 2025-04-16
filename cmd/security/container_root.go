@@ -44,6 +44,15 @@ func CheckContainerExecutionUser(client kubernetes.Interface) common.CheckResult
 				break
 			}
 		}
+		// pods label에 k8s-app 키가 있는 경우에도 패스
+		if _, exists := pod.Labels["k8s-app"]; exists {
+			exclude = true
+		}
+
+		// pods label에 app.kubernetes.io/managed-by 키가 있는 경우에도 패스
+		if _, exists := pod.Labels["app.kubernetes.io/managed-by"]; exists {
+			exclude = true
+		}
 
 		if exclude {
 			continue
