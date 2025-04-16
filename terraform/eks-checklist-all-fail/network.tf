@@ -13,5 +13,6 @@ module "vpc" {
   enable_nat_gateway = true
   single_nat_gateway = true
 
-   map_public_ip_on_launch = true
+  # public subnet에 퍼블릭 IP 할당
+  map_public_ip_on_launch = true
 }

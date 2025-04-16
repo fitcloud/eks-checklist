@@ -33,6 +33,7 @@ module "eks" {
 
   # EKS Addons 추가
 cluster_addons = {
+  # CoreDNS cache 비활성화
   coredns = {
     configuration_values = jsonencode({
       corefile = <<-EOT
@@ -56,6 +57,7 @@ cluster_addons = {
   eks-pod-identity-agent = {}
   kube-proxy             = {}
   vpc-cni = {
+    # VPC CNI 플러그인에서 Prefix Delegation을 사용하지 않도록 설정
     configuration_values = jsonencode({
       env = {
         ENABLE_PREFIX_DELEGATION = "false"
@@ -65,7 +67,6 @@ cluster_addons = {
   aws-ebs-csi-driver = {}
 }
 
-
   # EKS 노드 그룹 t3.medium 인스턴스 타입 단 1개 생성
   eks_managed_node_groups = {
     nodegroup-1 = {
@@ -74,7 +75,8 @@ cluster_addons = {
       min_size         = 1
       max_size         = 1
       volume_size      = 20
-      subnet_ids       = module.vpc.public_subnets
+      # 하나의 서브넷 에만 노드 그룹을 생성
+      subnet_ids       = [module.vpc.public_subnets[2]]
       iam_role_additional_policies = {
         AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
       }
