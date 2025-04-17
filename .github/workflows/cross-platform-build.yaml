@@ -20,6 +20,6 @@ jobs:
         with:
             platforms: 'linux/amd64, darwin/amd64'
             package: ''
-            name: 'program'
+            name: ''
             compress: 'true'
             dest: 'dist'
