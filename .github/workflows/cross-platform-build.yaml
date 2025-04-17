@@ -30,7 +30,7 @@ jobs:
           mkdir -p dist
           EXT=""
           if [ "${{ matrix.os }}" = "windows" ]; then EXT=".exe"; fi
-          go build -ldflags="-s -w" -o dist/myapp-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}$EXT ./cmd/myapp
+          go build -ldflags="-s -w" -o dist/eks-checklist-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}$EXT ./main.go
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
