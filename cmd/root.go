@@ -8,6 +8,7 @@ import (
 	"eks-checklist/cmd/scalability"
 	"eks-checklist/cmd/security"
 	"eks-checklist/cmd/stability"
+	"flag"
 	"fmt"
 	"os"
 
@@ -18,6 +19,7 @@ var (
 	kubeconfigPath    string
 	kubeconfigContext string
 	awsProfile        string
+	outputFilter      string
 )
 
 var rootCmd = &cobra.Command{
@@ -25,6 +27,11 @@ var rootCmd = &cobra.Command{
 	Short: "eks-checklist",
 	Long:  "eks-checklist",
 	Run: func(cmd *cobra.Command, args []string) {
+		if outputFilter != "" {
+			fmt.Printf("Output filter: %s\n", outputFilter)
+			common.SetOutputFilter(*flag.String("out", outputFilter, "출력 결과 필터링 (pass, fail, manual)"))
+		}
+
 		kubeconfig := getKubeconfig(kubeconfigPath, awsProfile)
 		cluster := getEksClusterName(kubeconfig)
 
@@ -230,4 +237,6 @@ func Execute() {
 func init() {
 	rootCmd.PersistentFlags().StringVar(&kubeconfigPath, "kubeconfig", "", "Path to the kubeconfig file to use for CLI requests")
 	rootCmd.PersistentFlags().StringVar(&kubeconfigContext, "context", "", "The name of the kubeconfig context to use")
+	rootCmd.PersistentFlags().StringVar(&awsProfile, "profile", "", "AWS 프로파일 이름")
+	rootCmd.PersistentFlags().StringVar(&outputFilter, "out", "", "출력 결과 필터링 (pass, fail, manual)")
 }

@@ -16,15 +16,25 @@ var (
 )
 
 func PrintResult(r CheckResult) {
+	// 필터 기준에 따라 이 결과를 출력할지 확인
+	if !ShouldPrintResult(r.Passed, r.Manual) {
+		return // 이 결과는 출력하지 않음
+	}
+
 	if r.Passed {
 		PassedCount++
+	} else if r.Manual {
+		ManualCount++
+	} else {
+		FailedCount++
+	}
+
+	if r.Passed {
 		fmt.Printf(Green+"✔ PASS | %s\n"+Reset, r.CheckName)
 	} else {
 		if r.Manual {
-			ManualCount++
 			fmt.Printf(Yellow+"⚠ MANUAL | %s\n"+Reset, r.CheckName)
 		} else {
-			FailedCount++
 			fmt.Printf(Red+"✖ FAIL | %s\n"+Reset, r.CheckName)
 		}
 		fmt.Printf("  ├─ 🔸 이유 : %s\n", r.FailureMsg)
@@ -40,9 +50,9 @@ func PrintResult(r CheckResult) {
 }
 
 func PrintSummary() {
-	fmt.Println("\n===========  Checklist Summary  ===========")
+	fmt.Println("\n===============[Checklist Summary]===============")
 	fmt.Printf(Green+"✔ PASS: %d\n"+Reset, PassedCount)
 	fmt.Printf(Red+"✖ FAIL: %d\n"+Reset, FailedCount)
 	fmt.Printf(Yellow+"⚠ Manual: %d\n"+Reset, ManualCount)
-	fmt.Println("======================================")
+	fmt.Println("===============[End of Summary]=================")
 }
