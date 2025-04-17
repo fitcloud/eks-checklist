@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: '1.21'
+          cache: 'gha'       # ← 새 GitHub Actions cache service 사용
 
       - name: Build for ${{ matrix.os }} / ${{ matrix.arch }}
         env:
@@ -34,10 +35,10 @@ jobs:
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: dist/eks-checklist-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.os == 'windows' && '.exe' || '' }}
           asset_name: eks-checklist-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.os == 'windows' && '.exe' || '' }}
           asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
