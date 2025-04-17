@@ -4,6 +4,9 @@ on:
   release:
     types: [created]
 
+permissions:
+  contents: write     # ← 릴리즈 자산 업로드를 위해 반드시 필요
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,34 +16,26 @@ jobs:
         arch: [amd64, arm64]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
         with:
           go-version: '1.21'
-          cache: true       # ← boolean 값만 허용. (기본값 true 이므로 생략 가능)
+          cache: true
 
-      - name: Build for ${{ matrix.os }} / ${{ matrix.arch }}
-        env:
-          CGO_ENABLED: 0
-          GOOS: ${{ matrix.os }}
-          GOARCH: ${{ matrix.arch }}
+      - id: meta
         run: |
-          mkdir -p dist
-          EXT=""
-          if [ "${{ matrix.os }}" = "windows" ]; then EXT=".exe"; fi
-          go build -ldflags="-s -w" \
-            -o dist/eks-checklist-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}$EXT \
-            ./main.go
+          if [ "${{ matrix.os }}" = "windows" ]; then ext=".exe"; else ext=""; fi
+          echo "filename=eks-checklist-${GITHUB_REF_NAME}-${{ matrix.os }}-${{ matrix.arch }}$ext" >> $GITHUB_OUTPUT
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+          mkdir -p dist
+          go build -ldflags="-s -w" -o dist/${{ steps.meta.outputs.filename }} ./main.go
+
+      - uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/eks-checklist-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.os == 'windows' && '.exe' || '' }}
-          asset_name: eks-checklist-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.os == 'windows' && '.exe' || '' }}
+          asset_path: dist/${{ steps.meta.outputs.filename }}
+          asset_name: ${{ steps.meta.outputs.filename }}
           asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
