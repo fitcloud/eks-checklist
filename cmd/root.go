@@ -22,6 +22,7 @@ var (
 	kubeconfigContext string
 	awsProfile        string
 	outputFilter      string
+	outputFormat      string
 )
 
 var rootCmd = &cobra.Command{
@@ -52,6 +53,33 @@ var rootCmd = &cobra.Command{
 			common.SetOutputFilter(lowerFilter)
 		}
 
+		// 출력 형식 설정
+		if outputFormat != "" {
+			lowerFormat := strings.ToLower(outputFormat)
+			validFormats := []string{"text", "html", "pdf"}
+			isValid := false
+
+			for _, valid := range validFormats {
+				if lowerFormat == valid {
+					isValid = true
+					break
+				}
+			}
+
+			if !isValid {
+				fmt.Printf("오류: 유효하지 않은 출력 형식 '%s'\n", outputFormat)
+				fmt.Println("유효한 값: text, html, pdf")
+				os.Exit(1)
+			}
+
+			common.SetOutputFormat(lowerFormat)
+		}
+
+		// HTML 출력 초기화
+		if outputFormat == "html" || outputFormat == "pdf" {
+			common.InitHTMLOutput()
+		}
+
 		kubeconfig := getKubeconfig(kubeconfigPath, awsProfile)
 		cluster := getEksClusterName(kubeconfig)
 
@@ -67,7 +95,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		// General 항목 체크 기능은 하단 항목에 추가
-		fmt.Printf("\n===============[General Check]===============\n")
+		common.PrintCategoryHeader("General Check")
 
 		// 코드형 인프라 (EKS 클러스터, 애플리케이션 배포)
 		common.PrintResult(general.CheckIAC())
@@ -79,7 +107,7 @@ var rootCmd = &cobra.Command{
 		common.PrintResult(general.CheckImageTag(k8sClient))
 
 		// Security 항목 체크 기능은 하단 항목에 추가
-		fmt.Printf("\n===============[Security Check]===============\n")
+		common.PrintCategoryHeader("Security Check")
 
 		// EKS 클러스터 API 엔드포인트 접근 제어(공인망, 사설망, IP 기반 제어) - Automatic
 		common.PrintResult(security.CheckEndpointPublicAccess(security.EksCluster(eksCluster)))
@@ -126,7 +154,7 @@ var rootCmd = &cobra.Command{
 		common.PrintResult(security.ReadnonlyFilesystemCheck(k8sClient))
 
 		// Scalability 항목 체크 기능은 하단 항목에 추가
-		fmt.Printf("\n===============[Scalability Check]===============\n")
+		common.PrintCategoryHeader("Scalability Check")
 
 		// Karpenter 사용 - Automatic
 		common.PrintResult(scalability.GetKarpenter(k8sClient))
@@ -150,7 +178,7 @@ var rootCmd = &cobra.Command{
 		common.PrintResult(scalability.CheckInstanceTypes(k8sClient))
 
 		// Scalability 항목 체크 기능은 하단 항목에 추가
-		fmt.Printf("\n===============[Stability Check]===============\n")
+		common.PrintCategoryHeader("Stability Check")
 
 		// 싱글톤 Pod 미사용 - Automatic
 		common.PrintResult(stability.SingletonPodCheck(k8sClient))
@@ -207,7 +235,7 @@ var rootCmd = &cobra.Command{
 		common.PrintResult(stability.CheckDaemonSetPriorityClass(scalability.GetKarpenter(k8sClient), k8sClient))
 
 		// Network 항목 체크 기능은 하단 항목에 추가
-		fmt.Printf("\n===============[Network Check]===============\n")
+		common.PrintCategoryHeader("Network Check")
 
 		// VPC 서브넷에 충분한 IP 대역대 확보 - Automatic/Manual
 		common.PrintResult(network.CheckVpcSubnetIpCapacity(network.EksCluster(eksCluster), cfg))
@@ -237,7 +265,7 @@ var rootCmd = &cobra.Command{
 		common.PrintResult(network.EndpointSlicesCheck(k8sClient))
 
 		// 비용최적화 항목 체크 기능은 하단 항목에 추가
-		fmt.Printf("\n===============[Cost-Optimized Check]===============\n")
+		common.PrintCategoryHeader("Cost-Optimized Check")
 
 		// EKS용 Kubecost 설치 - Automatic
 		common.PrintResult(cost.GetKubecost(k8sClient))
@@ -259,4 +287,6 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&kubeconfigContext, "context", "", "The name of the kubeconfig context to use")
 	rootCmd.PersistentFlags().StringVar(&awsProfile, "profile", "", "AWS 프로파일 이름")
 	rootCmd.PersistentFlags().StringVar(&outputFilter, "out", "", "출력 결과 필터링 (all, pass, fail, manual)")
+	rootCmd.PersistentFlags().StringVar(&outputFormat, "output", "", "출력 형식 (text, html)")
+
 }
