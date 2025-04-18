@@ -163,6 +163,21 @@
             margin-right: 1rem;
         }
         
+        .success-bg {
+            background-color: #ecfdf5;
+            color: var(--success-color);
+        }
+        
+        .danger-bg {
+            background-color: #fef2f2;
+            color: var(--danger-color);
+        }
+        
+        .warning-bg {
+            background-color: #fffbeb;
+            color: var(--warning-color);
+        }
+        
         .category-content {
             padding: 1.5rem;
             display: none;
@@ -313,6 +328,17 @@
             margin-right: 0.5rem;
         }
         
+        .category-tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: #e0e7ff;
+            color: var(--primary-color);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+        
         @media (max-width: 768px) {
             .stats-card {
                 margin-bottom: 1rem;
@@ -398,63 +424,211 @@
             모든 카테고리 펼치기
         </button>
 
-        {{ if .HasCategory }}
-        <div id="categories-container">
-        {{ range .CategoryOrder }}
-        {{ $category := . }}
-        {{ $results := index $.Categories $category }}
-        <div class="category-section">
-            <div class="category-title" data-category="{{ $category }}">
-                <h3>
-                    <span class="category-icon">
-                        <i class="bi bi-layers"></i>
-                    </span>
-                    {{ $category }}
-                </h3>
-                <span class="toggle-icon">
-                    <i class="bi bi-chevron-down"></i>
-                </span>
-            </div>
-            <div class="category-content">
-                {{ range $results }}
-                <div class="check-item">
-                    <div class="check-header {{ if eq .Status "PASS" }}pass-bg{{ else if eq .Status "MANUAL" }}manual-bg{{ else }}fail-bg{{ end }}">
-                        <span class="status-icon">
-                            {{ if eq .Status "PASS" }}
-                            <i class="bi bi-check-circle-fill"></i>
-                            {{ else if eq .Status "MANUAL" }}
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                            {{ else }}
-                            <i class="bi bi-x-circle-fill"></i>
-                            {{ end }}
+        <!-- 정렬 모드용 뷰 추가 -->
+        {{ if .SortByStatus }}
+        <div id="status-container">
+            <!-- PASS 섹션 -->
+            {{ $passResults := index .Categories "PASS" }}
+            {{ if $passResults }}
+            <div class="category-section">
+                <div class="category-title active" data-category="PASS">
+                    <h3>
+                        <span class="category-icon success-bg">
+                            <i class="bi bi-check-circle"></i>
                         </span>
-                        <span>{{ .CheckName }}</span>
-                    </div>
-                    {{ if ne .Status "PASS" }}
-                    <div class="check-body">
-                        <div class="check-reason">
-                            <strong><i class="bi bi-info-circle me-2"></i>이유:</strong> {{ .FailureMsg }}
+                        PASS ({{ len $passResults }})
+                    </h3>
+                    <span class="toggle-icon">
+                        <i class="bi bi-chevron-down"></i>
+                    </span>
+                </div>
+                <div class="category-content" style="display: block;">
+                    {{ range $passResults }}
+                    <div class="check-item">
+                        <div class="check-header pass-bg">
+                            <span class="status-icon">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </span>
+                            <span>{{ .CheckName }}</span>
                         </div>
-                        {{ if .Resources }}
-                        <div class="mb-3">
-                            <strong><i class="bi bi-hdd-stack me-2"></i>영향받는 리소스:</strong>
-                            <div class="resource-list mt-2">
-                                {{ range .Resources }}
-                                <div class="resource-item">{{ . }}</div>
-                                {{ end }}
+                        <div class="check-body">
+                            <div class="category-tag">
+                                <i class="bi bi-folder me-1"></i>{{ .Category }}
                             </div>
                         </div>
-                        {{ end }}
-                        <a href="{{ .Runbook }}" target="_blank" class="runbook-link">
-                            <i class="bi bi-book"></i>Runbook 보기
-                        </a>
                     </div>
                     {{ end }}
                 </div>
-                {{ end }}
             </div>
+            {{ end }}
+
+            <!-- FAIL 섹션 -->
+            {{ $failResults := index .Categories "FAIL" }}
+            {{ if $failResults }}
+            <div class="category-section">
+                <div class="category-title active" data-category="FAIL">
+                    <h3>
+                        <span class="category-icon danger-bg">
+                            <i class="bi bi-x-circle"></i>
+                        </span>
+                        FAIL ({{ len $failResults }})
+                    </h3>
+                    <span class="toggle-icon">
+                        <i class="bi bi-chevron-down"></i>
+                    </span>
+                </div>
+                <div class="category-content" style="display: block;">
+                    {{ range $failResults }}
+                    <div class="check-item">
+                        <div class="check-header fail-bg">
+                            <span class="status-icon">
+                                <i class="bi bi-x-circle-fill"></i>
+                            </span>
+                            <span>{{ .CheckName }}</span>
+                        </div>
+                        <div class="check-body">
+                            <div class="check-reason">
+                                <strong><i class="bi bi-info-circle me-2"></i>이유:</strong> {{ .FailureMsg }}
+                            </div>
+                            {{ if .Resources }}
+                            <div class="mb-3">
+                                <strong><i class="bi bi-hdd-stack me-2"></i>영향받는 리소스:</strong>
+                                <div class="resource-list mt-2">
+                                    {{ range .Resources }}
+                                    <div class="resource-item">{{ . }}</div>
+                                    {{ end }}
+                                </div>
+                            </div>
+                            {{ end }}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{{ .Runbook }}" target="_blank" class="runbook-link">
+                                    <i class="bi bi-book"></i>Runbook 보기
+                                </a>
+                                <div class="category-tag">
+                                    <i class="bi bi-folder me-1"></i>{{ .Category }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+            {{ end }}
+
+            <!-- MANUAL 섹션 -->
+            {{ $manualResults := index .Categories "MANUAL" }}
+            {{ if $manualResults }}
+            <div class="category-section">
+                <div class="category-title active" data-category="MANUAL">
+                    <h3>
+                        <span class="category-icon warning-bg">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </span>
+                        MANUAL ({{ len $manualResults }})
+                    </h3>
+                    <span class="toggle-icon">
+                        <i class="bi bi-chevron-down"></i>
+                    </span>
+                </div>
+                <div class="category-content" style="display: block;">
+                    {{ range $manualResults }}
+                    <div class="check-item">
+                        <div class="check-header manual-bg">
+                            <span class="status-icon">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                            </span>
+                            <span>{{ .CheckName }}</span>
+                        </div>
+                        <div class="check-body">
+                            <div class="check-reason">
+                                <strong><i class="bi bi-info-circle me-2"></i>이유:</strong> {{ .FailureMsg }}
+                            </div>
+                            {{ if .Resources }}
+                            <div class="mb-3">
+                                <strong><i class="bi bi-hdd-stack me-2"></i>영향받는 리소스:</strong>
+                                <div class="resource-list mt-2">
+                                    {{ range .Resources }}
+                                    <div class="resource-item">{{ . }}</div>
+                                    {{ end }}
+                                </div>
+                            </div>
+                            {{ end }}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{{ .Runbook }}" target="_blank" class="runbook-link">
+                                    <i class="bi bi-book"></i>Runbook 보기
+                                </a>
+                                <div class="category-tag">
+                                    <i class="bi bi-folder me-1"></i>{{ .Category }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+            {{ end }}
         </div>
-        {{ end }}
+        {{ else }}
+        <!-- 기존 카테고리별 뷰 -->
+        {{ if .HasCategory }}
+        <div id="categories-container">
+            {{ range .CategoryOrder }}
+            {{ if ne . "PASS" }}{{ if ne . "FAIL" }}{{ if ne . "MANUAL" }}
+            {{ $category := . }}
+            {{ $results := index $.Categories $category }}
+            <div class="category-section">
+                <div class="category-title" data-category="{{ $category }}">
+                    <h3>
+                        <span class="category-icon">
+                            <i class="bi bi-layers"></i>
+                        </span>
+                        {{ $category }}
+                    </h3>
+                    <span class="toggle-icon">
+                        <i class="bi bi-chevron-down"></i>
+                    </span>
+                </div>
+                <div class="category-content">
+                    {{ range $results }}
+                    <div class="check-item">
+                        <div class="check-header {{ if eq .Status "PASS" }}pass-bg{{ else if eq .Status "MANUAL" }}manual-bg{{ else }}fail-bg{{ end }}">
+                            <span class="status-icon">
+                                {{ if eq .Status "PASS" }}
+                                <i class="bi bi-check-circle-fill"></i>
+                                {{ else if eq .Status "MANUAL" }}
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                {{ else }}
+                                <i class="bi bi-x-circle-fill"></i>
+                                {{ end }}
+                            </span>
+                            <span>{{ .CheckName }}</span>
+                        </div>
+                        {{ if ne .Status "PASS" }}
+                        <div class="check-body">
+                            <div class="check-reason">
+                                <strong><i class="bi bi-info-circle me-2"></i>이유:</strong> {{ .FailureMsg }}
+                            </div>
+                            {{ if .Resources }}
+                            <div class="mb-3">
+                                <strong><i class="bi bi-hdd-stack me-2"></i>영향받는 리소스:</strong>
+                                <div class="resource-list mt-2">
+                                    {{ range .Resources }}
+                                    <div class="resource-item">{{ . }}</div>
+                                    {{ end }}
+                                </div>
+                            </div>
+                            {{ end }}
+                            <a href="{{ .Runbook }}" target="_blank" class="runbook-link">
+                                <i class="bi bi-book"></i>Runbook 보기
+                            </a>
+                        </div>
+                        {{ end }}
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+            {{ end }}{{ end }}{{ end }}
+            {{ end }}
         </div>
         {{ else }}
         <div class="alert alert-info">
@@ -497,6 +671,7 @@
             </div>
             {{ end }}
         </div>
+        {{ end }}
         {{ end }}
         {{ end }}
     </div>
@@ -577,14 +752,19 @@
             });
 
             // 모든 카테고리 접기/펼치기 버튼
-            let allExpanded = false; // 초기 상태: 접힘
+            let allExpanded = {{ if .SortByStatus }}true{{ else }}false{{ end }}; // 정렬 모드에서는 초기 상태가 펼쳐짐
             const toggleAllBtn = document.getElementById('toggle-all-btn');
             
             // 초기 상태 설정
             const categoryContents = document.querySelectorAll('.category-content');
             categoryContents.forEach(content => {
-                content.style.display = "none";
+                content.style.display = {{ if .SortByStatus }}"block"{{ else }}"none"{{ end }};
             });
+            
+            // 정렬 모드에서는 버튼 텍스트 변경
+            {{ if .SortByStatus }}
+            toggleAllBtn.innerHTML = '<i class="bi bi-arrows-collapse"></i> 모든 카테고리 접기';
+            {{ end }}
             
             toggleAllBtn.addEventListener('click', function() {
                 allExpanded = !allExpanded;

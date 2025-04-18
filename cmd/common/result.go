@@ -1,11 +1,23 @@
 package common
 
+// CheckResult 체크 결과를 저장하는 구조체
 type CheckResult struct {
-	CheckName  string   // 체크 기능 이름?
-	Manual     bool     // 수동 체크 여부
-	Passed     bool     // 체크 통과 여부
-	SuccessMsg string   // 성공 메세지
-	FailureMsg string   // 실패 메세지
-	Resources  []string // 영향받는 리소스 목록
-	Runbook    string   // 런북 URL
+	CheckName  string
+	Passed     bool
+	Manual     bool
+	FailureMsg string
+	Resources  []string
+	Runbook    string
+	Category   string // 카테고리 정보 추가
+}
+
+// CheckResultHTML HTML 출력을 위한 체크 결과 구조체
+type CheckResultHTML struct {
+	CheckName   string
+	Status      string
+	StatusClass string
+	FailureMsg  string
+	Resources   []string
+	Runbook     string
+	Category    string
 }

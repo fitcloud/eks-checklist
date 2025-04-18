@@ -23,6 +23,7 @@ var (
 	awsProfile        string
 	outputFilter      string
 	outputFormat      string
+	sortMode          bool
 )
 
 var rootCmd = &cobra.Command{
@@ -30,6 +31,8 @@ var rootCmd = &cobra.Command{
 	Short: "eks-checklist",
 	Long:  "eks-checklist",
 	Run: func(cmd *cobra.Command, args []string) {
+		common.SetSortMode(sortMode)
+
 		if outputFilter != "" {
 			// 소문자로 변환하여 비교
 			lowerFilter := strings.ToLower(outputFilter)
@@ -287,6 +290,6 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&kubeconfigContext, "context", "", "The name of the kubeconfig context to use")
 	rootCmd.PersistentFlags().StringVar(&awsProfile, "profile", "", "AWS 프로파일 이름")
 	rootCmd.PersistentFlags().StringVar(&outputFilter, "out", "", "출력 결과 필터링 (all, pass, fail, manual)")
-	rootCmd.PersistentFlags().StringVar(&outputFormat, "output", "", "출력 형식 (text, html)")
-
+	rootCmd.PersistentFlags().StringVar(&outputFormat, "output", "text", "출력 형식 (text, html)")
+	rootCmd.PersistentFlags().BoolVar(&sortMode, "sort", false, "결과를 상태별(PASS/FAIL/MANUAL)로 정렬하여 출력")
 }

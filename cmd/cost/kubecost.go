@@ -30,7 +30,7 @@ func GetKubecost(client kubernetes.Interface) common.CheckResult {
 		for _, container := range deploy.Spec.Template.Spec.Containers {
 			if strings.Contains(container.Image, "kubecost") {
 				result.Passed = true
-				result.SuccessMsg = "Kubecost가 클러스터에 설치되어 있습니다."
+				// result.SuccessMsg = "Kubecost가 클러스터에 설치되어 있습니다."
 				result.Resources = append(result.Resources,
 					fmt.Sprintf("Namespace: %s | Deployment: %s | Image: %s",
 						deploy.Namespace, deploy.Name, container.Image))
