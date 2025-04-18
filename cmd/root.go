@@ -8,11 +8,13 @@ import (
 	"eks-checklist/cmd/scalability"
 	"eks-checklist/cmd/security"
 	"eks-checklist/cmd/stability"
-	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
+	"k8s.io/client-go/util/homedir"
 )
 
 var (
@@ -28,8 +30,26 @@ var rootCmd = &cobra.Command{
 	Long:  "eks-checklist",
 	Run: func(cmd *cobra.Command, args []string) {
 		if outputFilter != "" {
-			fmt.Printf("Output filter: %s\n", outputFilter)
-			common.SetOutputFilter(*flag.String("out", outputFilter, "출력 결과 필터링 (pass, fail, manual)"))
+			// 소문자로 변환하여 비교
+			lowerFilter := strings.ToLower(outputFilter)
+			validFilters := []string{"all", "pass", "fail", "manual"}
+			isValid := false
+
+			for _, valid := range validFilters {
+				if lowerFilter == valid {
+					isValid = true
+					break
+				}
+			}
+
+			if !isValid {
+				fmt.Printf("오류: 유효하지 않은 출력 필터 '%s'\n", outputFilter)
+				fmt.Println("유효한 값: all, pass, fail, manual")
+				os.Exit(1)
+			}
+
+			fmt.Printf("Output filter: %s\n", lowerFilter)
+			common.SetOutputFilter(lowerFilter)
 		}
 
 		kubeconfig := getKubeconfig(kubeconfigPath, awsProfile)
@@ -235,8 +255,8 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&kubeconfigPath, "kubeconfig", "", "Path to the kubeconfig file to use for CLI requests")
+	rootCmd.PersistentFlags().StringVar(&kubeconfigPath, "kubeconfig", filepath.Join(homedir.HomeDir(), ".kube", "config"), "Path to the kubeconfig file to use for CLI requests")
 	rootCmd.PersistentFlags().StringVar(&kubeconfigContext, "context", "", "The name of the kubeconfig context to use")
 	rootCmd.PersistentFlags().StringVar(&awsProfile, "profile", "", "AWS 프로파일 이름")
-	rootCmd.PersistentFlags().StringVar(&outputFilter, "out", "", "출력 결과 필터링 (pass, fail, manual)")
+	rootCmd.PersistentFlags().StringVar(&outputFilter, "out", "", "출력 결과 필터링 (all, pass, fail, manual)")
 }
