@@ -14,7 +14,7 @@ func SetOutputFilter(filter string) {
 
 // ShouldPrintResult는 필터에 따라 결과를 출력할지 결정합니다
 func ShouldPrintResult(passed bool, manual bool) bool {
-	if OutputFilter == "" {
+	if OutputFilter == "" || OutputFilter == "all" {
 		return true // 필터가 없으면 모든 결과 출력
 	}
 
