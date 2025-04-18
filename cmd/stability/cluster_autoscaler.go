@@ -32,7 +32,7 @@ func CheckClusterAutoscalerEnabled(client kubernetes.Interface) common.CheckResu
 		for _, container := range deploy.Spec.Template.Spec.Containers {
 			if strings.Contains(container.Image, "cluster-autoscaler") {
 				result.Passed = true
-				result.SuccessMsg = fmt.Sprintf("Deployment '%s/%s'에 Cluster Autoscaler가 설치되어 있습니다.", deploy.Namespace, deploy.Name)
+				// result.SuccessMsg = fmt.Sprintf("Deployment '%s/%s'에 Cluster Autoscaler가 설치되어 있습니다.", deploy.Namespace, deploy.Name)
 				result.Resources = append(result.Resources,
 					fmt.Sprintf("Namespace: %s | Deployment: %s | Image: %s", deploy.Namespace, deploy.Name, container.Image))
 				return result

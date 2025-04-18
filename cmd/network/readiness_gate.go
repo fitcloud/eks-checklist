@@ -43,7 +43,7 @@ func CheckReadinessGateEnabled(controller_installed common.CheckResult, client k
 
 	if found {
 		result.Passed = true
-		result.SuccessMsg = "일부 네임스페이스에 Pod Readiness Gate가 적용되어 있습니다."
+		// result.SuccessMsg = "일부 네임스페이스에 Pod Readiness Gate가 적용되어 있습니다."
 	} else {
 		result.Passed = false
 		result.FailureMsg = "Pod Readiness Gate가 적용된 네임스페이스가 없습니다."

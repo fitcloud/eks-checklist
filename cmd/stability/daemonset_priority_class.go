@@ -47,7 +47,7 @@ func CheckDaemonSetPriorityClass(karpenter_installed common.CheckResult, client 
 		result.FailureMsg = "일부 DaemonSet에 PriorityClass가 설정되어 있지 않습니다."
 	} else {
 		result.Passed = true
-		result.SuccessMsg = "모든 DaemonSet에 PriorityClass가 설정되어 있습니다."
+		// result.SuccessMsg = "모든 DaemonSet에 PriorityClass가 설정되어 있습니다."
 	}
 
 	return result

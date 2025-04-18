@@ -30,6 +30,7 @@ type HTMLTemplateData struct {
 	Categories    map[string][]CheckResultHTML
 	HasCategory   bool
 	CategoryOrder []string
+	SortByStatus  bool
 }
 
 // SummaryData 요약 데이터 구조
@@ -38,17 +39,6 @@ type SummaryData struct {
 	FailCount   int
 	ManualCount int
 	Total       int
-}
-
-// CheckResultHTML HTML 출력을 위한 체크 결과 구조체
-type CheckResultHTML struct {
-	CheckName   string
-	Status      string // "PASS", "FAIL", "MANUAL"
-	StatusClass string // CSS 클래스: "success", "danger", "warning"
-	FailureMsg  string
-	Resources   []string
-	Runbook     string
-	Category    string
 }
 
 // 결과를 저장할 배열
@@ -144,6 +134,7 @@ func SaveHTMLReport() (string, error) {
 		Categories:    categoryResults,
 		HasCategory:   len(categoryResults) > 0,
 		CategoryOrder: categoryOrder,
+		SortByStatus:  SortByStatus,
 	}
 
 	// 파일에 템플릿 실행 결과 저장
