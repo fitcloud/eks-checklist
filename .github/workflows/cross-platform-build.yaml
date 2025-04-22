@@ -5,7 +5,7 @@ on:
     types: [created]
 
 permissions:
-  contents: write     # ← 릴리즈 자산 업로드를 위해 반드시 필요
+  contents: write
 
 jobs:
   build:
@@ -17,25 +17,37 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-go@v4
         with:
           go-version: '1.21'
           cache: true
 
+      # 1) 메타 정보: 파일명 생성
       - id: meta
         run: |
-          if [ "${{ matrix.os }}" = "windows" ]; then ext=".exe"; else ext=""; fi
-          echo "filename=eks-checklist-${GITHUB_REF_NAME}-${{ matrix.os }}-${{ matrix.arch }}$ext" >> $GITHUB_OUTPUT
+          ext=""
+          if [ "${{ matrix.os }}" = "windows" ]; then ext=".exe"; fi
+          echo "filename=eks-checklist-${{ github.ref_name }}-${{ matrix.os }}-${{ matrix.arch }}$ext" >> $GITHUB_OUTPUT
 
-      - run: |
+      # 2) 크로스 컴파일용 GOOS/GOARCH 설정
+      - name: Build executable
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+        run: |
           mkdir -p dist
-          go build -ldflags="-s -w" -o dist/${{ steps.meta.outputs.filename }} ./main.go
+          go build -ldflags="-s -w" \
+            -o dist/${{ steps.meta.outputs.filename }} \
+            ./main.go
 
-      - uses: actions/upload-release-asset@v1
+      # 3) 릴리즈 에셋 업로드
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: dist/${{ steps.meta.outputs.filename }}
           asset_name: ${{ steps.meta.outputs.filename }}
           asset_content_type: application/octet-stream
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
