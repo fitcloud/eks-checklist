@@ -22,7 +22,7 @@ func CheckAutoScaledManagedNodeGroup(client kubernetes.Interface, clusterName st
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 관리형 노드 그룹이 ASG를 통한 자동 확장 구성이 되어 있지 않습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/managedNodeGroupASG",
 	}
 
 	result.Passed = false // 기본은 실패

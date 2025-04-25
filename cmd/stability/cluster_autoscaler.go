@@ -18,7 +18,7 @@ func CheckClusterAutoscalerEnabled(client kubernetes.Interface) common.CheckResu
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "Cluster Autoscaler가 설치되어 있지 않습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/clusterAutoscaler",
 	}
 
 	deployments, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})

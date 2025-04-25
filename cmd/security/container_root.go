@@ -18,7 +18,7 @@ func CheckContainerExecutionUser(client kubernetes.Interface) common.CheckResult
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 컨테이너가 root 유저로 실행 중이거나, RunAsUser가 명시되지 않았습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/nonRootUser",
 	}
 
 	// 검사에서 제외할 문자열

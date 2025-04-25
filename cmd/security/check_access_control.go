@@ -19,7 +19,7 @@ func CheckAccessControl(client kubernetes.Interface, cfg aws.Config, eksCluster 
 		Manual:     true,
 		Passed:     true,
 		FailureMsg: "클러스터 접근 제어 설정이 되어 있으나, 적합한 설정이 되어 있는지 수동으로 확인해야 합니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/clusterAccessControl",
 	}
 
 	// 👉 실행 디렉토리 기준 ./result 하위 경로 생성

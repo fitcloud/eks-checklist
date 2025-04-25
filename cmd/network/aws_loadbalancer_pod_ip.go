@@ -16,7 +16,7 @@ func CheckAwsLoadBalancerPodIp(controller_installed common.CheckResult, client k
 		CheckName: "ALB/NLB의 대상으로 Pod의 IP 사용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://your.runbook.url/latest-tag-image",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/network/podIpTarget",
 	}
 
 	if !controller_installed.Passed {

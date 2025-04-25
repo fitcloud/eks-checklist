@@ -17,7 +17,7 @@ func CheckKubeProxyIPVSMode(client kubernetes.Interface) common.CheckResult {
 		CheckName: "kube-proxy에 IPVS 모드 적용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://your.runbook.url/latest-tag-image",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/network/kubeProxyIpvsMode",
 	}
 
 	configMap, err := client.CoreV1().ConfigMaps("kube-system").Get(context.TODO(), "kube-proxy-config", metav1.GetOptions{})

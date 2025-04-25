@@ -17,7 +17,7 @@ func ReadnonlyFilesystemCheck(client kubernetes.Interface) common.CheckResult {
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 컨테이너가 readOnlyRootFilesystem=true 설정을 사용하지 않고 있습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/readOnlyRootFS",
 	}
 
 	pods, err := client.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})

@@ -17,7 +17,7 @@ func CheckSpotNodeTerminationHandler(client kubernetes.Interface) common.CheckRe
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "Spot Termination Handler 관련 파드를 찾을 수 없습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/scalability/spotTerminationHandler",
 	}
 
 	pods, err := client.CoreV1().Pods("").List(context.TODO(), metav1.ListOptions{})

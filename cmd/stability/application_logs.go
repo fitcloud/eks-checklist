@@ -10,7 +10,7 @@ func CheckApplicationLogs() common.CheckResult {
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "application의 로그는 Opensearch, Cloudwatch Logs 등 영구 저장소에 수집하는 것이 좋습니다",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/컨테이너_이미지_태그에_latest_미사용/",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/persistentLogStorage",
 	}
 
 	return result

@@ -17,7 +17,7 @@ func CheckDaemonSetPriorityClass(karpenter_installed common.CheckResult, client 
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 DaemonSet에 PriorityClass가 설정되어 있지 않습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/daemonSetPriorityClass",
 	}
 
 	if !karpenter_installed.Passed {

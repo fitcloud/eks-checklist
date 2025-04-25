@@ -17,7 +17,7 @@ func CheckPodDistributionAndAffinity(clientset kubernetes.Interface) common.Chec
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 Pod에 affinity나 유효한 topologySpreadConstraints 설정이 누락되어 있습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/podSpreadAcrossNodes",
 	}
 
 	pods, err := clientset.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})

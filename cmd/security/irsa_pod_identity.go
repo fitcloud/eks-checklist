@@ -17,7 +17,7 @@ func CheckIRSAAndPodIdentity(clientset kubernetes.Interface) common.CheckResult 
 		Passed:    true,
 		// SuccessMsg: "IRSA 또는 EKS Pod Identity 기반 권한 부여",
 		FailureMsg: "일부 서비스 계정이 IRSA 또는 EKS Pod Identity를 사용하지 않고 있습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/podIamAuth",
 	}
 
 	saList, err := clientset.CoreV1().ServiceAccounts("").List(context.TODO(), v1.ListOptions{

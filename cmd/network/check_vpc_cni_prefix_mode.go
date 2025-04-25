@@ -16,7 +16,7 @@ func CheckVpcCniPrefixMode(client kubernetes.Interface) common.CheckResult {
 		CheckName: "VPC CNI의 Prefix 모드 사용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://your.runbook.url/latest-tag-image",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/network/vpcCniPrefixMode",
 	}
 
 	daemonsets, err := client.AppsV1().DaemonSets("").List(context.TODO(), v1.ListOptions{})

@@ -18,7 +18,7 @@ func CheckMultitenancy(client kubernetes.Interface, cfg aws.Config, eksCluster s
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "멀티 테넌시 격리 구성은 수동으로 점검이 필요합니다. 네임스페이스, 네트워크 정책, RBAC, 쿼터, IRSA, 우선순위 등 관련 리소스를 확인하세요.",
-		Runbook:    "https://docs.aws.amazon.com/eks/latest/best-practices/tenant-isolation.html",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/multiTenancy",
 	}
 
 	baseDir := filepath.Join(".", "result", eksCluster+"-multitenancy")

@@ -19,7 +19,7 @@ func CheckGracefulShutdown(client kubernetes.Interface, cfg aws.Config, eksClust
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "Graceful shutdown 처리는 컨테이너 종료 이벤트 처리 여부를 코드 및 설정에서 수동 점검해야 합니다.",
-		Runbook:    "https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/scalability/gracefulShutdown",
 	}
 
 	baseDir := filepath.Join(".", "result", eksCluster+"-graceful-shutdown")

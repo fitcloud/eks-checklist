@@ -18,7 +18,7 @@ func CheckAuditLoggingEnabled(eksCluster *EksCluster) common.CheckResult {
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "Audit 로그가 활성화되지 않았습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/auditLogging",
 	}
 
 	if eksCluster.Cluster.Logging == nil {

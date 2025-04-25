@@ -17,7 +17,7 @@ func CheckHpa(client kubernetes.Interface) common.CheckResult {
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 Deployment에 HPA가 적용되어 있지 않습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/hpaEnabled",
 	}
 
 	// 모든 Deployment 조회

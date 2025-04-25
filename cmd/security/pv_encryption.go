@@ -17,7 +17,7 @@ func CheckPVEcryption(client kubernetes.Interface) common.CheckResult {
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 PV가 암호화되지 않았거나 수동 확인이 필요합니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/pvEncryption",
 	}
 
 	pvs, err := client.CoreV1().PersistentVolumes().List(context.TODO(), metav1.ListOptions{})

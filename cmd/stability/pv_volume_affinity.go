@@ -20,7 +20,7 @@ func CheckVolumeAffinity(client kubernetes.Interface, cfg aws.Config, eksCluster
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "PV와 관련된 nodeAffinity 조건을 자동 수집하였으며, Pod 스케줄링 위치와의 일치 여부는 수동으로 점검해야 합니다.",
-		Runbook:    "https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/volumeAffinityCheck",
 	}
 
 	ctx := context.TODO()
