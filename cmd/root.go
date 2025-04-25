@@ -83,7 +83,7 @@ var rootCmd = &cobra.Command{
 			common.InitHTMLOutput()
 		}
 
-		kubeconfig := getKubeconfig(kubeconfigPath, awsProfile)
+		kubeconfig := getKubeconfig(kubeconfigPath, kubeconfigContext, awsProfile)
 		cluster := getEksClusterName(kubeconfig)
 
 		fmt.Printf("Running checks on %s\n", cluster)
@@ -289,7 +289,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&kubeconfigPath, "kubeconfig", filepath.Join(homedir.HomeDir(), ".kube", "config"), "Path to the kubeconfig file to use for CLI requests")
 	rootCmd.PersistentFlags().StringVar(&kubeconfigContext, "context", "", "The name of the kubeconfig context to use")
 	rootCmd.PersistentFlags().StringVar(&awsProfile, "profile", "", "AWS 프로파일 이름")
-	rootCmd.PersistentFlags().StringVar(&outputFilter, "out", "", "출력 결과 필터링 (all, pass, fail, manual)")
+	rootCmd.PersistentFlags().StringVar(&outputFilter, "filter", "", "출력 결과 필터링 (all, pass, fail, manual)")
 	rootCmd.PersistentFlags().StringVar(&outputFormat, "output", "text", "출력 형식 (text, html)")
 	rootCmd.PersistentFlags().BoolVar(&sortMode, "sort", false, "결과를 상태별(PASS/FAIL/MANUAL)로 정렬하여 출력")
 }
