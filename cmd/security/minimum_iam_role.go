@@ -132,7 +132,7 @@ func CheckNodeIAMRoles(client kubernetes.Interface) common.CheckResult {
 		Manual:     false,
 		Passed:     true, // 기본적으로 통과 상태로 설정, 문제 발생 시 false로 변경
 		FailureMsg: "일부 노드에서 허용되지 않은 IAM 정책이 발견되었습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image", // 문제가 있을 경우 참고할 Runbook 링크
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/minimalNodeIam", // 문제가 있을 경우 참고할 Runbook 링크
 	}
 
 	// 노드 IP 목록 가져오기

@@ -20,7 +20,7 @@ func DataplanePrivateCheck(eksCluster EksCluster, cfg aws.Config) common.CheckRe
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 서브넷이 IGW(인터넷 게이트웨이)와 연결되어 있어 퍼블릭 상태입니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/privateNodes",
 	}
 
 	eksClient := eks.NewFromConfig(cfg)

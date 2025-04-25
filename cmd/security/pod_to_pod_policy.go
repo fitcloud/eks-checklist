@@ -19,7 +19,7 @@ func CheckPodToPodNetworkPolicy(client kubernetes.Interface, eksCluster string) 
 		Manual:     true,
 		Passed:     true,
 		FailureMsg: "Pod 간 접근 제어를 위한 NetworkPolicy가 설정되어 있지만 정책이 적합하게 설정되어 있는지 수동으로 확인해야합니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/podToPodAccess",
 	}
 
 	// 1. NetworkPolicy 목록 조회

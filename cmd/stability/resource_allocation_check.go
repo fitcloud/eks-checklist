@@ -21,7 +21,7 @@ func CheckResourceAllocation(client kubernetes.Interface, cfg aws.Config, eksClu
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "일부 Pod에 Request/Limit 설정이 없거나, 값의 적정성은 수동 확인이 필요합니다.",
-		Runbook:    "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/resourceRequestsLimits",
 	}
 
 	baseDir := filepath.Join(".", "result", eksCluster+"-resource-allocation")

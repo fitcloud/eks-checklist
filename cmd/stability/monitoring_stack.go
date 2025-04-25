@@ -10,7 +10,7 @@ func CheckNodeScalingPolicy() common.CheckResult {
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "EKS와 워크로드 전체를 확인할 수 있는 모니터링 스택이 있는 것이 좋습니다 ( kube-prometheus-stack, cloudwatch ..etc)",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/컨테이너_이미지_태그에_latest_미사용/",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/monitoringStack",
 	}
 
 	return result

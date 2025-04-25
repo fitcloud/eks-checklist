@@ -17,7 +17,7 @@ func CheckNodeMultiAZ(client kubernetes.Interface) common.CheckResult {
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "데이터 플레인 노드가 다수의 가용 영역(AZ)에 분산되어 있지 않습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/multiAzNodes",
 	}
 
 	nodes, err := client.CoreV1().Nodes().List(context.TODO(), v1.ListOptions{})

@@ -19,7 +19,7 @@ func CheckImageStaticAnalysis(client kubernetes.Interface, cfg aws.Config, eksCl
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "컨테이너 이미지의 보안 취약점 여부는 수동으로 정적 분석 도구를 사용해 확인해야 합니다.",
-		Runbook:    "https://docs.aws.amazon.com/eks/latest/best-practices/security-images.html",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/imageScanning",
 	}
 
 	// 결과 디렉토리 생성

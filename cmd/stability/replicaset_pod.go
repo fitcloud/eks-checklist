@@ -17,7 +17,7 @@ func PodReplicaSetCheck(client kubernetes.Interface) common.CheckResult {
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 ReplicaSet이 복제본을 1개만 사용하고 있습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/multiplePodReplicas",
 	}
 
 	replicaSets, err := client.AppsV1().ReplicaSets("").List(context.TODO(), v1.ListOptions{})

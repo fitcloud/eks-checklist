@@ -17,7 +17,7 @@ func CheckNodeGroupUsage(client kubernetes.Interface) common.CheckResult {
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "Karpenter 전용 노드 그룹 또는 Fargate가 사용되고 있지 않습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/scalability/karpenterOrFargate",
 	}
 
 	nodes, err := client.CoreV1().Nodes().List(context.TODO(), metaV1.ListOptions{})

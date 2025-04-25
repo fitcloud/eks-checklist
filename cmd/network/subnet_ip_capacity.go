@@ -24,7 +24,7 @@ func CheckVpcSubnetIpCapacity(eksCluster EksCluster, cfg aws.Config) common.Chec
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "모든 서브넷의 IP 사용량을 출력했습니다. 사용 가능 용량이 충분한지 수동으로 확인하세요.",
-		Runbook:    "https://your.runbook.url/vpc-subnet-ip-check",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/network/subnetIpCapacity",
 	}
 
 	subnetIds := eksCluster.Cluster.ResourcesVpcConfig.SubnetIds

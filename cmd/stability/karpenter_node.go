@@ -17,7 +17,7 @@ func CheckKarpenterNode(karpenter_installed common.CheckResult, client dynamic.I
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "Karpenter가 노드를 프로비저닝한 흔적(NodeClaim 리소스)이 존재하지 않습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/karpenterNodes",
 	}
 
 	if !karpenter_installed.Passed {

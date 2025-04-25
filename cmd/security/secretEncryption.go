@@ -17,7 +17,7 @@ func CheckSecretEncryption(client kubernetes.Interface) common.CheckResult {
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 Secret 객체가 암호화되지 않은 채로 저장되어 있습니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/security/secretEncryption",
 	}
 
 	secrets, err := client.CoreV1().Secrets("").List(context.TODO(), metav1.ListOptions{})

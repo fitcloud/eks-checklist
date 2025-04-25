@@ -17,7 +17,7 @@ func SingletonPodCheck(client kubernetes.Interface) common.CheckResult {
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "Deployment나 StatefulSet 등의 컨트롤러에 속하지 않은 Standalone Pod가 존재합니다.",
-		Runbook:    "https://your.runbook.url/latest-tag-image",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/noSingletonPod",
 	}
 
 	pods, err := client.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})

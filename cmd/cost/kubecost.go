@@ -17,7 +17,7 @@ func GetKubecost(client kubernetes.Interface) common.CheckResult {
 		CheckName: "EKS용 Kubecost 설치",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://your.runbook.url/latest-tag-image",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/cost/kubecost",
 	}
 
 	deploys, err := client.AppsV1().Deployments(v1.NamespaceAll).List(context.TODO(), v1.ListOptions{})

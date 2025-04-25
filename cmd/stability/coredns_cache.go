@@ -16,7 +16,7 @@ func CheckCoreDNSCache(client kubernetes.Interface) common.CheckResult {
 		CheckName: "DNS 캐시 적용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://your.runbook.url/latest-tag-image",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/stability/dnsCaching",
 	}
 
 	configMap, err := client.CoreV1().ConfigMaps("kube-system").Get(context.TODO(), "coredns", v1.GetOptions{})

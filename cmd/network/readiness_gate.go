@@ -16,7 +16,7 @@ func CheckReadinessGateEnabled(controller_installed common.CheckResult, client k
 		CheckName: "Pod Readiness Gate 적용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://your.runbook.url/latest-tag-image",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/network/readinessGate",
 	}
 
 	if !controller_installed.Passed {

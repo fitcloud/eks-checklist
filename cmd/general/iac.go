@@ -10,7 +10,7 @@ func CheckIAC() common.CheckResult {
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "클러스터 및 Application은 IaC 방식으로 관리하는 것이 좋습니다 (Terraform ,CDK, CloudFormation)",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/컨테이너_이미지_태그에_latest_미사용/",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/general/iac",
 	}
 
 	return result
