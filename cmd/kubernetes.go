@@ -1,69 +1,3 @@
-// package cmd
-
-// import (
-// 	// "flag"
-
-// 	"os"
-
-// 	// "path/filepath"
-// 	"slices"
-
-// 	"k8s.io/client-go/dynamic"
-// 	"k8s.io/client-go/kubernetes"
-// 	"k8s.io/client-go/rest"
-// 	"k8s.io/client-go/tools/clientcmd"
-// 	// "k8s.io/client-go/util/homedir"
-// )
-
-// func getKubeconfig(kubeconfigPath string, awsProfile string) rest.Config {
-// 	kubeconfig := &kubeconfigPath
-
-// 	// if home := homedir.HomeDir(); kubeconfigPath == "" {
-// 	// 	kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
-// 	// } else {
-// 	// 	kubeconfig = flag.String("kubeconfig", kubeconfigPath, "absolute path to the kubeconfig file")
-// 	// }
-
-// 	// flag.Parse()
-
-// 	// AWS_PROFILE 설정
-// 	if awsProfile != "" {
-// 		os.Setenv("AWS_PROFILE", awsProfile)
-// 	}
-
-// 	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
-// 	if err != nil {
-// 		panic(err.Error())
-// 	}
-
-// 	return *config
-// }
-
-// func getEksClusterName(kubeconfig rest.Config) string {
-// 	clusterNameIdx := slices.Index(kubeconfig.ExecProvider.Args, "--cluster-name") + 1
-
-// 	return kubeconfig.ExecProvider.Args[clusterNameIdx]
-// }
-
-// func createK8sClient(kubeconfig rest.Config) kubernetes.Interface {
-// 	client, err := kubernetes.NewForConfig(&kubeconfig)
-// 	if err != nil {
-// 		panic(err.Error())
-// 	}
-
-// 	return client
-// }
-
-// // CreateDynamicClient: dynamic.Interface 생성
-// func CreateDynamicClient(kubeconfig *rest.Config) (dynamic.Interface, error) {
-// 	dynamicClient, err := dynamic.NewForConfig(kubeconfig)
-// 	if err != nil {
-// 		panic(err.Error())
-// 	}
-
-// 	return dynamicClient, nil
-// }
-
 package cmd
 
 import (
@@ -171,22 +105,25 @@ func getKubeconfigWithContext(kubeconfigPath string, context string, awsProfile 
 }
 
 // getKubeconfig 클러스터 선택 기능을 통합한 kubeconfig 로드 함수
-func getKubeconfig(kubeconfigPath string, kubeconfigContext string, awsProfile string) rest.Config {
+func getKubeconfig(kubeconfigPath string, kubeconfigContext string, awsProfile string) (string, rest.Config) {
 	var config *rest.Config
 	var err error
+	var selectedContext string
 
 	// 컨텍스트가 명시적으로 지정된 경우 해당 컨텍스트 사용
 	if kubeconfigContext != "" {
-		config, err = getKubeconfigWithContext(kubeconfigPath, kubeconfigContext, awsProfile)
+		selectedContext = kubeconfigContext
+		config, err = getKubeconfigWithContext(kubeconfigPath, selectedContext, awsProfile)
 		if err != nil {
-			fmt.Printf("지정된 컨텍스트 '%s'를 로드하는 중 오류 발생: %v\n", kubeconfigContext, err)
+			fmt.Printf("지정된 컨텍스트 '%s'를 로드하는 중 오류 발생: %v\n", selectedContext, err)
 			os.Exit(1)
 		}
 	} else {
 		// 대화형 선택 메뉴 표시
-		selectedContext, err := selectCluster(kubeconfigPath)
-		if err != nil {
-			fmt.Printf("클러스터 선택 중 오류 발생: %v\n", err)
+		var selErr error
+		selectedContext, selErr = selectCluster(kubeconfigPath)
+		if selErr != nil {
+			fmt.Printf("클러스터 선택 중 오류 발생: %v\n", selErr)
 			os.Exit(1)
 		}
 
@@ -197,7 +134,47 @@ func getKubeconfig(kubeconfigPath string, kubeconfigContext string, awsProfile s
 		}
 	}
 
-	return *config
+	AWS_PROFILE := getAwsProfileFromContext(kubeconfigPath, selectedContext)
+
+	return AWS_PROFILE, *config
+}
+
+// getAwsProfileFromContext는 주어진 컨텍스트에서 AWS_PROFILE 환경 변수 값을 추출합니다
+func getAwsProfileFromContext(kubeconfigPath string, contextName string) string {
+	config, err := clientcmd.LoadFromFile(kubeconfigPath)
+	if err != nil {
+		fmt.Printf("kubeconfig 파일을 로드하는 중 오류 발생: %v\n", err)
+		return ""
+	}
+
+	// 컨텍스트가 존재하는지 확인
+	context, exists := config.Contexts[contextName]
+	if !exists {
+		fmt.Printf("지정된 컨텍스트 '%s'를 찾을 수 없습니다\n", contextName)
+		return ""
+	}
+
+	// 컨텍스트에 연결된 유저 정보 확인
+	authInfoName := context.AuthInfo
+	authInfo, exists := config.AuthInfos[authInfoName]
+	if !exists {
+		fmt.Printf("컨텍스트 '%s'의 유저 정보를 찾을 수 없습니다\n", contextName)
+		return ""
+	}
+
+	// exec 설정이 있는지 확인
+	if authInfo.Exec == nil {
+		return ""
+	}
+
+	// AWS_PROFILE 환경 변수 검색
+	for _, env := range authInfo.Exec.Env {
+		if env.Name == "AWS_PROFILE" {
+			return env.Value
+		}
+	}
+
+	return ""
 }
 
 func getEksClusterName(kubeconfig rest.Config) string {
