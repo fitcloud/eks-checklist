@@ -1,65 +1,73 @@
-# EKS Checklist
+# EKS-Checklist
+EKS-Checklist는 Amazon EKS (Elastic Kubernetes Service) 클러스터의 설정 및 상태를 점검하는 도구입니다. 이 도구는 Go 언어로 개발되었으며, AWS-SDK-Go와 Go-K8s 및 Cobra을 활용하여 클러스터에 대한 정보를 가져와 EKS 클러스터의 **비용 최적화(Cost)**, **일반 설정(General)**, **네트워크(Network)**, **확장성(Scalability)**, **보안(Security)**, **안정성(Stability)** 등을 개선할 수 있습니다.
+이 도구는 EKS 클러스터가 AWS EKS 권장 모범 사례 및 Kubernetes의 권장 모범 사례를 준수하고 있는지 점검하고, 클러스터 운영을 최적화하는 데 필요한 권장 사항을 제공합니다.
 
-## 개요
-EKS Checklist는 Amazon Elastic Kubernetes Service(EKS) 클러스터의 상태를 점검하고, 필수적인 검증을 수행하는 도구입니다.  
-이 프로젝트는 Go 언어로 개발되었으며, 샘플 EKS 클러스터는 Terraform을 이용해 생성됩니다.
+## 프로젝트 목적 / 배경
+Amazon EKS는 관리형 Kubernetes 서비스이지만, 클러스터를 직접 운영하다 보면 다양한 설정 실수나 비효율이 발생하기 쉽습니다. 비용,권한 설정,네트워크 구성, 확장성 부족 등의 문제는 운영 안정성과 보안에 큰 영향을 미칠 수 있습니다.
+**EKS-Checklist**는 이러한 문제를 점검하고 개선을 할 수 있도록 개발된 도구입니다. AWS 및 Kubernetes의 권장 모범 사례(Best Practices)를 기반으로 클러스터를 자동으로 분석하여 운영자가 **효율적인 클러스터 환경을 유지**할 수 있도록 개발되었습니다.
 
-## 개발 환경 구성
-### 1. 환경 변수 설정 (Windows)
-Windows 환경에서 `Powershell(Admin)`을 실행하고 다음 명령어를 입력하여 환경 변수를 설정합니다.
-```powershell
-[System.Environment]::SetEnvironmentVariable('HOME', $env:USERPROFILE,[System.EnvironmentVariableTarget]::Machine)
+## 점검 항목
+- **비용 최적화 (Cost)**: EKS 클러스터의 리소스 사용을 점검하여 불필요한 비용을 줄일 수 있는 방법을 제공합니다.
+- **일반 설정 (General)**: 클러스터의 기본 설정과 환경이 적절하게 구성되었는지 확인합니다.
+- **네트워크 (Network)**: VPC, 서브넷, 보안 그룹 등 네트워크 구성을 점검하여 네트워크가 올바르게 설정되었는지 확인합니다.
+- **확장성 (Scalability)**: 클러스터가 필요에 따라 확장 가능하도록 설정되었는지 점검합니다.
+- **보안 (Security)**: IAM 정책, 인증 및 권한 설정 등 보안 설정을 점검하여 클러스터가 안전하게 운영되고 있는지 확인합니다.
+- **안정성 (Stability)**: 클러스터의 안정성을 위한 백업, 모니터링 및 로깅 설정이 제대로 되어 있는지 점검합니다.
+
+## 필수 조건
+EKS-Checklist를 사용하기 전에 다음 항목들이 설치되고 올바르게 설정되어 있어야 합니다.
+1. **AWS CLI**: AWS CLI가 설치되어 있고 적절한 권한으로 설정되어 있어야 합니다. 설치 및 설정 방법은 [여기](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)를 참고하세요.
+2. **AWS EKS 클러스터 접근 권한**: EKS-Checklist는 AWS EKS 클러스터에 접근할 수 있는 권한을 필요로 합니다.
+
+## 설치 방법
+EKS-Checklist는 GitHub의 릴리즈 페이지에서 원하는 버전을 다운로드하여 사용할 수 있습니다.
+### GitHub Releases에서 다운로드
+1. [GitHub Releases](https://github.com/fitcloud/eks-checklist/releases) 페이지로 이동합니다.
+2. 원하는 버전의 태그를 선택합니다.
+3. 운영 체제에 맞는 바이너리를 다운로드합니다.
+
+## 사용법
+### 실행 flags
+```bash
+{바이너리 파일명} {--flags}
+예: eks-checklist-darwin-amd64 --help
 ```
-
-### 2. 개발 도구
-- IDE : VSCode를 사용하며, Dev Container Extension을 활용하여 개발 환경을 자동 구성합니다.
-
-- VSCode를 실행하면 루트 디렉토리의 .devcontainer/devcontainer.json 파일에 정의된 환경이 자동으로 세팅됩니다.
-
-### 3. 실행 방법
-```sh
-go run main.go
+- `--context` : 사용할 kubeconfig 컨텍스트 이름
+- `--kubeconfig` : 사용할 kubeconfig 파일 경로 (기본값: `"C:\\Users\\사용자이름\\.kube\\config"`)
+- `--out` : 출력 결과 필터링 옵션 (`all`, `pass`, `fail`, `manual`)
+- `--output` : 출력 형식 지정 (`text`, `html`) — 기본값: `text`
+- `--profile` : 사용할 AWS CLI 프로파일 이름
+- `--sort` : 결과를 상태별(PASS / FAIL / MANUAL)로 정렬
+- `-h`, `--help` : 도움말 출력
+### macOS (Darwin)
+1. [Releases 페이지](https://github.com/fitcloud/eks-checklist/releases)에서 macOS용 바이너리를 다운로드
+   예: `eks-checklist-darwin-amd64`
+2. 실행 권한 부여 및 설치:
+```bash
+chmod +x eks-checklist-darwin-amd64
+sudo mv eks-checklist-darwin-amd64 /usr/local/bin/eks-checklist
 ```
-
-## 테스트 환경 구성
-EKS 클러스터를 이용한 테스트가 필요하며, Terraform을 사용해 환경을 구성합니다.
-### 1. Terraform을 이용한 EKS 클러스터 생성
-Terraform을 이용해 테스트 환경을 구성하려면 terraform 디렉터리로 이동 후 다음 명령어를 실행합니다.
-
-#### (1).  테라폼 초기화 (필수 모듈 다운로드)
-```sh
-terraform init
+3. 실행 예시:
+```bash
+eks-checklist-darwin-amd64 --profile {AWS_Profile}
 ```
-
-#### (2).  인프라 생성 (EKS 클러스터 구축)
-```sh
-terraform apply
+### Linux
+1. [Releases 페이지](https://github.com/fitcloud/eks-checklist/releases)에서 Linux용 바이너리 다운로드
+   예: `eks-checklist-linux-amd64`
+2. 실행 권한 부여 및 설치:
+```bash
+chmod +x eks-checklist-linux-amd64
+sudo mv eks-checklist-linux-amd64 /usr/local/bin/eks-checklist
 ```
-
-### 2. Kubeconfig 설정
-EKS 클러스터가 생성되면 kubectl이 클러스터에 접근할 수 있도록 kubeconfig를 설정합니다.
-```sh
-aws eks update-kubeconfig --name eks-checklist
+3. 실행 예시:
+```bash
+eks-checklist-linux-amd64 --profile {AWS_Profile}
 ```
-
-## Git Flow
-본 프로젝트는 Git Flow 전략을 따르며, dev 브랜치를 기준으로 기능별 feature 브랜치를 생성하여 작업합니다.
-
-### 1. 브랜치 네이밍 규칙
+### Windows
+1. [Releases 페이지](https://github.com/fitcloud/eks-checklist/releases)에서 `.exe` 파일 다운로드
+   예: `eks-checklist-windows-amd64.exe`
+2. 적절한 폴더에 저장 (예: `C:\\Program Files\\EKS-Checklist\\`)
+3. 명령 프롬프트 또는 PowerShell에서 실행:
+```bash
+eks-checklist.exe --profile {AWS_Profile}
 ```
-feature/<대분류>-<기능>
-```
-
-예시:
-```
-feature/network-targetip
-```
-
-### 2. 개발 프로세스
-#### (1). ```dev``` 브랜치에서 ```feature``` 브랜치를 생성하여 기능 개발을 진행합니다.
-
-#### (2). 기능 구현 후 ```dev``` 브랜치로 Pull Request(PR)를 생성합니다.
-
-#### (3). 코드 리뷰를 거친 후 dev 브랜치에 머지(Merge)합니다.
-
-#### (4). 다른 기능 브랜치는 최신 ```dev``` 브랜치를 반영하여 지속적으로 동기화합니다.
