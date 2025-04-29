@@ -1,7 +1,11 @@
+# dataplane_private.yaml
+
 - name: "Subnet with IGW connected"
   expect_pass: false
   cluster:
+    name: "test-cluster"
     resourcesVpcConfig:
+      vpcId: "vpc-1"
       subnetIds:
         - "subnet-1"
   route_tables:
@@ -14,7 +18,9 @@
 - name: "Subnet without IGW connected"
   expect_pass: true
   cluster:
+    name: "test-cluster"
     resourcesVpcConfig:
+      vpcId: "vpc-1"
       subnetIds:
         - "subnet-2"
   route_tables:
@@ -27,7 +33,9 @@
 - name: "Multiple subnets, one with IGW"
   expect_pass: false
   cluster:
+    name: "test-cluster"
     resourcesVpcConfig:
+      vpcId: "vpc-1"
       subnetIds:
         - "subnet-3"
         - "subnet-4"

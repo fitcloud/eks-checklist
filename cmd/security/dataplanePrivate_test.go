@@ -12,94 +12,137 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	"github.com/aws/aws-sdk-go-v2/service/eks"
 	eksTypes "github.com/aws/aws-sdk-go-v2/service/eks/types"
 )
 
 func TestDataplanePrivateCheck(t *testing.T) {
-	// YAML 파일 "dataplane_private.yaml"에서 테스트 케이스 로드
 	testCases := testutils.LoadTestCases(t, "dataplane_private.yaml")
+
+	type FakeRoute struct {
+		DestinationCidrBlock string
+		GatewayId            string
+	}
+	type FakeRouteTable struct {
+		RouteTableId string
+		Routes       []FakeRoute
+	}
+
 	for _, tc := range testCases {
 		testName := tc["name"].(string)
-		expectedPass := tc["expect_pass"].(bool)
+		expectPass := tc["expect_pass"].(bool)
 
+		// ── 1) YAML에서 cluster.name, vpcId, subnetIds 읽어오기
 		clusterMap := tc["cluster"].(map[string]interface{})
-		resVpcCfg := clusterMap["resourcesVpcConfig"].(map[string]interface{})
-		subnetIdsRaw := resVpcCfg["subnetIds"].([]interface{})
+		clusterName := clusterMap["name"].(string)
+		resVpc := clusterMap["resourcesVpcConfig"].(map[string]interface{})
+		vpcId := resVpc["vpcId"].(string)
+		rawSubnets := resVpc["subnetIds"].([]interface{})
 		var subnetIds []string
-		for _, id := range subnetIdsRaw {
-			subnetIds = append(subnetIds, id.(string))
+		for _, s := range rawSubnets {
+			subnetIds = append(subnetIds, s.(string))
 		}
+
+		// ── 2) EksCluster 객체 생성 (Name, VpcId, SubnetIds 모두 세팅)
 		eksCluster := security.EksCluster{
 			Cluster: &eksTypes.Cluster{
+				Name: aws.String(clusterName),
 				ResourcesVpcConfig: &eksTypes.VpcConfigResponse{
+					VpcId:     aws.String(vpcId),
 					SubnetIds: subnetIds,
 				},
 			},
 		}
 
+		// ── 3) route_tables 페이크 데이터 준비
 		routeTablesRaw := tc["route_tables"].(map[string]interface{})
-		// route_tables: mapping: subnet_id -> { route_table_id: string, routes: [ { DestinationCidrBlock: string, GatewayId: string } ] }
-		type FakeRoute struct {
-			DestinationCidrBlock string
-			GatewayId            string
-		}
-		type FakeRouteTable struct {
-			RouteTableId string
-			Routes       []FakeRoute
-		}
 		fakeRouteTables := make(map[string]FakeRouteTable)
-		for subnetID, raw := range routeTablesRaw {
-			m := raw.(map[string]interface{})
-			rtID := m["route_table_id"].(string)
-			routesRaw := m["routes"].([]interface{})
-			var routes []FakeRoute
-			for _, r := range routesRaw {
-				rMap := r.(map[string]interface{})
-				routes = append(routes, FakeRoute{
-					DestinationCidrBlock: rMap["DestinationCidrBlock"].(string),
-					GatewayId:            rMap["GatewayId"].(string),
+		for sid, raw := range routeTablesRaw {
+			mm := raw.(map[string]interface{})
+			rtID := mm["route_table_id"].(string)
+			routesRaw := mm["routes"].([]interface{})
+			var fr FakeRouteTable
+			fr.RouteTableId = rtID
+			for _, rr := range routesRaw {
+				rmap := rr.(map[string]interface{})
+				fr.Routes = append(fr.Routes, FakeRoute{
+					DestinationCidrBlock: rmap["DestinationCidrBlock"].(string),
+					GatewayId:            rmap["GatewayId"].(string),
 				})
 			}
-			fakeRouteTables[subnetID] = FakeRouteTable{
-				RouteTableId: rtID,
-				Routes:       routes,
-			}
+			fakeRouteTables[sid] = fr
 		}
 
 		t.Run(testName, func(t *testing.T) {
-			patch := monkey.PatchInstanceMethod(reflect.TypeOf(new(ec2.Client)), "DescribeRouteTables",
-				func(c *ec2.Client, ctx context.Context, input *ec2.DescribeRouteTablesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeRouteTablesOutput, error) {
-					var subnetID string
-					for _, filter := range input.Filters {
-						if filter.Name != nil && *filter.Name == "association.subnet-id" {
-							if len(filter.Values) > 0 {
-								subnetID = filter.Values[0]
-							}
-							break
+			// ── 4) EKS 클라이언트 NewFromConfig 패치
+			var eksClient *eks.Client
+			p1 := monkey.Patch(eks.NewFromConfig,
+				func(cfg aws.Config, opts ...func(*eks.Options)) *eks.Client {
+					eksClient = &eks.Client{}
+					return eksClient
+				},
+			)
+			defer p1.Unpatch()
+
+			// ── 5) ListNodegroups 패치
+			p2 := monkey.PatchInstanceMethod(
+				reflect.TypeOf(eksClient), "ListNodegroups",
+				func(_ *eks.Client, _ context.Context, _ *eks.ListNodegroupsInput, _ ...func(*eks.Options)) (*eks.ListNodegroupsOutput, error) {
+					return &eks.ListNodegroupsOutput{Nodegroups: []string{clusterName}}, nil
+				},
+			)
+			defer p2.Unpatch()
+
+			// ── 6) DescribeNodegroup 패치 (포인터 타입 주의)
+			p3 := monkey.PatchInstanceMethod(
+				reflect.TypeOf(eksClient), "DescribeNodegroup",
+				func(_ *eks.Client, _ context.Context, _ *eks.DescribeNodegroupInput, _ ...func(*eks.Options)) (*eks.DescribeNodegroupOutput, error) {
+					return &eks.DescribeNodegroupOutput{
+						Nodegroup: &eksTypes.Nodegroup{Subnets: subnetIds},
+					}, nil
+				},
+			)
+			defer p3.Unpatch()
+
+			// ── 7) EC2 클라이언트 NewFromConfig 패치
+			var ec2Client *ec2.Client
+			p4 := monkey.Patch(ec2.NewFromConfig,
+				func(cfg aws.Config, opts ...func(*ec2.Options)) *ec2.Client {
+					ec2Client = &ec2.Client{}
+					return ec2Client
+				},
+			)
+			defer p4.Unpatch()
+
+			// ── 8) DescribeRouteTables 패치
+			p5 := monkey.PatchInstanceMethod(
+				reflect.TypeOf(ec2Client), "DescribeRouteTables",
+				func(_ *ec2.Client, _ context.Context, in *ec2.DescribeRouteTablesInput, _ ...func(*ec2.Options)) (*ec2.DescribeRouteTablesOutput, error) {
+					var tables []ec2types.RouteTable
+					for sid, frt := range fakeRouteTables {
+						assoc := ec2types.RouteTableAssociation{SubnetId: aws.String(sid)}
+						var routes []ec2types.Route
+						for _, r := range frt.Routes {
+							routes = append(routes, ec2types.Route{
+								DestinationCidrBlock: aws.String(r.DestinationCidrBlock),
+								GatewayId:            aws.String(r.GatewayId),
+							})
 						}
-					}
-					fakeRT := fakeRouteTables[subnetID]
-					var routes []ec2types.Route
-					for _, r := range fakeRT.Routes {
-						routes = append(routes, ec2types.Route{
-							DestinationCidrBlock: aws.String(r.DestinationCidrBlock),
-							GatewayId:            aws.String(r.GatewayId),
+						tables = append(tables, ec2types.RouteTable{
+							RouteTableId: aws.String(frt.RouteTableId),
+							Associations: []ec2types.RouteTableAssociation{assoc},
+							Routes:       routes,
 						})
 					}
-					rt := ec2types.RouteTable{
-						RouteTableId: aws.String(fakeRT.RouteTableId),
-						Routes:       routes,
-					}
-					return &ec2.DescribeRouteTablesOutput{
-						RouteTables: []ec2types.RouteTable{rt},
-					}, nil
-				})
-			defer patch.Unpatch()
+					return &ec2.DescribeRouteTablesOutput{RouteTables: tables}, nil
+				},
+			)
+			defer p5.Unpatch()
 
-			cfg := aws.Config{}
-			result := security.DataplanePrivateCheck(eksCluster, cfg)
-			if result.Passed != expectedPass {
-				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectedPass, result.Passed)
+			// ── 9) 실제 함수 호출 및 검증
+			got := security.DataplanePrivateCheck(eksCluster, aws.Config{})
+			if got.Passed != expectPass {
+				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectPass, got.Passed)
 			}
 		})
 	}
