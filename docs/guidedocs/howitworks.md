@@ -2,6 +2,8 @@
 
 **EKS-Checklist**는 Amazon EKS (Elastic Kubernetes Service) 클러스터를 점검하는 도구입니다. 이 도구는 **Go** 언어로 개발되었으며, AWS SDK for Go, Kubernetes Go Client, 그리고 Cobra를 사용하여 클러스터의 상태를 자동으로 점검하고, 사용자에게 최적화, 보안 강화 및 비용 절감을 위한 인사이트를 제공합니다.
 
+![Work Flow](../images/workflow.png)
+
 ## 주요 기술 스택
 
 - **Go**: Go 언어는 성능이 뛰어나고, 동시성(concurrency) 처리가 우수하여 대규모 클러스터를 점검하는 데 적합합니다.
