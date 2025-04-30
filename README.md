@@ -26,7 +26,7 @@
 [k8s-best-link]: https://kubernetes.io/docs/setup/best-practices/
 [runbook-link]: https://fitcloud.github.io/eks-checklist/
 
-<img src="docs/images/amazon-eks.png" width="400" alt="Amazon EKS Logo">
+<img src="docs/images/EKS_Checklist.png" width="400" alt="EKS Checklist Logo">
 
 # EKS-Checklist
 EKS-Checklist는 Amazon EKS (Elastic Kubernetes Service) 클러스터의 설정 및 상태를 점검하는 도구입니다. 이 도구는 Go 언어로 개발되었으며, AWS-SDK-Go와 Go-K8s 및 Cobra을 활용하여 클러스터에 대한 정보를 가져와 EKS 클러스터의 **비용 최적화(Cost)**, **일반 설정(General)**, **네트워크(Network)**, **확장성(Scalability)**, **보안(Security)**, **안정성(Stability)** 등을 개선할 수 있습니다.
