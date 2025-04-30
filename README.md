@@ -29,7 +29,7 @@
 <img src="docs/images/EKS_Checklist.png" width="300" alt="EKS Checklist Logo">
 
 # EKS-Checklist
-EKS-Checklist는 Amazon EKS (Elastic Kubernetes Service) 클러스터의 설정 및 상태를 점검하는 도구입니다. 이 도구는 Go 언어로 개발되었으며, AWS-SDK-Go와 Go-K8s 및 Cobra을 활용하여 클러스터에 대한 정보를 가져와 EKS 클러스터의 **비용 최적화(Cost)**, **일반 설정(General)**, **네트워크(Network)**, **확장성(Scalability)**, **보안(Security)**, **안정성(Stability)** 등을 개선할 수 있습니다.
+EKS-Checklist는 Amazon EKS (Elastic Kubernetes Service) 클러스터의 설정 및 상태를 점검하는 도구입니다. 이 도구는 Go 언어로 개발되었으며, AWS-SDK-Go와 Go-K8s 및 Cobra을 활용하여 클러스터에 대한 정보를 가져와 EKS 클러스터의 **비용 최적화(Cost)**, **일반 설정(General)**, **네트워크(Network)**, **확장성(Scalability)**, **보안(Security)**, **안정성(Reliability)** 등을 개선할 수 있습니다.
 이 도구는 EKS 클러스터가 AWS EKS 권장 모범 사례 및 Kubernetes의 권장 모범 사례를 준수하고 있는지 점검하고, 클러스터 운영을 최적화하는 데 필요한 권장 사항을 제공합니다.
 
 <img src="docs/images/output.png" width="750" alt="output">
@@ -44,7 +44,7 @@ Amazon EKS는 관리형 Kubernetes 서비스이지만, 클러스터를 직접 �
 - **네트워크 (Network)**: VPC, 서브넷, 보안 그룹 등 네트워크 구성을 점검하여 네트워크가 올바르게 설정되었는지 확인합니다.
 - **확장성 (Scalability)**: 클러스터가 필요에 따라 확장 가능하도록 설정되었는지 점검합니다.
 - **보안 (Security)**: IAM 정책, 인증 및 권한 설정 등 보안 설정을 점검하여 클러스터가 안전하게 운영되고 있는지 확인합니다.
-- **안정성 (Stability)**: 클러스터의 안정성을 위한 백업, 모니터링 및 로깅 설정이 제대로 되어 있는지 점검합니다.
+- **안정성 (Reliability)**: 클러스터의 안정성을 위한 백업, 모니터링 및 로깅 설정이 제대로 되어 있는지 점검합니다.
 
 ## 필수 조건
 EKS-Checklist를 사용하기 전에 다음 항목들이 설치되고 올바르게 설정되어 있어야 합니다.
