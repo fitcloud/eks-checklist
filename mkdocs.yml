@@ -21,7 +21,7 @@ theme:
 nav:
     - Home : 
       - Welcome : guidedocs/guide.md
-      - How it works : how_it_works.md
+      - How it works : guidedocs/howitworks.md
     - Runbook:
       - Home : index.md
       - General:
