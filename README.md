@@ -1,6 +1,38 @@
+[![GitHub Release][release-img]][release]
+[![Downloads][download-img]][release]
+[![Language][go-img]][go-link]
+[![Cloud Platform][aws-img]][aws-link]
+[![Best Practice][eks-best-img]][eks-best-link]
+[![Best Practice][k8s-best-img]][k8s-best-link]
+[![Runbook][runbook-img]][runbook-link]
+[![Service][eks-img]][eks-link]
+
+<!-- Badge Definitions -->
+[release-img]: https://img.shields.io/github/v/release/fitcloud/eks-checklist?logo=github
+[download-img]: https://img.shields.io/github/downloads/fitcloud/eks-checklist/total.svg
+[go-img]: https://img.shields.io/badge/Language-Go-blue?logo=go
+[aws-img]: https://img.shields.io/badge/Cloud_Platform-AWS-FF9900?logo=amazon-aws&logoColor=white
+[eks-img]: https://img.shields.io/badge/Service-Elastic%20Kubernetes%20Service-FF9900?logo=amazon-eks&logoColor=white
+[eks-best-img]: https://img.shields.io/badge/AWS_EKS-Best_Practice-FF9900?logo=amazon-eks&logoColor=white
+[k8s-best-img]: https://img.shields.io/badge/Kubernetes-Best_Practice-326CE5?logo=kubernetes&logoColor=white
+[runbook-img]: https://img.shields.io/badge/Runbook-Guide-2f7b6f?logo=read-the-docs&logoColor=white
+
+<!-- Links -->
+[release]: https://github.com/fitcloud/eks-checklist/releases
+[go-link]: https://go.dev/
+[aws-link]: https://aws.amazon.com/
+[eks-link]: https://aws.amazon.com/eks/
+[eks-best-link]: https://aws.amazon.com/eks/
+[k8s-best-link]: https://kubernetes.io/docs/setup/best-practices/
+[runbook-link]: https://fitcloud.github.io/eks-checklist/
+
+<img src="docs/images/amazon-eks.png" width="200" alt="Amazon EKS Logo">
+
 # EKS-Checklist
 EKS-Checklist는 Amazon EKS (Elastic Kubernetes Service) 클러스터의 설정 및 상태를 점검하는 도구입니다. 이 도구는 Go 언어로 개발되었으며, AWS-SDK-Go와 Go-K8s 및 Cobra을 활용하여 클러스터에 대한 정보를 가져와 EKS 클러스터의 **비용 최적화(Cost)**, **일반 설정(General)**, **네트워크(Network)**, **확장성(Scalability)**, **보안(Security)**, **안정성(Stability)** 등을 개선할 수 있습니다.
 이 도구는 EKS 클러스터가 AWS EKS 권장 모범 사례 및 Kubernetes의 권장 모범 사례를 준수하고 있는지 점검하고, 클러스터 운영을 최적화하는 데 필요한 권장 사항을 제공합니다.
+
+<img src="docs/images/output.png" width="200" alt="output">
 
 ## 프로젝트 목적 / 배경
 Amazon EKS는 관리형 Kubernetes 서비스이지만, 클러스터를 직접 운영하다 보면 다양한 설정 실수나 비효율이 발생하기 쉽습니다. 비용,권한 설정,네트워크 구성, 확장성 부족 등의 문제는 운영 안정성과 보안에 큰 영향을 미칠 수 있습니다.
