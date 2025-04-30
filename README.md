@@ -22,7 +22,7 @@
 [go-link]: https://go.dev/
 [aws-link]: https://aws.amazon.com/
 [eks-link]: https://aws.amazon.com/eks/
-[eks-best-link]: https://aws.amazon.com/eks/
+[eks-best-link]: https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices
 [k8s-best-link]: https://kubernetes.io/docs/setup/best-practices/
 [runbook-link]: https://fitcloud.github.io/eks-checklist/
 
