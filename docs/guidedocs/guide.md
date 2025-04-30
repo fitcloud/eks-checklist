@@ -109,4 +109,4 @@ eks-checklist --context my-cluster --profile dev --output text --out all
 
 ## 출력 예시
 도구 실행 결과는 다음과 같은 방식으로 정리됩니다:
-<img src="../docs/images/output.png" width="750" alt="output">
+<img src="../images/output.png" width="750" alt="output">
