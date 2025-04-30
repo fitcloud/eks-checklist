@@ -1,5 +1,5 @@
 # EKS-Checklist
-<img src="../images/EKS_Checklist.png" width="350" alt="EKS Checklist Logo">
+![EKS Checklist Logo](../images/EKS_Checklist.png)
 
 **EKS-Checklist**는 Amazon EKS (Elastic Kubernetes Service) 클러스터의 설정과 상태를 자동으로 점검하여, 운영자가 클러스터를 **최적화**, **보안 강화**, **비용 절감**할 수 있도록 지원하는 도구입니다.
 
@@ -110,4 +110,5 @@ eks-checklist --context my-cluster --profile dev --output text --out all
 
 ## 출력 예시
 도구 실행 결과는 다음과 같은 방식으로 정리됩니다:
-<img src="../images/output.png" width="750" alt="output">
+![output](../images/output.png)
+
