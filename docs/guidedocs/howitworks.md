@@ -1,12 +1,12 @@
 # How It Works
 
-**EKS-Checklist**는 Amazon EKS (Elastic Kubernetes Service) 클러스터를 점검하는 도구입니다. 이 도구는 **Go** 언어로 개발되었으며, AWS SDK for Go, Kubernetes Go Client를 사용하여 클러스터의 상태를 자동으로 점검하고, 사용자에게 최적화, 보안 강화 및 비용 절감을 위한 인사이트를 제공합니다.
+**EKS-Checklist**는 Amazon EKS (Elastic Kubernetes Service) 클러스터를 점검하는 도구입니다. 이 도구는 **Go** 언어로 개발되었으며, AWS SDK for Go, Kubernetes Go Client를 사용하여 클러스터의 상태를 자동으로 점검합니다.
 
 ![Work Flow](../images/workflow.png)
 
 ## 주요 기술 스택
 
-- **AWS SDK for Go**: AWS 리소스와의 상호작용을 위해 사용됩니다. EKS 클러스터의 설정 및 상태 정보를 가져오고, 클러스터에 대한 API 호출을 관리합니다.
+- **AWS SDK for Go**: AWS API호출을 하기 위해 사용하며 EKS 클러스터의 설정 및 상태 정보를 가져옵니다
 - **Kubernetes Go Client**: Kubernetes API와 직접 상호작용하여 클러스터의 상태를 가져오고 점검합니다.
 
 ## 작동 방식
@@ -38,7 +38,7 @@ func Describe(clusterName string, cfg aws.Config) EksCluster {
 
 ### 2. **Kubernetes Go Client를 사용한 클러스터 상태 점검**
 
-Kubernetes Go Client를 사용하여 클러스터의 상태를 직접 점검합니다. EKS 클러스터에서 실행 중인 리소스 파드(pod), 노드(node), 서비스(service) 등의 상태를 가져오고, 이를 통해 클러스터의 성능 및 안정성을 진단합니다.
+Kubernetes Go Client를 사용하여 클러스터의 상태를 직접 점검합니다. EKS 클러스터에서 실행 중인 리소스 파드(pod), 노드(node), 서비스(service) 등의 상태를 확인합니다.
 
 ```go
 config, err := rest.InClusterConfig()
@@ -57,12 +57,12 @@ if err != nil {
 
 ### 3. **Cobra를 사용한 CLI 인터페이스 제공**
 
-Cobra 라이브러리는 CLI 명령어를 생성하고, 사용자가 다양한 옵션을 통해 클러스터 점검을 실행할 수 있도록 돕습니다. 예를 들어, 클러스터 상태를 점검하려면 아래와 같은 명령어를 실행할 수 있습니다
+Cobra 라이브러리는 CLI 명령어를 생성하고, 사용자가 다양한 옵션을 통해 클러스터 점검을 실행할 수 있도록 돕습니다.
 
 ```bash
 eks-checklist --context my-cluster --profile dev --output text 
 ```
-여기서 --context는 kubeconfig에서 사용할 클러스터 컨텍스트를 지정하고, --profile은 AWS CLI 프로파일을 설정합니다. --output 옵션을 통해 출력 형식을 text나 html로 설정할 수 있습니다다
+여기서 --context는 kubeconfig에서 사용할 클러스터 컨텍스트를 지정하고, --profile은 AWS CLI 프로파일을 설정합니다. --output 옵션을 통해 출력 형식을 text나 html로 설정할 수 있습니다
 
 ### 4. **결과 출력 및 피드백**
 
@@ -71,7 +71,3 @@ eks-checklist --context my-cluster --profile dev --output text
 ```bash
 eks-checklist --context my-cluster --profile dev --output html > eks-checklist-report.html
 ```
-
-### 5. **결과**
-
-EKS-Checklist는 AWS SDK for Go와 Kubernetes Go Client를 활용하여 EKS 클러스터의 상태를 정확하게 점검하고, 운영자가 클러스터를 최적화하고 보안을 강화하며 비용을 절감할 수 있도록 돕는 도구입니다. Cobra를 이용해 CLI 명령어로 쉽게 접근할 수 있어 효율적으로 클러스터를 관리할 수 있습니다.
