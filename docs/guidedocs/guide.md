@@ -37,17 +37,12 @@ Amazon EKS는 관리형 Kubernetes 환경을 제공하지만, 실제 운영에�
 
 도구를 사용하기 위해 다음 환경이 준비되어 있어야 합니다:
 
-1. **AWS CLI**
-   - 설치: [공식 문서](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) 참고
+**AWS CLI** 설치: [공식 문서](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) 참고
    - 인증: `aws configure` 명령어로 설정 (Access Key, Secret, Region 등)
-
-2. **kubectl**
    - 클러스터와 연결된 `kubeconfig`가 설정되어 있어야 함
-   - [kubectl 설치 가이드](https://kubernetes.io/docs/tasks/tools/)
 
-3. **EKS 클러스터 접근 권한**
+**EKS 클러스터 접근 권한**
    - IAM Role 또는 User가 EKS 클러스터 및 리소스에 접근 가능한 권한이 있어야 합니다.
-
 ---
 
 ## 📦 설치 방법
