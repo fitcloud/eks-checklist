@@ -20,7 +20,7 @@ theme:
     - content.code.select
 nav:
     - Home : 
-      - Welcome : guidedocs/guide.md
+      - Welcome : guidedocs/introduction.md
       - How it works : guidedocs/howitworks.md
     - Runbook:
       - Home : index.md
