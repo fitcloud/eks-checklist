@@ -4,12 +4,12 @@
 
 ![Work Flow](../images/workflow.png)
 
-## 주요 기술 스택
+## 📋 주요 기술 스택
 
 - **AWS SDK for Go**: AWS API 호출을 하기 위해 사용하며 EKS 클러스터의 설정 및 상태 정보를 가져옵니다
 - **Kubernetes Go Client**: Kubernetes API와 직접 상호작용하여 클러스터의 상태를 가져오고 점검합니다.
 
-## 작동 방식
+## 🔍 작동 방식
 
 ### 1. **AWS SDK for Go를 통한 EKS 클러스터 정보 가져오기**
 
