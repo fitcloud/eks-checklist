@@ -44,9 +44,9 @@
 
 1. GitHub의 [Releases 페이지](https://github.com/fitcloud/eks-checklist/releases)로 이동합니다.
 2. 운영 체제에 맞는 바이너리 파일을 다운로드합니다:
-   * macOS: `eks-checklist-darwin-amd64`
-   * Linux: `eks-checklist-linux-amd64`
-   * Windows: `eks-checklist-windows-amd64.exe`
+   # macOS: `eks-checklist-darwin-amd64`
+   # Linux: `eks-checklist-linux-amd64`
+   # Windows: `eks-checklist-windows-amd64.exe`
 
 ---
 
