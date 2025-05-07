@@ -23,7 +23,6 @@ nav:
       - Welcome : guidedocs/introduction.md
       - How it works : guidedocs/howitworks.md
     - Runbook:
-      - Home : index.md
       - General:
         - 컨테이너 이미지 태그에 latest 미사용 : general/noLatestTag.md
         - GitOps 적용 : general/gitOps.md
