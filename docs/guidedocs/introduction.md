@@ -1,7 +1,7 @@
 # EKS-Checklist
 ![EKS Checklist Logo](../images/EKS_Checklist.png)
 
-**EKS-Checklist**는 Amazon EKS (Elastic Kubernetes Service) 클러스터의 설정과 상태를 자동으로 점검하여, 운영자가 클러스터를 **최적화**, **보안 강화**, **비용 절감**할 수 있도록 지원하는 도구입니다.
+**EKS-Checklist**는 Amazon EKS (Elastic Kubernetes Service) 클러스터의 설정과 상태를 자동으로 점검하여, 운영자가 클러스터의 구성을 파악하여 **최적화**, **보안**, **비용 절감**, **안정성**을 개선 할 수 있도록 EKS 클러스터 검사 도구입니다.
 
 > 이 도구는 Go 언어로 작성되었으며, AWS SDK for Go, Kubernetes Go Client, 그리고 CLI 명령어 프레임워크인 Cobra를 활용하여 제작되었습니다.
 
@@ -17,16 +17,16 @@
 
 | 카테고리        | 설명 |
 |----------------|------|
-| **비용 최적화 (Cost)**     | 클러스터 리소스 최적화를 통해 과도한 리소스 확인, 미사용 리소스 확인, 고비용 인스턴스를 탐지하고, 절감 방안 식별 |
-| **일반 설정 (General)**   | 클러스터 버전, 태그 구성, 메타데이터 등 기본적인 구성이 적절하게 이루어졌는지 확인하고, 관리 및 유지보수를 용이하게 하는 방법 식별 |
-| **네트워크 (Network)**    | VPC, Subnet, 보안 그룹, ENI, IP 할당 등의 네트워크 구성 요소가 최적화되어 있는지 점검하고, 연결성 및 보안을 강화할 방법 식별 |
-| **확장성 (Scalability)**  | HPA (Horizontal Pod Autoscaler), Cluster Autoscaler, 노드그룹 등 클러스터의 확장성과 자원 관리의 자동화를 위한 설정을 점검 |
-| **보안 (Security)**       | IAM 정책, 인증 구성, API 서버 접근 제어 등 보안 관련 설정이 적절히 되어 있는지 점검하여 클러스터의 보안성을 강화할 방법 확인 |
-| **안정성 (Reliability)**    | 로그, 모니터링, 백업 설정 등을 분석하여 클러스터의 안정성 수준을 진단하고, 장애 예방 및 복구 전략을 마련하는 방법을 제시 |
+| **비용 최적화 (Cost)**     | 클러스터 리소스 최적화를 통해 과도한/미사용 리소스 확인, 고사양/미사용 인스턴스를 탐지를 통한 절감 방안 식별 |
+| **일반 설정 (General)**   | 클러스터 버전, 태그 구성, 메타데이터 등 기본적인 구성이 모범사례에 맞게 구성되어 있는지 확인 |
+| **네트워크 (Network)**    | VPC, Subnet, 보안 그룹, ENI, IP 할당 등의 네트워크 구성 요소가 최적화되어 있는지 점검 |
+| **확장성 (Scalability)**  | HPA (Horizontal Pod Autoscaler), Cluster Autoscaler, 노드그룹 등 클러스터의 확장성과 자원 관리의 자동화를 위한 설정 점검 |
+| **보안 (Security)**       | IAM 정책, 인증 구성, API 서버 접근 제어 등 보안 관련 설정이 적절히 되어 있는지 점검하여 클러스터의 보안 설정 확인 |
+| **안정성 (Reliability)**    | 로그, 모니터링, 백업 설정 등의 설정 유무를 점검하여 클러스터의 안정성 진단단 |
 
 ---
 
-## 📋 요구 사항 (Prerequisites)
+## 📋 요구 사항
 
 도구를 사용하기 위해 다음 환경이 준비되어 있어야 합니다:
 
@@ -82,7 +82,7 @@ eks-checklist-windows-amd64.exe --profile my-aws-profile
 
 ### 기본 사용 예시
 ```bash
-eks-checklist --context my-cluster --profile dev --output text --out all
+eks-checklist --context my-cluster --profile dev --output text
 ```
 ### 주요 옵션 설명
 
@@ -92,7 +92,7 @@ eks-checklist --context my-cluster --profile dev --output text --out all
 | `--kubeconfig`      | kubeconfig 파일 경로 (기본: 사용자 홈 디렉토리 경로) |
 | `--profile`         | 사용할 AWS CLI 프로파일 이름 |
 | `--output`          | 출력 형식 지정 (`text`, `html`) |
-| `--out`             | 결과 필터링 옵션 (`all`, `pass`, `fail`, `manual`) |
+| `--filter`             | 결과 필터링 옵션 (`all`, `pass`, `fail`, `manual`) |
 | `--sort`            | 결과를 상태별 정렬 (`pass`, `fail`, `manual`) |
 | `--help` 또는 `-h` | 도움말 출력 |
 

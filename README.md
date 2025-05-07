@@ -66,7 +66,7 @@ EKS-Checklist는 GitHub의 릴리즈 페이지에서 원하는 버전을 다운�
 ```
 - `--context` : 사용할 kubeconfig 컨텍스트 이름
 - `--kubeconfig` : 사용할 kubeconfig 파일 경로 (기본값: `"C:\\Users\\사용자이름\\.kube\\config"`)
-- `--out` : 출력 결과 필터링 옵션 (`all`, `pass`, `fail`, `manual`)
+- `--filter` : 출력 결과 필터링 옵션 (`all`, `pass`, `fail`, `manual`)
 - `--output` : 출력 형식 지정 (`text`, `html`) — 기본값: `text`
 - `--profile` : 사용할 AWS CLI 프로파일 이름
 - `--sort` : 결과를 상태별(PASS / FAIL / MANUAL)로 정렬
