@@ -3,6 +3,7 @@ package cmd
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"slices"
 	"strconv"
@@ -46,7 +47,7 @@ func getAvailableClusters(kubeconfigPath string) ([]string, map[string]string, e
 	return eksContexts, contextToCluster, nil
 }
 
-// selectCluster 사용자에게 클러스터 선택을 위한 대화형 메뉴를 표시합니다
+// selectCluster 함수 수정
 func selectCluster(kubeconfigPath string) (string, error) {
 	clusters, contextToCluster, err := getAvailableClusters(kubeconfigPath)
 	if err != nil {
@@ -55,6 +56,14 @@ func selectCluster(kubeconfigPath string) (string, error) {
 
 	if len(clusters) == 0 {
 		return "", fmt.Errorf("kubeconfig에 사용 가능한 EKS 클러스터가 없습니다")
+	}
+
+	// Docker 환경이거나 stdin이 tty가 아닌 경우 첫 번째 클러스터 자동 선택
+	if os.Getenv("RUNNING_IN_DOCKER") == "true" && !isTerminal() {
+		fmt.Printf("\n비대화형 환경에서 실행 중입니다. 첫 번째 클러스터를 자동으로 선택합니다.\n")
+		fmt.Printf("선택된 클러스터: %s (클러스터: %s)\n",
+			clusters[0], contextToCluster[clusters[0]])
+		return clusters[0], nil
 	}
 
 	fmt.Println("\n사용 가능한 EKS 클러스터:")
@@ -67,6 +76,11 @@ func selectCluster(kubeconfigPath string) (string, error) {
 		fmt.Print("\n클러스터 번호를 선택하세요: ")
 		input, err := reader.ReadString('\n')
 		if err != nil {
+			if err == io.EOF {
+				// EOF 오류는 파이프된 입력에서 발생할 수 있으므로 첫 번째 클러스터 선택
+				fmt.Println("입력을 받을 수 없습니다. 첫 번째 클러스터를 자동으로 선택합니다.")
+				return clusters[0], nil
+			}
 			fmt.Println("입력 오류:", err)
 			continue
 		}
@@ -82,6 +96,15 @@ func selectCluster(kubeconfigPath string) (string, error) {
 		fmt.Printf("\n선택된 클러스터: %s\n", selectedContext)
 		return selectedContext, nil
 	}
+}
+
+// isTerminal은 현재 stdin이 터미널인지 확인합니다
+func isTerminal() bool {
+	fileInfo, err := os.Stdin.Stat()
+	if err != nil {
+		return false
+	}
+	return (fileInfo.Mode() & os.ModeCharDevice) != 0
 }
 
 // getKubeconfigWithContext는 kubeconfig 파일과 선택된 컨텍스트를 사용하여 rest.Config를 생성합니다

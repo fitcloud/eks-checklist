@@ -1,0 +1,9 @@
+result
+docs
+.vscode
+.github
+.devcontainer
+testdata
+eks-checklist-report*
+mkdocs.yml
+README.md
