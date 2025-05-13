@@ -15,7 +15,7 @@ Kubernetes에서 securityContext.runAsUser 필드를 통해 컨테이너를 일�
 - securityContext 또는 runAsUser가 아예 명시되지 않은 경우 (기본적으로 root 권한 실행 가능)
 - Windows 컨테이너에서 runAsUserName이 "Administrator"로 설정된 경우
 
-command example
+**command example**
 ```bash
 kubectl get pods -A -o json | jq -r '
   .items[]
@@ -53,12 +53,13 @@ kubectl get pods -A -o json | jq -r '
 ```
 - 이 명령은 보안 상 취약한 컨테이너만 필터링하여 표시하므로, 출력이 없다면 모든 컨테이너가 적절한 사용자 권한으로 실행되고 있는 것입니다.
 
-출력 example
+**출력 example**
 ```bash
 Namespace: default | Pod: nginx | Container: nginx (RunAsUser 미설정, root로 실행 가능성 존재)
 Namespace: test | Pod: backend | Container: app (명시적 root 계정 실행)
 Namespace: winspace | Pod: winpod | Container: winapp (Windows Administrator 실행)
 ```
+
 - RunAsUser 미설정: securityContext 또는 runAsUser가 지정되지 않아 기본적으로 root 권한으로 실행될 가능성이 있습니다.
 - 명시적 root 계정 실행: runAsUser: 0으로 명시되어 있어 의도적으로 루트로 실행되도록 설정된 컨테이너입니다.
 - Windows Administrator 실행: Windows 기반 컨테이너에서 runAsUserName이 "Administrator"로 설정된 경우로, 보안상 root 실행과 동일한 위험을 가집니다.
@@ -66,7 +67,7 @@ Namespace: winspace | Pod: winpod | Container: winapp (Windows Administrator 실
 ## **Mitigation**
 컨테이너에 securityContext.runAsUser를 명시하고 UID 0을 피하세요. 루트 권한을 회피하는 것은 기본 보안 원칙 중 하나입니다.
 
-비루트 사용자로 실행 설정 example
+**비루트 사용자로 실행 설정 example**
 ```bash
 apiVersion: v1
 kind: Pod

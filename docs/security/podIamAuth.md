@@ -28,6 +28,7 @@ kubectl get sa --all-namespaces -o jsonpath="{range .items[*]}{.metadata.namespa
 
 ## **Mitigation**
 **1. IRSA 구성**
+
 IRSA를 구성하려면 IAM Role과 서비스 계정을 연결하는 작업이 필요합니다.
 
 IAM OIDC 공급자 생성
@@ -45,6 +46,7 @@ kubectl annotate serviceaccount <service-account-name> \
 ```
 
 **2. EKS Pod Identity 사용**
+
 EKS Pod Identity는 AWS CLI 또는 Console에서 설정 가능하며, 최근 IRSA를 대체할 수 있는 방식으로 자리 잡고 있습니다.
 
 [EKS Pod Identity 공식 문서](https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html)
