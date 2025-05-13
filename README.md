@@ -95,7 +95,7 @@ sudo mv eks-checklist-darwin-amd64 /usr/local/bin/eks-checklist
 ```
 3. 실행 예시:
 ```bash
-eks-checklist-darwin-amd64 --profile {AWS_Profile}
+eks-checklist
 ```
 ### Linux
 1. [Releases 페이지](https://github.com/fitcloud/eks-checklist/releases)에서 Linux용 바이너리 다운로드
@@ -107,7 +107,7 @@ sudo mv eks-checklist-linux-amd64 /usr/local/bin/eks-checklist
 ```
 3. 실행 예시:
 ```bash
-eks-checklist-linux-amd64 --profile {AWS_Profile}
+eks-checklist
 ```
 ### Windows
 1. [Releases 페이지](https://github.com/fitcloud/eks-checklist/releases)에서 `.exe` 파일 다운로드
