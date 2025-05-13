@@ -25,8 +25,8 @@ nav:
     - Runbook:
       - General:
         - GEN-001-코드형 인프라 : general/iac.md
-        - GEN-002-컨테이너 이미지 태그에 latest 미사용 : general/noLatestTag.md
-        - GEN-003-GitOps 적용 : general/gitOps.md
+        - GEN-002-GitOps 적용 : general/gitOps.md
+        - GEN-003-컨테이너 이미지 태그에 latest 미사용 : general/noLatestTag.md
       - Security:
         - SEC-001-EKS 클러스터 API 엔드포인트 접근 제어 : security/apiEndpointAccess.md
         - SEC-002-클러스터 접근 제어(Access entries, aws-auth 컨피그맵) : security/clusterAccessControl.md
@@ -70,11 +70,14 @@ nav:
         - REL-017-DNS 캐시 적용 : stability/dnsCaching.md
         - REL-018-Karpenter 사용시 DaemonSet에 Priority Class 부여 : stability/daemonSetPriorityClass.md
       - Network:
-        - NET-001-VPC 서브넷에 충분한 IP 대역대 확보 : network/subnetIpCapacity.md
-        - NET-002-VPC CNI의 Prefix 모드 사용 : network/vpcCniPrefixMode.md
-        - NET-003-AWS Load Balancer Controller 사용 : network/albController.md
-        - NET-004-ALB_NLB의 대상으로 Pod의 IP 사용 : network/podIpTarget.md
-        - NET-005-Pod Readiness Gate 적용 : network/readinessGate.md
-        - NET-006-kube-proxy에 IPVS 모드 적용 : network/kubeProxyIpvsMode.md
+        - NET-001-VPC 서브넷에 충분한 IP 대역대 확보: network/subnetIpCapacity.md
+        - NET-002-Pod에 부여할 IP 부족시 알림 설정: network/podIpAlert.md
+        - NET-003-VPC CNI의 Prefix 모드 사용: network/vpcCniPrefixMode.md
+        - NET-004-사용 사례에 맞는 로드밸런서 사용(ALB or NLB): network/loadbalancerUsage.md
+        - NET-005-AWS Load Balancer Controller 사용: network/albController.md
+        - NET-006-ALB/NLB의 대상으로 Pod의 IP 사용: network/podIpTarget.md
+        - NET-007-Pod Readiness Gate 적용: network/readinessGate.md
+        - NET-008-kube-proxy에 IPVS 모드 적용: network/kubeProxyIpvsMode.md
+        - NET-009-Endpoint 대신 EndpointSlices 사용: network/endpointSlices.md
       - Cost:
         - COS-001-kubecost 설치 : cost/kubecost.md
