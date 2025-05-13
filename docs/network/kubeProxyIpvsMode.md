@@ -49,5 +49,5 @@ kubectl -n kube-system edit cm kube-proxy-config
   udpIdleTimeout: 250ms
 ```
 
-### [Kubenetes Kube-proxy란](https://kubernetes.io/ko/docs/reference/command-line-tools-reference/kube-proxy/)
-### [IPVS 모드에서 kube-proxy 실행](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/ipvs.html)
+[Kubenetes Kube-proxy란](https://kubernetes.io/ko/docs/reference/command-line-tools-reference/kube-proxy/)
+[IPVS 모드에서 kube-proxy 실행](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/ipvs.html)

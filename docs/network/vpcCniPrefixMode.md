@@ -37,6 +37,6 @@ kubectl set env daemonset aws-node -n kube-system ENABLE_PREFIX_DELEGATION=true
 aws ec2 describe-instances --query 'Reservations[*].Instances[].{InstanceId: InstanceId, Prefixes: NetworkInterfaces[].Ipv4Prefixes[]}'
 ```
 
-### [AWS EKS Best Practice - Amazon VPC CNI](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/vpc-cni.html)
-### [AWS EKS Best Practice - linux Prefix mode](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/prefix-mode-linux.html)
-### [AWS EKS Best Practice - window Prefix mode](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/prefix-mode-win.html)
+[AWS EKS Best Practice - Amazon VPC CNI](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/vpc-cni.html)
+[AWS EKS Best Practice - linux Prefix mode](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/prefix-mode-linux.html)
+[AWS EKS Best Practice - window Prefix mode](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/prefix-mode-win.html)

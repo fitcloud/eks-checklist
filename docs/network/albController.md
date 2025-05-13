@@ -5,9 +5,7 @@ AWS Load Balancer Controller는 Amazon Web Services(AWS) 환경에서 Kubernetes
 
 ## Impact
 - 수동 관리 필요: 로드 밸런서를 수동으로 생성하고 관리해야 하는 포인트가 늘어나며, 설정 오류나 관리의 일관성이 떨어지게 됩니다.
-
 - 유연성 부족: 자동으로 로드 밸런서를 관리하지 않기 때문에 서비스 확장 시 로드 밸런서를 동적으로 조정이 어려움.
-
 - 보안 설정 번거로움: TLS 인증서나 보안 정책 등을 수동으로 설정해야 해서 보안 관리가 어려워질 수 있습니다.
 
 ## Diagnosis
@@ -28,6 +26,6 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller
 ```
-### [AWS Load Balancer Controller란](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/)
-### [Helm을 사용한 AWS Load Balancer Controller 설치](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/lbc-helm.html)
-### [매니페스트를 사용한 AWS Load Balancer Controller 설치](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/lbc-manifest.html)
+[AWS Load Balancer Controller란](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/)
+[Helm을 사용한 AWS Load Balancer Controller 설치](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/lbc-helm.html)
+[매니페스트를 사용한 AWS Load Balancer Controller 설치](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/lbc-manifest.html)

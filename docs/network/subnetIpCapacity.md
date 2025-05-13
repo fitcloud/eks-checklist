@@ -17,5 +17,5 @@ aws eks describe-cluster --name <CLUSTER_NAME> --query "cluster.resourcesVpcConf
 사용가능한 IP 대역을 추가하세요
 CIDR을 추가할 때, 이미 다른 곳에서 사용 중이지 않은 대역을 선택해 주세요 (하기 링크 참조)
 
-### [EKS IP 최적화](https://docs.aws.amazon.com/eks/latest/best-practices/ip-opt.html)
-### [Multiple CIDR ranges 사용](https://repost.aws/knowledge-center/eks-multiple-cidr-ranges)
+[EKS IP 최적화](https://docs.aws.amazon.com/eks/latest/best-practices/ip-opt.html)
+[Multiple CIDR ranges 사용](https://repost.aws/knowledge-center/eks-multiple-cidr-ranges)
