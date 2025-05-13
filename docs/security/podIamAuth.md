@@ -37,6 +37,7 @@ aws eks describe-cluster --name <cluster-name> --query "cluster.identity.oidc.is
 ```
 
 IAM Role 생성 (Trust Policy 포함)
+
 Trust Policy는 서비스 계정이 역할을 사용할 수 있도록 허용하는 문서입니다.
 
 서비스 계정에 annotation 추가

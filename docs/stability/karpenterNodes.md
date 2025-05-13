@@ -24,7 +24,7 @@ kubectl get nodeclaims -A --no-headers 2>/dev/null | grep -q . && echo "Karpente
 프로비저닝한 흔적(NodeClaim 리소스)이 존재하지 않습니다."
 ```
 
-### 출력 예시
+**출력 예시**
 정상적인 경우
 - Karpenter가 노드를 프로비저닝한 흔적(NodeClaim 리소스)가 존재합니다.
 비정상적인 경우

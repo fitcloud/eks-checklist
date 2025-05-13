@@ -24,7 +24,7 @@ kubectl get daemonsets --all-namespaces -o json | jq -r '
   "Namespace: \(.metadata.namespace) | DaemonSet: \(.metadata.name) (PriorityClass 미설정)"
 '
 ```
-### 출력 예시
+**출력 예시**
 - Namespace: kube-system | DaemonSet: log-agent (PriorityClass 미설정)
 PriorityClass가 설정되지 않은 것은 다음과 같이 출력되게 됩니다. 
 PriorityClass가 설정되어 있다면 출력되지 않을 것 입니다.

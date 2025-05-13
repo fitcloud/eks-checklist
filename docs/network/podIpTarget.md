@@ -52,14 +52,14 @@ kubectl get svc --all-namespaces -o json | jq -r '
 ## Mitigation
 Ingress 및 Service에 다음과 같은 Annotation을 명시적으로 설정해야 합니다.
 
-### ALB (Ingress) 설정 예시
+**ALB (Ingress) 설정 예시**
 ```yaml
 metadata:
   annotations:
     alb.ingress.kubernetes.io/target-type: ip
 ```
 
-### NLB (Service) 설정 예시
+**NLB (Service) 설정 예시**
 ```yaml
 metadata:
   annotations:

@@ -60,7 +60,7 @@ done
 
 문제가 되는 노드그룹에 대해 아래와 같이 수정합니다.
 
-### AWS CLI 또는 콘솔에서 해당 Auto Scaling Group의 minSize / maxSize 값을 조정해야 합니다
+**AWS CLI 또는 콘솔에서 해당 Auto Scaling Group의 minSize / maxSize 값을 조정해야 합니다**
 example
 ```bash
 aws autoscaling update-auto-scaling-group \

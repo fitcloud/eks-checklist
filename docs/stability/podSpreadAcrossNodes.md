@@ -48,7 +48,7 @@ kubectl get pods --all-namespaces -o json | jq -r '
 ## Mitigation
 Pod가 클러스터에 균등하게 배치되도록 하기 위한 설정을 추가해야 합니다.
 example
-## TopologySpreadConstraints 사용
+**TopologySpreadConstraints 사용**
 ```bash
 apiVersion: v1
 kind: Pod
@@ -65,8 +65,7 @@ spec:
 ```
 - maxSkew: 허용 가능한 분산 불균형 정도
 
-
-## PodAntiAffinity 설정
+**PodAntiAffinity 설정**
 ```bash
 apiVersion: apps/v1
 kind: Deployment
