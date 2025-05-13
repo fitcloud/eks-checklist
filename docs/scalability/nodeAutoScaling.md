@@ -1,4 +1,4 @@
-# **checkimagetag(example)**
+# SCA-006-노드 확장/축소 정책 적용
 
 ## Meaning
 이 기능의 의미를 설명합니다.

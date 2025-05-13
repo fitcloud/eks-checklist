@@ -1,4 +1,4 @@
-# **kube-proxy에 IPVS 모드 적용**
+# NET-006-kube-proxy에 IPVS 모드 적용
 
 ## Meaning
 IP 가상 서버(IPVS) 모드의 EKS는 기존 iptables 모드에서 실행되는 kube-proxy를 사용하여 대규모 클러스터에서 1,000개 이상의 서비스를 제공할 때 발생하는 네트워크 지연 문제를 해결합니다. 이 성능 문제는 각 패킷에 대해 iptables 패킷 필터링 규칙을 순차적으로 처리하는 방식에서 비롯됩니다. 이를 해결하려면 클러스터를 IPVS 모드에서 kube-proxy를 실행하도록 구성할 수 있습니다

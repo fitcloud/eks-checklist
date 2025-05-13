@@ -1,4 +1,4 @@
-# **CoreDNS HPA 설정**
+# REL-016-CoreDNS에 HPA 적용
 
 ## Meaning
 CoreDNS는 클러스터 내 서비스 디스커버리(DNS) 및 이름 해석 서비스를 제공하는 핵심 구성요소입니다.

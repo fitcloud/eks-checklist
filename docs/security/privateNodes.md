@@ -1,4 +1,4 @@
-# **DataplanePrivate Subnet 사용**
+# SEC-012-데이터 플레인 사설망
 
 ## Meaning
 Data plane를 Private 서브넷에 배치하면 인터넷에 대한 노출을 최소화하여 공격 위험을 줄일 수 있습니다. 만약 worker node를 공용 서브넷에 배치하기로 결정했다면, 제한적인 AWS 보안 그룹 규칙을 설정하여 노출을 최소화하는 것이 중요합니다 (비권장)

@@ -1,4 +1,4 @@
-# **checkimagetag(example)**
+# SCA-002-Karpenter 전용 노드 그룹 혹은 Fargate 사용
 
 ## Meaning
 이 기능의 의미를 설명합니다.

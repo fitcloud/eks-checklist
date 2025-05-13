@@ -1,4 +1,4 @@
-# **checkimagetag(example)**
+# SCA-005-Application에 Graceful shutdown 적용
 
 ## Meaning
 이 기능의 의미를 설명합니다.

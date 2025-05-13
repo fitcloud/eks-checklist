@@ -1,4 +1,4 @@
-# **checkimagetag(example)**
+# REL-010-반영구 저장소에 애플리케이션 로그 저장
 
 ## Meaning
 이 기능의 의미를 설명합니다.

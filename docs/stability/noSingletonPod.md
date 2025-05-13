@@ -1,4 +1,4 @@
-# **싱글톤 Pod 미사용 (Singleton Pod Usage Detection)**
+# REL-001-싱글톤 Pod 미사용
 
 ## Meaning
 EKS에서 고가용성(High Availability)을 구현하는 것은 여러 인스턴스를 실행하여 서비스가 중단되지 않도록 하는 중요한 전략입니다. 고가용성을 구현하려면 StatefulSet, Deployment, 또는 ReplicaSet을 사용하여 **복제본(replica)**을 여러 개 설정하는 방법이 있습니다. 이 방식은 애플리케이션의 가용성을 보장하고, 하나의 Pod가 실패했을 때 다른 Pod가 그 역할을 대신할 수 있게 해줍니다.

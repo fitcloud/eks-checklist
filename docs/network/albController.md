@@ -1,4 +1,4 @@
-# **AWS Load Balancer Controller 사용**
+# NET-003-AWS Load Balancer Controller 사용
 
 ## Meaning
 AWS Load Balancer Controller는 Amazon Web Services(AWS) 환경에서 Kubernetes 클러스터와 함께 사용되는 컨트롤러입니다. 이를 통해 Kubernetes 서비스에 대해 Elastic Load Balancers (ELB)를 자동으로 생성하고 관리할 수 있습니다. 즉, AWS에서 제공하는 로드 밸런서를 Kubernetes와 원활하게 통합하여, 클러스터 외부에서 오는 트래픽을 적절하게 분배하고 관리합니다.

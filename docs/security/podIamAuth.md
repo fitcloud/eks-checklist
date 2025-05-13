@@ -1,5 +1,4 @@
-
-# **IRSA 또는 EKS Pod Identity 기반 권한 부여**
+# SEC-003-IRSA 또는 EKS Pod Identity 기반 권한 부여
 
 ## **Meaning**
 EKS에서 워크로드(Pod)가 AWS 리소스에 접근할 수 있도록 권한을 부여할 때, 전통적으로는 노드 IAM Role을 사용했지만 이는 과도한 권한 부여의 문제가 있습니다.

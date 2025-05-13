@@ -1,4 +1,4 @@
-# **replicasetpod**
+# REL-002-2개 이상의 Pod 복제본 사용
 
 ## Meaning
 ReplicaSet은 Kubernetes에서 Pod의 복제본을 관리하는 리소스입니다. ReplicaSet은 지정된 수의 Pod 복제본이 항상 실행되도록 보장합니다.

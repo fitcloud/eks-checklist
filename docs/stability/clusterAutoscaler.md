@@ -1,4 +1,4 @@
-# **ClusterAutoscale 적용**
+# REL-012-Cluster Autoscaler 적용
 
 ## Meaning
 Cluster Autoscaler는 클라우드 환경에서 Kubernetes 클러스터의 노드를 자동으로 확장하거나 축소하여 워크로드에 필요한 자원을 동적으로 제공하는 도구입니다. 이를 통해 클러스터의 리소스를 효율적으로 관리하고 비용을 최적화할 수 있습니다

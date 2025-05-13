@@ -1,4 +1,4 @@
-# **checkimagetag(example)**
+# SEC-008-비정상 접근에 대한 알림 설정
 
 ## Meaning
 이 기능의 의미를 설명합니다.

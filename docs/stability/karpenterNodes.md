@@ -1,4 +1,4 @@
-# **Karpenter_기반_노드_생성**
+# REL-013-Karpenter 기반 노드 생성
 
 ## Meaning
 Karpenter는 NodeClaim이라는 커스텀 리소스를 통해 노드 생성을 추적하고 관리합니다.
