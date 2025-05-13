@@ -1,4 +1,4 @@
-# GEN-003-GitOps 적용
+# GEN-002-GitOps 적용
 
 ## **Meaning**
 

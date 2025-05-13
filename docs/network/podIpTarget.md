@@ -1,4 +1,4 @@
-# NET-004-ALB_NLB의 대상으로 Pod의 IP 사용
+# NET-006-ALB/NLB의 대상으로 Pod의 IP 사용
 
 ## Meaning
 AWS의 ALB(Application Load Balancer)와 NLB(Network Load Balancer)는 Kubernetes에서 외부 트래픽을 수신하고 이를 클러스터 내부의 파드로 라우팅하는 데 사용됩니다.

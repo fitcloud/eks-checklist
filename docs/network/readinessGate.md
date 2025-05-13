@@ -1,4 +1,4 @@
-# NET-005-Pod Readiness Gate 적용
+# NET-007-Pod Readiness Gate 적용
 
 ## Meaning
 PodReadinessGate는 Kubernetes에서 Pod의 준비 상태를 세밀하게 관리할 수 있는 기능입니다. 이 기능을 사용하면 Pod의 준비 상태가 특정 조건을 만족할 때까지 Pod를 Ready 상태로 간주하지 않도록 설정할 수 있습니다.이 기능을 서비스가 실제로 트래픽을 받을 준비가 되었을 때만 요청을 처리하도록 보장할 수 있습니다

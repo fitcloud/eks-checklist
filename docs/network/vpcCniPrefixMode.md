@@ -1,4 +1,4 @@
-# NET-002-VPC CNI의 Prefix 모드 사용
+# NET-003-VPC CNI의 Prefix 모드 사용
 
 ## Meaning
 Amazon VPC CNI는 EC2 네트워크 인터페이스(ENI)에 네트워크 Prefix를 할당하여 노드당 파드 밀도를 높이고, 사용 가능한 IP 주소 수를 증가시키는 기능을 제공합니다. 이 모드를 활성화하면 보조 IP 주소 대신 IPv4 및 IPv6 CIDR을 할당할 수 있어, 더 많은 IP 주소를 파드에 할당할 수 있습니다.

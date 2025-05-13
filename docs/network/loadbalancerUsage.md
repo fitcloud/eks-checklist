@@ -1,4 +1,4 @@
-# NET-005-AWS Load Balancer Controller 사용
+# NET-004-사용 사례에 맞는 로드밸런서 사용(ALB or NLB)
 
 ## **Meaning**
 
