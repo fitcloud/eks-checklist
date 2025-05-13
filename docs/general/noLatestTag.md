@@ -25,17 +25,17 @@ kubectl get pods -A -o custom-columns=NAMESPACE:.metadata.namespace,NAME:.metada
 컨테이너 이미지에서 ```latest``` 태그 대신 명시적인 버전 태그를 사용하도록 합니다.
 예를 들어, 다음과 같이 ```latest```를 명시적 버전으로 변경합니다.
 
-#### Before:
+Before:
 ```yaml
 image: nginx:latest
 ```
 
-#### After:
+After:
 ```yaml
 image: nginx:1.25.2
 ```
 
-### 이미지 버전 확인 방법
+## 이미지 버전 확인 방법
 DockerHub 또는 이미지 저장소에서 해당 이미지의 사용 가능한 태그를 확인한 후, 안정적인 버전을 선택하여 사용합니다.
 
 ```bash
@@ -43,4 +43,4 @@ DockerHub 또는 이미지 저장소에서 해당 이미지의 사용 가능한 
 curl -s https://registry.hub.docker.com/v1/repositories/nginx/tags | jq '.[].name'
 ```
 
-### [컨테이너 이미지 관리 가이드](https://kubernetes.io/ko/docs/concepts/containers/images/#updating-images)
+[컨테이너 이미지 관리 가이드](https://kubernetes.io/ko/docs/concepts/containers/images/#updating-images)

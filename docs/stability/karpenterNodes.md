@@ -37,6 +37,6 @@ kubectl get nodeclaims -A --no-headers 2>/dev/null | grep -q . && echo "Karpente
 - Karpenter 로그 확인
 - CRD(NodeClaim) 리소스가 실제로 존재하는지 확인
 
-### [AWS 공식 문서 - Karpenter](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/karpenter.html)
-### [Karpenter 공식 문서 - Nodeclaim](https://karpenter.sh/docs/concepts/nodeclaims)
-### [Karpenter 공식 문서 - 설치](https://karpenter.sh/docs/getting-started)
+[AWS 공식 문서 - Karpenter](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/karpenter.html)
+[Karpenter 공식 문서 - Nodeclaim](https://karpenter.sh/docs/concepts/nodeclaims)
+[Karpenter 공식 문서 - 설치](https://karpenter.sh/docs/getting-started)

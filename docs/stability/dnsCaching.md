@@ -1,4 +1,4 @@
-# REL-017-DNS 캐시 적
+# REL-017-DNS 캐시 적용
 
 ## Meaning
 Codredns에 cache가 설정되어 잇는지 확인하여 DNS 쿼리 성능을 향상시키고 네트워크 리소스를 절약합니다.DNS cache은 DNS 응답을 일정 기간 동안 저장하여, 동일한 쿼리에 대해 반복적으로 DNS 서버에 요청하지 않고 캐시된 응답을 빠르게 반환할 수 있습니다.
@@ -50,6 +50,6 @@ data:
         loadbalance
     }    
 ```
-### [Amazon EKS 클러스터에서 DNS에 대한 CoreDNS 관리](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-coredns.html)
-### [Customizing DNS Service](https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/)
-### [Corefile Explained](https://coredns.io/2017/07/23/corefile-explained/)
+[Amazon EKS 클러스터에서 DNS에 대한 CoreDNS 관리](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-coredns.html)
+[Customizing DNS Service](https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/)
+[Corefile Explained](https://coredns.io/2017/07/23/corefile-explained/)

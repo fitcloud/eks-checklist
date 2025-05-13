@@ -55,5 +55,5 @@ aws eks update-cluster-config \
   --resources-vpc-config endpointPublicAccess=true,publicAccessCidrs="203.0.113.0/24"
 ```
 
-### [EKS 네트워크 구성 가이드](https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html)
-### [EKS 클러스터 접근 제어 공식 문서](https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
+[EKS 네트워크 구성 가이드](https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html)
+[EKS 클러스터 접근 제어 공식 문서](https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)

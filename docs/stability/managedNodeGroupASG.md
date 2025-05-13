@@ -46,7 +46,7 @@ echo "$NODEGROUPS" | while read ng; do
       end'
 done
 ```
-### 출력 예시시
+## 출력 예시
 - 관리형 노드그룹이 존재하지 않습니다. → 관리형 노드가 클러스터에 없음
 
 - ng-a (ASG 없음) → 노드그룹은 있으나 ASG가 할당되어 있지 않음
@@ -69,5 +69,5 @@ aws autoscaling update-auto-scaling-group \
   --max-size 5 \
   --region <REGION>
 ```
-### [AWS Autoscaling 공식문서](https://docs.aws.amazon.com/cli/latest/reference/autoscaling/update-auto-scaling-group.html)
-### [AWS Github.io Cluster Autoscaler](https://aws.github.io/aws-eks-best-practices/ko/cluster-autoscaling/) 
+[AWS Autoscaling 공식문서](https://docs.aws.amazon.com/cli/latest/reference/autoscaling/update-auto-scaling-group.html)
+[AWS Github.io Cluster Autoscaler](https://aws.github.io/aws-eks-best-practices/ko/cluster-autoscaling/) 

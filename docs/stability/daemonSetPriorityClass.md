@@ -51,5 +51,5 @@ value: 1000000
 globalDefault: false
 description: "우선순위가 높은 DaemonSet용 PriorityClass"
 ```
-### [Kubernetes 공식 문서 - DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset)
-### [Kubernetes 공식 문서 - pod-priority-preemption](https://kubernetes.io/ko/docs/concepts/scheduling-eviction/pod-priority-preemption)
+[Kubernetes 공식 문서 - DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset)
+[Kubernetes 공식 문서 - pod-priority-preemption](https://kubernetes.io/ko/docs/concepts/scheduling-eviction/pod-priority-preemption)

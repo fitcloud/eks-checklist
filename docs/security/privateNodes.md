@@ -42,4 +42,4 @@ Example
 aws ec2 create-route --route-table-id <ROUTE-TABLE-ID> --destination-cidr-block 0.0.0.0/0 --nat-gateway-id <NAT-GATEWAY-ID>
 ```
 
-### [EKS 인프라 보안](https://docs.aws.amazon.com/eks/latest/best-practices/protecting-the-infrastructure.html)
+[EKS 인프라 보안](https://docs.aws.amazon.com/eks/latest/best-practices/protecting-the-infrastructure.html)

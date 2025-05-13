@@ -30,6 +30,6 @@ helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --vers
   --set controller.resources.limits.memory=1Gi \
   --wait
 ```
-### [Karpenter 설치](https://karpenter.sh/docs/getting-started/getting-started-with-karpenter/#4-install-karpenter)
-### [AWS 모범사례 Karpenter](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/karpenter.html)
+[Karpenter 설치](https://karpenter.sh/docs/getting-started/getting-started-with-karpenter/#4-install-karpenter)
+[AWS 모범사례 Karpenter](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/karpenter.html)
 

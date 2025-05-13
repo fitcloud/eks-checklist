@@ -71,4 +71,4 @@ spec:
       periodSeconds: 5
 
 ```
-### [프로브 사용법](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+[Probe 사용법](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)

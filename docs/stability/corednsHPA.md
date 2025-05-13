@@ -25,4 +25,4 @@ kubectl autoscale deployment coredns -n kube-system --cpu-percent=50 --min=<min-
 kubectl describe hpa coredns -n kube-system
 ```
 
-### [HPA 구성](https://kubernetes.io/ko/docs/tasks/run-application/horizontal-pod-autoscale/)
+[HPA 구성](https://kubernetes.io/ko/docs/tasks/run-application/horizontal-pod-autoscale/)

@@ -42,4 +42,4 @@ spec:
         - name: app-container
           image: my-app-image
 ```
-### [Kubernetes Replicaset](https://kubernetes.io/ko/docs/concepts/workloads/controllers/replicaset/)
+[Kubernetes Replicaset](https://kubernetes.io/ko/docs/concepts/workloads/controllers/replicaset/)

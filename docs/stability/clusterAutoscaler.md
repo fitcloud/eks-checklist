@@ -31,7 +31,7 @@ helm install cluster-autoscaler autoscaler/cluster-autoscaler \
   --set rbac.create=true
 ```
 
-### [Cluster Autoscaler 설치](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md)
-### [Kubernetes Autoscaling](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/autoscaling.html)
+[Cluster Autoscaler 설치](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md)
+[Kubernetes Autoscaling](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/autoscaling.html)
 
 

@@ -7,9 +7,7 @@ Kubernetes에서 securityContext.runAsUser 필드를 통해 컨테이너를 일�
 
 ## **Impact**
 - 루트 권한 컨테이너는 취약점 발생 시 호스트 시스템까지 침해 가능
-
 - Pod 간 보안 격리 실패 가능성 증가
-
 
 ## **Diagnosis**
 아래 명령어를 사용하면 클러스터 내의 컨테이너 중에서 다음 조건에 해당하는 경우를 탐지할 수 있습니다.
@@ -17,7 +15,7 @@ Kubernetes에서 securityContext.runAsUser 필드를 통해 컨테이너를 일�
 - securityContext 또는 runAsUser가 아예 명시되지 않은 경우 (기본적으로 root 권한 실행 가능)
 - Windows 컨테이너에서 runAsUserName이 "Administrator"로 설정된 경우
 
-### Command Example
+command example
 ```bash
 kubectl get pods -A -o json | jq -r '
   .items[]
@@ -53,10 +51,9 @@ kubectl get pods -A -o json | jq -r '
     end
 '
 ```
-
 - 이 명령은 보안 상 취약한 컨테이너만 필터링하여 표시하므로, 출력이 없다면 모든 컨테이너가 적절한 사용자 권한으로 실행되고 있는 것입니다.
 
-### 예시 출력 결과
+출력 example
 ```bash
 Namespace: default | Pod: nginx | Container: nginx (RunAsUser 미설정, root로 실행 가능성 존재)
 Namespace: test | Pod: backend | Container: app (명시적 root 계정 실행)
@@ -69,7 +66,7 @@ Namespace: winspace | Pod: winpod | Container: winapp (Windows Administrator 실
 ## **Mitigation**
 컨테이너에 securityContext.runAsUser를 명시하고 UID 0을 피하세요. 루트 권한을 회피하는 것은 기본 보안 원칙 중 하나입니다.
 
-### 예시: 비루트 사용자로 실행 설정
+비루트 사용자로 실행 설정 example
 ```bash
 apiVersion: v1
 kind: Pod
@@ -85,4 +82,4 @@ spec:
       allowPrivilegeEscalation: false
 ```
 참고 링크
-https://kubernetes.io/ko/docs/concepts/security/pod-security-standards/
+[Pod-security](https://kubernetes.io/ko/docs/concepts/security/pod-security-standards/)

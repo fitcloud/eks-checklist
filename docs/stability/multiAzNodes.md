@@ -44,5 +44,5 @@ spec:
           values: ["ap-northeast-2a", "ap-northeast-2b", "ap-northeast-2c"]
 ```
 
-### [EKS 모범사례 Multiple AZ](https://docs.aws.amazon.com/eks/latest/best-practices/data-plane.html)
-### [Karpenter 공식 문서](https://karpenter.sh/docs/concepts/nodepools/)
+[EKS 모범사례 Multiple AZ](https://docs.aws.amazon.com/eks/latest/best-practices/data-plane.html)
+[Karpenter 공식 문서](https://karpenter.sh/docs/concepts/nodepools/)

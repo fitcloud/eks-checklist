@@ -25,4 +25,4 @@ HPA 적용 - Deployment에 HPA를 설정하여 autosacle를 설정합니다
 kubectl autoscale deployment <deployment-name> --cpu-percent=50 --min=<min-number> --max=<max-number>
 ```
 
-### [HPA 구성](https://kubernetes.io/ko/docs/tasks/run-application/horizontal-pod-autoscale/)
+[HPA 구성](https://kubernetes.io/ko/docs/tasks/run-application/horizontal-pod-autoscale/)

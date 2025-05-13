@@ -23,6 +23,6 @@ EKS Cluster Audit log 활성화
 aws eks update-cluster-config --region <region> --name <클러스터 이름> --logging '{"clusterLogging":[{"types":["audit"],"enabled":true}]}'
 ```
 
-### [EKS 감사 및 로깅](hhttps://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/auditing-and-logging.html)
-### [EKS Auditlog 설정 - AWS CLI 부분 참조](https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html#enabling-control-plane-log-export)
-### [Kubernetes Audit](https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/)
+[EKS 감사 및 로깅](hhttps://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/auditing-and-logging.html)
+[EKS Auditlog 설정 - AWS CLI 부분 참조](https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html#enabling-control-plane-log-export)
+[Kubernetes Audit](https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/)

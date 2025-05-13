@@ -22,5 +22,5 @@ aws eks list-access-entries --cluster-name <cluster-name>
 
 - 향후 AWS EKS의 특정 Kubenetes 버전에서는 지원되는 인증 소스에서 aws-auth Configmap이 제거될 예정이므로, Access Entry 방식으로 전환하여 정책 기반 관리와 콘솔 UI를 통한 편리한 권한 제어을 권장합니다.
 
-### [EKS 보안 ID 및 액세스 관리](https://docs.aws.amazon.com/eks/latest/best-practices/identity-and-access-management.html)
-### [간소화된 Amazon EKS 액세스 관리 제어](https://aws.amazon.com/ko/blogs/tech/a-deep-dive-into-simplified-amazon-eks-access-management-controls/)
+[EKS 보안 ID 및 액세스 관리](https://docs.aws.amazon.com/eks/latest/best-practices/identity-and-access-management.html)
+[간소화된 Amazon EKS 액세스 관리 제어](https://aws.amazon.com/ko/blogs/tech/a-deep-dive-into-simplified-amazon-eks-access-management-controls/)

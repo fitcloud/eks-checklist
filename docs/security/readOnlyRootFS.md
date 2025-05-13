@@ -55,6 +55,6 @@ securityContext:
   readOnlyRootFilesystem: true
 ```
 
-### [Kubernetes 공식 문서 - Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
-### [Kubernetes 공식 문서 - Immutable container filesystems](https://kubernetes.io/blog/2021/10/05/nsa-cisa-kubernetes-hardening-guidance/#immutable-container-filesystems)
-### [Amazon EKS 환경에서 Pod Security Standard 구현하기](https://aws.amazon.com/ko/blogs/tech/implementing-pod-security-standards-in-amazon-eks/)
+[Kubernetes 공식 문서 - Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+[Kubernetes 공식 문서 - Immutable container filesystems](https://kubernetes.io/blog/2021/10/05/nsa-cisa-kubernetes-hardening-guidance/#immutable-container-filesystems)
+[Amazon EKS 환경에서 Pod Security Standard 구현하기](https://aws.amazon.com/ko/blogs/tech/implementing-pod-security-standards-in-amazon-eks/)
