@@ -17,7 +17,7 @@ Amazon EKS 클러스터의 API 서버는 클러스터 관리, 워크로드 배�
 ## **Diagnosis**
 EKS 클러스터의 API 엔드포인트가 퍼블릭으로 열려 있는지 확인합니다.
 
-### AWS CLI Example
+**AWS CLI Example**
 ```bash
 aws eks describe-cluster --name <cluster-name> --query "cluster.resourcesVpcConfig"
 ```
@@ -39,7 +39,7 @@ Result Example
 ## **Mitigation**
 보안을 강화하려면 다음과 같은 조치를 취합니다:
 
-### 1. 퍼블릭 접근 비활성화 및 프라이빗 접근 활성화
+**1. 퍼블릭 접근 비활성화 및 프라이빗 접근 활성화**
 ```bash
 aws eks update-cluster-config \
   --region <region> \
@@ -47,7 +47,7 @@ aws eks update-cluster-config \
   --resources-vpc-config endpointPublicAccess=false,endpointPrivateAccess=true
 ```
 
-### 2. 퍼블릭 접근이 필요한 경우 IP 화이트리스트 설정
+**2. 퍼블릭 접근이 필요한 경우 IP 화이트리스트 설정**
 ```bash
 aws eks update-cluster-config \
   --region <region> \
