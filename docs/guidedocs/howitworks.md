@@ -60,7 +60,7 @@ if err != nil {
 Cobra 라이브러리는 CLI 명령어를 생성하고, 사용자가 다양한 옵션을 통해 클러스터 점검을 실행할 수 있도록 돕습니다.
 
 ```bash
-eks-checklist --context my-cluster --profile dev --output text 
+eks-checklist --context my-cluster --output text 
 ```
 여기서 --context는 kubeconfig에서 사용할 클러스터 컨텍스트를 지정하고, --profile은 AWS CLI 프로파일을 설정합니다. --output 옵션을 통해 출력 형식을 text나 html로 설정할 수 있습니다
 
@@ -69,5 +69,5 @@ eks-checklist --context my-cluster --profile dev --output text
 점검 결과는 사용자가 설정한 출력 형식에 맞게 표시됩니다. 예를 들어, text 형식으로 출력하면 터미널에 점검 결과를 표시하고, html 형식으로 출력하면 HTML로 점검 리포트를 생성하여 파일로 저장할 수 있습니다.
 
 ```bash
-eks-checklist --context my-cluster --profile dev --output html > eks-checklist-report.html
+eks-checklist --context my-cluster --output html > eks-checklist-report.html
 ```

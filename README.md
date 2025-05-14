@@ -115,5 +115,5 @@ eks-checklist
 2. 적절한 폴더에 저장 (예: `C:\\Program Files\\EKS-Checklist\\`)
 3. 명령 프롬프트 또는 PowerShell에서 실행:
 ```bash
-eks-checklist.exe --profile {AWS_Profile}
+eks-checklist.exe
 ```

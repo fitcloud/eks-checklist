@@ -58,7 +58,7 @@
 wget https://github.com/fitcloud/eks-checklist/releases/download/{version}/eks-checklist-linux-amd64
 chmod +x eks-checklist-linux-amd64
 sudo mv eks-checklist-linux-amd64 /usr/local/bin/eks-checklist
-eks-checklist --profile my-aws-profile
+eks-checklist
 ```
 **MacOS**
 
@@ -66,7 +66,7 @@ eks-checklist --profile my-aws-profile
 curl -LO https://github.com/fitcloud/eks-checklist/releases/download/{version}/eks-checklist-darwin-amd64
 chmod +x eks-checklist-darwin-amd64
 sudo mv eks-checklist-darwin-amd64 /usr/local/bin/eks-checklist
-eks-checklist --profile my-aws-profile
+eks-checklist
 ```
 **Window**
 
@@ -75,14 +75,14 @@ eks-checklist --profile my-aws-profile
 
 ```bash
 cd "C:\Program Files\EKS-Checklist\"
-eks-checklist-windows-amd64.exe --profile my-aws-profile
+eks-checklist-windows-amd64.exe
 ```
 
 ## 🚀 사용 방법
 
 **기본 사용 예시**
 ```bash
-eks-checklist --context my-cluster --profile dev --output text
+eks-checklist --context my-cluster --output text
 ```
 **주요 옵션 설명**
 
