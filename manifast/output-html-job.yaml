@@ -1,4 +1,14 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubeconfig
+  namespace: default
+data:
+  config: |
+    <your_kubeconfig_content_here>
+
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: eks-checklist-sa
@@ -42,15 +52,20 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccountName: eks-checklist-sa
+      serviceAccountName: eks-checklist-sa  # 서비스 어카운트 지정
       containers:
-      - name: eks-checklist
-        image: public.ecr.aws/x5b3c7k0/eks-checklist:latest
-        command: ["/eks-checklist", "--output", "html"]
-        volumeMounts:
-        - name: output
-          mountPath: /output
-      restartPolicy: Never
+        - name: eks-checklist
+          image: public.ecr.aws/x5b3c7k0/eks-checklist:latest
+          volumeMounts:
+            - name: kubeconfig-volume
+              mountPath: /root/.kube  # /root/.kube/config에 마운트
+              subPath: config
+            - name: output-volume
+              mountPath: /output  # 결과를 output 디렉터리에 저장
       volumes:
-      - name: output
-        emptyDir: {}
+        - name: kubeconfig-volume
+          configMap:
+            name: kubeconfig  # 위에서 만든 ConfigMap 이름
+        - name: output-volume
+          emptyDir: {}  # 출력 결과 저장을 위한 EmptyDir 설정
+
