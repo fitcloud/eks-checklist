@@ -40,7 +40,7 @@
 
 ## 📦 설치 방법
 
-### GitHub Releases에서 바이너리 다운로드
+**GitHub Releases에서 바이너리 다운로드**
 
 1. GitHub의 [Releases 페이지](https://github.com/fitcloud/eks-checklist/releases)로 이동합니다.
 2. 운영 체제에 맞는 바이너리 파일을 다운로드합니다
@@ -52,7 +52,7 @@
 
 ## 💻 플랫폼별 설치 예시
 
-### Linux
+**Linux**
 
 ```bash
 wget https://github.com/fitcloud/eks-checklist/releases/download/{version}/eks-checklist-linux-amd64
@@ -60,7 +60,7 @@ chmod +x eks-checklist-linux-amd64
 sudo mv eks-checklist-linux-amd64 /usr/local/bin/eks-checklist
 eks-checklist --profile my-aws-profile
 ```
-### MacOS
+**MacOS**
 
 ```bash
 curl -LO https://github.com/fitcloud/eks-checklist/releases/download/{version}/eks-checklist-darwin-amd64
@@ -68,7 +68,7 @@ chmod +x eks-checklist-darwin-amd64
 sudo mv eks-checklist-darwin-amd64 /usr/local/bin/eks-checklist
 eks-checklist --profile my-aws-profile
 ```
-### Window
+**Window**
 
 1. .exe 파일을 다운로드하여 예: C:\Program Files\EKS-Checklist\에 저장합니다.
 2. 명령 프롬프트 또는 PowerShell에서 다음과 같이 실행합니다:
@@ -80,11 +80,11 @@ eks-checklist-windows-amd64.exe --profile my-aws-profile
 
 ## 🚀 사용 방법
 
-### 기본 사용 예시
+**기본 사용 예시**
 ```bash
 eks-checklist --context my-cluster --profile dev --output text
 ```
-### 주요 옵션 설명
+**주요 옵션 설명**
 
 | 옵션                | 설명 |
 |---------------------|------|
@@ -96,7 +96,7 @@ eks-checklist --context my-cluster --profile dev --output text
 | `--sort`            | 결과를 상태별 정렬 (`pass`, `fail`, `manual`) |
 | `--help` 또는 `-h` | 도움말 출력 |
 
-### 출력 예시
+**출력 예시**
 도구 실행 결과는 다음과 같은 방식으로 정리됩니다:
 ![output](../images/output.png)
 
