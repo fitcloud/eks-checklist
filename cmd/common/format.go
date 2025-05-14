@@ -107,7 +107,7 @@ func AddResultForHTML(r CheckResult, category string) {
 func SaveHTMLReport() (string, error) {
 	// 파일 생성
 	now := time.Now()
-	filename := "eks-checklist-report-" + now.Format("20060102-150405") + ".html"
+	filename := "output/" + "eks-checklist-report-" + now.Format("20060102-150405") + ".html"
 	file, err := os.Create(filename)
 	if err != nil {
 		return "", fmt.Errorf("파일 생성 오류: %v", err)
@@ -150,20 +150,7 @@ func SaveHTMLReport() (string, error) {
 func loadTemplate() (*template.Template, error) {
 	// 템플릿 파일 경로
 	templatePath := "templates/report.html"
-	// 현재 실행 경로 기준으로 템플릿 파일 경로 설정
-	execPath, err := os.Executable()
-	if err != nil {
-		return nil, fmt.Errorf("실행 파일 경로 확인 오류: %v", err)
-	}
-	execDir := filepath.Dir(execPath)
-	templatePath = filepath.Join(execDir, templatePath)
-	// 템플릿 파일 경로를 절대 경로로 변환
-	absTemplatePath, err := filepath.Abs(templatePath)
-	if err != nil {
-		return nil, fmt.Errorf("절대 경로 변환 오류: %v", err)
-	}
-	// 템플릿 파일 경로를 절대 경로로 변환
-	templatePath = absTemplatePath
+
 	// 템플릿 파일 존재 여부 확인
 	if _, err := os.Stat(templatePath); err == nil {
 		// 템플릿 파일이 존재하면 로드

@@ -36,7 +36,7 @@ COPY --from=builder /eks-checklist /
 COPY --from=builder /templates /templates
 
 # 필요한 디렉토리 생성
-RUN mkdir -p /root/.kube /root/.aws /results /output
+RUN mkdir -p /root/.kube /root/.aws /output
 
 # # 스크립트 추가
 # COPY entrypoint.sh /
@@ -47,10 +47,7 @@ ENV KUBECONFIG=/root/.kube/config
 ENV AWS_SHARED_CREDENTIALS_FILE=/root/.aws/credentials
 ENV AWS_CONFIG_FILE=/root/.aws/config
 ENV RUNNING_IN_DOCKER=true
-ENV OUTPUT_DIR=/output
 
-# 출력 디렉토리를 볼륨으로 설정
-VOLUME ["/output"]
 # 작업 디렉토리 유지 (원본 애플리케이션에 영향 없도록)
 WORKDIR /
 

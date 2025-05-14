@@ -1,0 +1,37 @@
+[
+  {
+    "AccessEntryArn": "arn:aws:eks:ap-northeast-2:287997882978:access-entry/eks-checklist/role/287997882978/AWSServiceRoleForAmazonEKS/82cad3d6-56be-e9bd-5128-f24d375dbaff",
+    "ClusterName": "eks-checklist",
+    "CreatedAt": "2025-03-18T05:14:26.646Z",
+    "KubernetesGroups": [],
+    "ModifiedAt": "2025-03-18T05:14:26.646Z",
+    "PrincipalArn": "arn:aws:iam::287997882978:role/aws-service-role/eks.amazonaws.com/AWSServiceRoleForAmazonEKS",
+    "Tags": {},
+    "Type": "STANDARD",
+    "Username": "arn:aws:sts::287997882978:assumed-role/AWSServiceRoleForAmazonEKS/{{SessionName}}"
+  },
+  {
+    "AccessEntryArn": "arn:aws:eks:ap-northeast-2:287997882978:access-entry/eks-checklist/role/287997882978/eks_checklist_terraform_role/68cad3d0-48a4-3ac3-0e9c-16d5b82b9579",
+    "ClusterName": "eks-checklist",
+    "CreatedAt": "2025-03-18T05:01:12.951Z",
+    "KubernetesGroups": [],
+    "ModifiedAt": "2025-03-18T05:01:12.951Z",
+    "PrincipalArn": "arn:aws:iam::287997882978:role/eks_checklist_terraform_role",
+    "Tags": {},
+    "Type": "STANDARD",
+    "Username": "arn:aws:sts::287997882978:assumed-role/eks_checklist_terraform_role/{{SessionName}}"
+  },
+  {
+    "AccessEntryArn": "arn:aws:eks:ap-northeast-2:287997882978:access-entry/eks-checklist/role/287997882978/nodegroup-1-eks-node-group-20250318045243619200000008/88cad3d0-f6a9-ccb7-cf76-7515f9d6fca6",
+    "ClusterName": "eks-checklist",
+    "CreatedAt": "2025-03-18T05:02:42.06Z",
+    "KubernetesGroups": [
+      "system:nodes"
+    ],
+    "ModifiedAt": "2025-03-18T05:02:42.06Z",
+    "PrincipalArn": "arn:aws:iam::287997882978:role/nodegroup-1-eks-node-group-20250318045243619200000008",
+    "Tags": {},
+    "Type": "EC2_LINUX",
+    "Username": "system:node:{{EC2PrivateDNSName}}"
+  }
+]

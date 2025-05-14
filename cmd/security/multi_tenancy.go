@@ -21,7 +21,7 @@ func CheckMultitenancy(client kubernetes.Interface, cfg aws.Config, eksCluster s
 		Runbook:    "https://fitcloud.github.io/eks-checklist/security/multiTenancy",
 	}
 
-	baseDir := filepath.Join(".", "result", eksCluster+"-multitenancy")
+	baseDir := filepath.Join(".", "output", eksCluster+"-multitenancy")
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
 		return result

@@ -22,7 +22,7 @@ func CheckQoSClass(client kubernetes.Interface, cfg aws.Config, eksCluster strin
 		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/qosByPriority",
 	}
 
-	baseDir := filepath.Join(".", "result", eksCluster+"-qos-class")
+	baseDir := filepath.Join(".", "output", eksCluster+"-qos-class")
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
 		return result

@@ -37,7 +37,7 @@ func CheckPodToPodNetworkPolicy(client kubernetes.Interface, eksCluster string) 
 	}
 
 	// 2. 결과 저장 디렉토리 생성
-	baseDir := filepath.Join(".", "result", eksCluster+"-pod-network-policy")
+	baseDir := filepath.Join(".", "output", eksCluster+"-pod-network-policy")
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		result.Passed = false
 		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
