@@ -16,11 +16,11 @@ latest는 실제 어떤 버전의 이미지인지 명확하지 않으며, 시간
 클러스터 내 모든 Pod의 컨테이너 이미지에서 ```latest``` 태그가 사용되었는지 확인합니다.
 ```bash
 kubectl get pods --all-namespaces -o jsonpath='{range .items[*]}{.metadata.namespace}{"\t"}{.metadata.name}{"\t"}{range .spec.containers[*]}{.name}{"\t"}{.image}{"\n"}{end}{end}' | grep ':latest'
-```
+
 <!--
 kubectl get pods -A -o custom-columns=NAMESPACE:.metadata.namespace,NAME:.metadata.name,IMAGE:.spec.containers[*].image | awk 'NR==1 || $3 ~ /:latest/'
 -->
-
+```
 ## **Mitigation**
 컨테이너 이미지에서 ```latest``` 태그 대신 명시적인 버전 태그를 사용하도록 합니다.
 예를 들어, 다음과 같이 ```latest```를 명시적 버전으로 변경합니다.

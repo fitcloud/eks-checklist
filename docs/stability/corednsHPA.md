@@ -19,7 +19,7 @@ kubectl get deployments -n kube-system --no-headers | awk '$1=="coredns"{print $
 HPA 설정
 CoreDNS에 HPA를 설정하여 트래픽 증가에 따라 Pod 수를 동적으로 확장합니다
 
-example
+**example**
 ```bash
 kubectl autoscale deployment coredns -n kube-system --cpu-percent=50 --min=<min-number> --max=<max-number>
 kubectl describe hpa coredns -n kube-system

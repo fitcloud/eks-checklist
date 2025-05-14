@@ -1,13 +1,25 @@
 # SCL-004 중요 Pod에 노드 삭제 방지용 Label 부여
 
 ## Meaning
-이 기능의 의미를 설명합니다.
+중요한 워크로드가 올라간 노드가 Karpenter나 Cluster Autoscaler에 의해 자동으로 삭제되지 않도록, 해당 노드에 삭제 방지용 label을 부여합니다.
 
 ## Impact
-이 기능이 영향을 미치는 영역을 설명합니다.
+- 중요 서비스가 의도치 않게 중단될 수 있음
+
+- 복구 지연 및 운영 리스크 증가
 
 ## Diagnosis
-이 기능의 상태를 진단하는 방법을 설명합니다.
+중요 Pod가 실행 중인 노드에 삭제 방지용 label이 설정돼 있는지 확인:
+
+```bash
+kubectl get nodes --show-labels | grep do-not-disrupt
+```
 
 ## Mitigation
-이 기능에 문제가 발생했을 때 적용할 수 있는 완화책을 설명합니다.
+중요 노드에 karpenter.sh/do-not-disrupt=true label 추가
+
+nodepool 또는 Cluster Autoscaler 설정에서 해당 노드는 스케일 인 대상 제외 처리
+
+```bash
+kubectl label node <NODE_NAME> karpenter.sh/do-not-disrupt: "true"
+```

@@ -20,7 +20,7 @@ kubectl get pods -n kube-system | grep cluster-autoscaler
 ## Mitigation
 ClusterAutosacler를 설치하세요
 
-example
+**example**
 ```bash
 helm repo add autoscaler https://kubernetes.github.io/autoscaler
 helm repo update
