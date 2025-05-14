@@ -1,4 +1,4 @@
-# REL-018-Karpenter 사용시 DaemonSet에 Priority Class 부여
+# REL-018 Karpenter 사용시 DaemonSet에 Priority Class 부여
 
 ## Meaning
 Karpenter는 필요에 따라 노드를 자동으로 생성하거나 제거해주는 AWS 기반의 노드 프로비저너입니다.

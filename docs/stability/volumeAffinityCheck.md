@@ -1,4 +1,4 @@
-# REL-015-PV 사용시 volume affinity 위반 사항 체크
+# REL-015 PV 사용시 volume affinity 위반 사항 체크
 
 ## Meaning
 이 기능의 의미를 설명합니다.

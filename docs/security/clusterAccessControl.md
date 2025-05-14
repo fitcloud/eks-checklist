@@ -1,4 +1,4 @@
-# SEC-002-클러스터 접근 제어(Access entries, aws-auth 컨피그맵)
+# SEC-002 클러스터 접근 제어(Access entries, aws-auth 컨피그맵)
 
 ## Meaning
 클러스터 접근 제어는 Kubernetes 클러스터에 누가 접근할 수 있는지와 어떤 권한을 가지는지를 제어하는 핵심 보안 기능입니다. 이 점검은 클러스터에 대해 Access Entries 또는 aws-auth ConfigMap이 적절히 설정되어 있는지를 확인합니다.

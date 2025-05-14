@@ -1,4 +1,4 @@
-# SEC-007-Audit 로그 활성화
+# SEC-007 Audit 로그 활성화
 
 ## Meaning
 Audit Log는 Amazon EKS 클러스터에서 발생하는 모든 API 요청과 이벤트를 기록하는 기능입니다. 

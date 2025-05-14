@@ -1,4 +1,4 @@
-# SEC-009-Pod-to-Pod 접근 제어
+# SEC-009 Pod-to-Pod 접근 제어
 
 ## Meaning
 이 기능의 의미를 설명합니다.

@@ -1,4 +1,4 @@
-# REL-011-오토스케일링 그룹 기반 관리형 노드 그룹 생성
+# REL-011 오토스케일링 그룹 기반 관리형 노드 그룹 생성
 
 ## Meaning
 Amazon EKS에서 관리형 노드 그룹(Managed Node Group) 은 AWS Auto Scaling Group(ASG)을 통해 관리되며, 클러스터의 컴퓨팅 자원을 유연하게 확장하거나 축소할 수 있도록 되어 있습니다.

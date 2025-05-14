@@ -1,4 +1,4 @@
-# SCA-004-중요 Pod에 노드 삭제 방지용 Label 부여
+# SCL-004 중요 Pod에 노드 삭제 방지용 Label 부여
 
 ## Meaning
 이 기능의 의미를 설명합니다.

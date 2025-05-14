@@ -1,4 +1,4 @@
-# REL-006-중요 워크로드에 대한 PDB(Pod Distruption Budget) 적용
+# REL-006 중요 워크로드에 대한 PDB(Pod Distruption Budget) 적용
 
 ## Meaning
 이 기능의 의미를 설명합니다.

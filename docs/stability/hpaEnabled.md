@@ -1,4 +1,4 @@
-# REL-004-HPA(Horizontal Pod Autoscaler) 적용
+# REL-004 HPA(Horizontal Pod Autoscaler) 적용
 
 ## Meaning
 HPA(Horizontal Pod Autoscaler)는 Kubernetes Deployment의 리소스 사용량(CPU, 메모리 등)을 기반으로 Pod 수를 자동으로 조정하는 기능입니다. Deployment에 HPA를 적용하면 트래픽 변동에 유연하게 대응할 수 있으며, 안정성과 리소스 효율성을 동시에 확보할 수 있습니다.

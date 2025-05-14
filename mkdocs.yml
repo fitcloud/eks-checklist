@@ -24,60 +24,60 @@ nav:
       - How it works : guidedocs/howitworks.md
     - Runbook:
       - General:
-        - GEN-001-코드형 인프라 : general/iac.md
-        - GEN-002-GitOps 적용 : general/gitOps.md
-        - GEN-003-컨테이너 이미지 태그에 latest 미사용 : general/noLatestTag.md
+        - GEN-001 코드형 인프라 : general/iac.md
+        - GEN-002 GitOps 적용 : general/gitOps.md
+        - GEN-003 컨테이너 이미지 태그에 latest 미사용 : general/noLatestTag.md
       - Security:
-        - SEC-001-EKS 클러스터 API 엔드포인트 접근 제어 : security/apiEndpointAccess.md
-        - SEC-002-클러스터 접근 제어(Access entries, aws-auth 컨피그맵) : security/clusterAccessControl.md
-        - SEC-003-IRSA 또는 EKS Pod Identity 기반 권한 부여 : security/podIamAuth.md
-        - SEC-004-데이터 플레인 노드에 필수로 필요한 IAM 권한만 부여: security/minimalNodeIam.md
-        - SEC-005-루트 유저가 아닌 유저로 컨테이너 실행: security/nonRootUser.md
-        - SEC-006-멀티 태넌시 적용 유무 : security/multiTenancy.md
-        - SEC-007-Audit 로그 활성화 : security/auditLogging.md
-        - SEC-008-비정상 접근에 대한 알림 설정 : security/unauthorizedAlerting.md
-        - SEC-009-Pod-to-Pod 접근 제어 : security/podToPodAccess.md
-        - SEC-010-PV 암호화 : security/pvEncryption.md
-        - SEC-011-Secret 객체 암호화 : security/secretEncryption.md
-        - SEC-012-데이터 플레인 사설망 : security/privateNodes.md
-        - SEC-013-컨테이너 이미지 정적 분석 : security/imageScanning.md
-        - SEC-014-읽기 전용 파일시스템 사용 : security/readOnlyRootFS.md
+        - SEC-001 EKS 클러스터 API 엔드포인트 접근 제어 : security/apiEndpointAccess.md
+        - SEC-002 클러스터 접근 제어(Access entries, aws-auth 컨피그맵) : security/clusterAccessControl.md
+        - SEC-003 IRSA 또는 EKS Pod Identity 기반 권한 부여 : security/podIamAuth.md
+        - SEC-004 데이터 플레인 노드에 필수로 필요한 IAM 권한만 부여: security/minimalNodeIam.md
+        - SEC-005 루트 유저가 아닌 유저로 컨테이너 실행: security/nonRootUser.md
+        - SEC-006 멀티 태넌시 적용 유무 : security/multiTenancy.md
+        - SEC-007 Audit 로그 활성화 : security/auditLogging.md
+        - SEC-008 비정상 접근에 대한 알림 설정 : security/unauthorizedAlerting.md
+        - SEC-009 Pod-to-Pod 접근 제어 : security/podToPodAccess.md
+        - SEC-010 PV 암호화 : security/pvEncryption.md
+        - SEC-011 Secret 객체 암호화 : security/secretEncryption.md
+        - SEC-012 데이터 플레인 사설망 : security/privateNodes.md
+        - SEC-013 컨테이너 이미지 정적 분석 : security/imageScanning.md
+        - SEC-014 읽기 전용 파일시스템 사용 : security/readOnlyRootFS.md
       - Scalability:
-        - SCA-001-Karpenter 사용 : scalability/karpenterEnabled.md
-        - SCA-002-Karpenter 전용 노드 그룹 혹은 Fargate 사용 : scalability/karpenterOrFargate.md
-        - SCA-003-Spot 노드 사용시 Spot 중지 핸들러 적용 : scalability/spotTerminationHandler.md
-        - SCA-004-중요 Pod에 노드 삭제 방지용 Label 부여 : scalability/podEvictionProtection.md
-        - SCA-005-Application에 Graceful shutdown 적용 : scalability/gracefulShutdown.md
-        - SCA-006-노드 확장/축소 정책 적용 : scalability/nodeAutoScaling.md
-        - SCA-007-다양한 인스턴스 타입 사용 : scalability/instanceDiversity.md
+        - SCL-001 Karpenter 사용 : scalability/karpenterEnabled.md
+        - SCL-002 Karpenter 전용 노드 그룹 혹은 Fargate 사용 : scalability/karpenterOrFargate.md
+        - SCL-003 Spot 노드 사용시 Spot 중지 핸들러 적용 : scalability/spotTerminationHandler.md
+        - SCL-004 중요 Pod에 노드 삭제 방지용 Label 부여 : scalability/podEvictionProtection.md
+        - SCL-005 Application에 Graceful shutdown 적용 : scalability/gracefulShutdown.md
+        - SCL-006 노드 확장/축소 정책 적용 : scalability/nodeAutoScaling.md
+        - SCL-007 다양한 인스턴스 타입 사용 : scalability/instanceDiversity.md
       - Reliability:
-        - REL-001-싱글톤 Pod 미사용 : stability/noSingletonPod.md
-        - REL-002-2개 이상의 Pod 복제본 사용 : stability/multiplePodReplicas.md
-        - REL-003-동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 : stability/podSpreadAcrossNodes.md
-        - REL-004-HPA 적용 : stability/hpaEnabled.md
-        - REL-005-Probe(Startup, Readiness, Liveness) 적용 : stability/probeConfigured.md
-        - REL-006-중요 워크로드에 대한 PDB(Pod Distruption Budget) 적용 : stability/pdbByPriority.md
-        - REL-007-애플리케이션에 적절한 CPU/RAM 할당 : stability/resourceRequestsLimits.md
-        - REL-008-애플플케이션 중요도에 따른 QoS 적용 : stability/qosByPriority.md
-        - REL-009-인프라 및 애플리케이션 모니터링 스택 적용 : stability/monitoringStack.md
-        - REL-010-반영구 저장소에 애플리케이션 로그 저장 : stability/persistentLogStorage.md
-        - REL-011-오토스케일링 그룹 기반 관리형 노드 그룹 생성 : stability/managedNodeGroupASG.md
-        - REL-012-Cluster Autoscaler 적용 : stability/clusterAutoscaler.md
-        - REL-013-Karpenter 기반 노드 생성 : stability/karpenterNodes.md
-        - REL-014-다수의 가용 영역에 데이터 플레인 노드 배포 : stability/multiAzNodes.md
-        - REL-015-PV 사용시 volume affinity 위반 사항 체크 : stability/volumeAffinityCheck.md
-        - REL-016-CoreDNS에 HPA 적용 : stability/corednsHPA.md
-        - REL-017-DNS 캐시 적용 : stability/dnsCaching.md
-        - REL-018-Karpenter 사용시 DaemonSet에 Priority Class 부여 : stability/daemonSetPriorityClass.md
+        - REL-001 싱글톤 Pod 미사용 : stability/noSingletonPod.md
+        - REL-002 2개 이상의 Pod 복제본 사용 : stability/multiplePodReplicas.md
+        - REL-003 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 : stability/podSpreadAcrossNodes.md
+        - REL-004 HPA 적용 : stability/hpaEnabled.md
+        - REL-005 Probe(Startup, Readiness, Liveness) 적용 : stability/probeConfigured.md
+        - REL-006 중요 워크로드에 대한 PDB(Pod Distruption Budget) 적용 : stability/pdbByPriority.md
+        - REL-007 애플리케이션에 적절한 CPU/RAM 할당 : stability/resourceRequestsLimits.md
+        - REL-008 애플리케이션 중요도에 따른 QoS 적용 : stability/qosByPriority.md
+        - REL-009 인프라 및 애플리케이션 모니터링 스택 적용 : stability/monitoringStack.md
+        - REL-010 반영구 저장소에 애플리케이션 로그 저장 : stability/persistentLogStorage.md
+        - REL-011 오토스케일링 그룹 기반 관리형 노드 그룹 생성 : stability/managedNodeGroupASG.md
+        - REL-012 Cluster Autoscaler 적용 : stability/clusterAutoscaler.md
+        - REL-013 Karpenter 기반 노드 생성 : stability/karpenterNodes.md
+        - REL-014 다수의 가용 영역에 데이터 플레인 노드 배포 : stability/multiAzNodes.md
+        - REL-015 PV 사용시 volume affinity 위반 사항 체크 : stability/volumeAffinityCheck.md
+        - REL-016 CoreDNS에 HPA 적용 : stability/corednsHPA.md
+        - REL-017 DNS 캐시 적용 : stability/dnsCaching.md
+        - REL-018 Karpenter 사용시 DaemonSet에 Priority Class 부여 : stability/daemonSetPriorityClass.md
       - Network:
-        - NET-001-VPC 서브넷에 충분한 IP 대역대 확보: network/subnetIpCapacity.md
-        - NET-002-Pod에 부여할 IP 부족시 알림 설정: network/podIpAlert.md
-        - NET-003-VPC CNI의 Prefix 모드 사용: network/vpcCniPrefixMode.md
-        - NET-004-사용 사례에 맞는 로드밸런서 사용(ALB or NLB): network/loadbalancerUsage.md
-        - NET-005-AWS Load Balancer Controller 사용: network/albController.md
-        - NET-006-ALB/NLB의 대상으로 Pod의 IP 사용: network/podIpTarget.md
-        - NET-007-Pod Readiness Gate 적용: network/readinessGate.md
-        - NET-008-kube-proxy에 IPVS 모드 적용: network/kubeProxyIpvsMode.md
-        - NET-009-Endpoint 대신 EndpointSlices 사용: network/endpointSlices.md
+        - NET-001 VPC 서브넷에 충분한 IP 대역대 확보: network/subnetIpCapacity.md
+        - NET-002 Pod에 부여할 IP 부족시 알림 설정: network/podIpAlert.md
+        - NET-003 VPC CNI의 Prefix 모드 사용: network/vpcCniPrefixMode.md
+        - NET-004 사용 사례에 맞는 로드밸런서 사용(ALB or NLB): network/loadbalancerUsage.md
+        - NET-005 AWS Load Balancer Controller 사용: network/albController.md
+        - NET-006 ALB/NLB의 대상으로 Pod의 IP 사용: network/podIpTarget.md
+        - NET-007 Pod Readiness Gate 적용: network/readinessGate.md
+        - NET-008 kube-proxy에 IPVS 모드 적용: network/kubeProxyIpvsMode.md
+        - NET-009 Endpoint 대신 EndpointSlices 사용: network/endpointSlices.md
       - Cost:
-        - COS-001-kubecost 설치 : cost/kubecost.md
+        - COST-001 kubecost 설치 : cost/kubecost.md

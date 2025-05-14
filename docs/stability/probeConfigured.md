@@ -1,4 +1,4 @@
-# REL-005-Probe(Startup, Readiness, Liveness) 적용
+# REL-005 Probe(Startup, Readiness, Liveness) 적용
 
 ## Meaning
 Kubernetes에서는 애플리케이션의 상태를 주기적으로 확인하기 위해 3가지 Probe를 제공합니다.

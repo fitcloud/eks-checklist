@@ -1,4 +1,4 @@
-# SCA-007-다양한 인스턴스 타입 사용
+# SCL-007 다양한 인스턴스 타입 사용
 
 ## Meaning
 현재 사용중인 Node의 Instace type을 확인하여 단일 Instacne type 사용 시 다양한 Instance type 사용 변경으로 애플리케이션의 요구 사항에 맞게 최적화하고, 클러스터의 리소스를 효율적으로 활용 합니다.
