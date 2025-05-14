@@ -9,6 +9,9 @@ import (
 	"strconv"
 	"strings"
 
+	"context"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -58,9 +61,11 @@ func selectCluster(kubeconfigPath string) (string, error) {
 		return "", fmt.Errorf("kubeconfig에 사용 가능한 EKS 클러스터가 없습니다")
 	}
 
-	// Docker 환경이거나 stdin이 tty가 아닌 경우 첫 번째 클러스터 자동 선택
-	if os.Getenv("RUNNING_IN_DOCKER") == "true" && !isTerminal() {
-		fmt.Printf("\n비대화형 환경에서 실행 중입니다. 첫 번째 클러스터를 자동으로 선택합니다.\n")
+	// 1. Kubernetes 클러스터 내부인 경우 (처리는 getKubeconfig에서 이미 했으므로 여기서는 처리 안함)
+	// 2. Docker 환경이거나 stdin이 tty가 아닌 경우 첫 번째 클러스터 자동 선택
+	if (os.Getenv("RUNNING_IN_DOCKER") == "true" && !isTerminal()) ||
+		len(clusters) == 1 { // 클러스터가 하나만 있는 경우도 자동 선택
+		fmt.Printf("\n비대화형 환경이거나 클러스터가 하나만 있습니다. 첫 번째 클러스터를 자동으로 선택합니다.\n")
 		fmt.Printf("선택된 클러스터: %s (클러스터: %s)\n",
 			clusters[0], contextToCluster[clusters[0]])
 		return clusters[0], nil
@@ -132,7 +137,24 @@ func getKubeconfig(kubeconfigPath string, kubeconfigContext string, awsProfile s
 	var config *rest.Config
 	var err error
 	var selectedContext string
+	var AWS_PROFILE string
 
+	// Kubernetes 클러스터 내부에서 실행 중인지 확인
+	if os.Getenv("KUBERNETES_SERVICE_HOST") != "" {
+		fmt.Println("Kubernetes 클러스터 내부에서 실행 중입니다. ServiceAccount 인증 정보를 사용합니다.")
+
+		// InClusterConfig 사용
+		config, err = rest.InClusterConfig()
+		if err != nil {
+			fmt.Printf("인클러스터 설정을 로드하는 중 오류 발생: %v\n", err)
+			os.Exit(1)
+		}
+
+		// 클러스터 내부에서는 AWS_PROFILE이 의미가 없으므로 빈 문자열 반환
+		return "", *config
+	}
+
+	// Docker 환경에서 실행 중이지만 클러스터 외부인 경우
 	// 컨텍스트가 명시적으로 지정된 경우 해당 컨텍스트 사용
 	if kubeconfigContext != "" {
 		selectedContext = kubeconfigContext
@@ -157,7 +179,7 @@ func getKubeconfig(kubeconfigPath string, kubeconfigContext string, awsProfile s
 		}
 	}
 
-	AWS_PROFILE := getAwsProfileFromContext(kubeconfigPath, selectedContext)
+	AWS_PROFILE = getAwsProfileFromContext(kubeconfigPath, selectedContext)
 
 	return AWS_PROFILE, *config
 }
@@ -200,8 +222,51 @@ func getAwsProfileFromContext(kubeconfigPath string, contextName string) string 
 	return ""
 }
 
+// getEksClusterName은 실행 환경에 따라 적절한 방법으로 EKS 클러스터 이름을 가져옵니다
 func getEksClusterName(kubeconfig rest.Config) string {
-	// ExecProvider가 없는 경우 처리
+	// 클러스터 내부에서 실행 중인지 확인
+	if os.Getenv("KUBERNETES_SERVICE_HOST") != "" {
+		// 클러스터 내부에서는 다양한 방법으로 클러스터 이름 찾기 시도
+
+		// 방법 1: ConfigMap에서 클러스터 정보 읽기
+		clientset, err := kubernetes.NewForConfig(&kubeconfig)
+		if err == nil {
+			// kube-system 네임스페이스의 aws-auth ConfigMap 확인
+			configMap, err := clientset.CoreV1().ConfigMaps("kube-system").Get(context.Background(), "aws-auth", metav1.GetOptions{})
+			if err == nil && configMap != nil {
+				if clusterName, ok := configMap.Data["cluster-name"]; ok {
+					return clusterName
+				}
+			}
+
+			// 또는 EKS 클러스터의 경우 아래와 같은 ConfigMap에서도 정보를 찾을 수 있음
+			configMap, err = clientset.CoreV1().ConfigMaps("kube-system").Get(context.Background(), "cluster-info", metav1.GetOptions{})
+			if err == nil && configMap != nil {
+				if data, ok := configMap.Data["cluster.name"]; ok {
+					return data
+				}
+			}
+		}
+
+		// 방법 2: 환경 변수에서 가져오기
+		if clusterName := os.Getenv("CLUSTER_NAME"); clusterName != "" {
+			return clusterName
+		}
+
+		// 방법 3: 노드 이름에서 추출 시도
+		// EKS 노드 이름은 보통 ip-xxx-xxx-xxx-xxx.region.compute.internal 형식
+		nodeName := os.Getenv("NODE_NAME")
+		if strings.Contains(nodeName, "compute.internal") {
+			parts := strings.Split(nodeName, ".")
+			if len(parts) > 1 {
+				return "eks-cluster-in-" + parts[1]
+			}
+		}
+
+		return "in-cluster"
+	}
+
+	// 클러스터 외부에서는 ExecProvider에서 클러스터 이름 추출
 	if kubeconfig.ExecProvider == nil || len(kubeconfig.ExecProvider.Args) == 0 {
 		return "unknown-cluster"
 	}
