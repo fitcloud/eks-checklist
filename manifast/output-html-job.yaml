@@ -1,9 +1,3 @@
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: eks-checklist-sa
-  namespace: default
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -46,9 +40,17 @@ spec:
       containers:
         - name: eks-checklist
           image: public.ecr.aws/x5b3c7k0/eks-checklist:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - >
+              /eks-checklist --output html &&
+              echo "Sleeping for 300 seconds..." &&
+              sleep 300
           env:
           - name: AWS_REGION
-            value: ap-northeast-2  # 혹은 클러스터가 있는 정확한 리전
+            value: ap-northeast-2  # 클러스터가 있는 리전
+          - name: CLUSTER_NAME
+            value: eks-checklist  # EKS 클러스터 이름
           volumeMounts:
             - name: output-volume
               mountPath: /output  # 결과를 output 디렉터리에 저장
