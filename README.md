@@ -130,10 +130,9 @@ docker run -v ~/.kube:/root/.kube -v ~/.aws:/root/.aws -v ./output:/output publi
 
 ### EKS Pod
 **조건**: EC2, VPC, EKS 등 AWS 리소스를 조회하기 때문에 IAM Role 권한이 필요합니다.
-여기서는 eksctl을 활용해 IRSA(ServiceAccount)로 Pod에 IAM Role을 주입하여 사용합니다.
+여기서는 **eksctl을 활용해 IRSA(ServiceAccount)로 Pod에 IAM Role을 주입**하여 사용합니다.
 
-**예 (eksctl)**
-기본 namespace에 "eks-checklist-sa" 이름의 ServiceAccount를 만들고 두 개의 권한을 부여합니다
+**예) eksctl**: 기본 namespace에 "eks-checklist-sa" 이름의 ServiceAccount를 만들고 두 개의 권한을 부여합니다
  - AmazonEKSWorkerNodePolicy: EKS Cluster 조회 권한
  - AmazonEC2ReadOnlyAccess: EC2, VPC, Subnet 등 조회 권한
 
