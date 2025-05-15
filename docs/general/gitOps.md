@@ -32,7 +32,7 @@ argocd app list
 
 ## **Mitigation**
 
-케이션 구성을 Git 저장소에 선언적으로 정의합니다.
+애플리케이션 구성을 Git 저장소에 선언적으로 정의합니다.
 
 **구성 요소 example**
 
