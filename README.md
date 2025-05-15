@@ -116,3 +116,52 @@ eks-checklist
 ```bash
 eks-checklist.exe
 ```
+### Docker
+**다음 세 디렉토리를 마운트하여 사용합니다**:
+- `~/.kube`  : kubeconfig file 디렉터리  
+- `~/.aws`   : AWS credentials 디렉터리  
+- `./output` : 옵션에 따른 레포트 결과물이 저장되는 디텍토리  
+
+1. EKS-Checklist Public Image로 docker 실행:
+```bash
+docker run -v ~/.kube:/root/.kube -v ~/.aws:/root/.aws -v ./output:/output public.ecr.aws/x5b3c7k0/eks-checklist:latest
+```
+실행 시 결과물이 바로 나타나며 종료됩니다 --detach 옵션 사용 시 docker logs 명령어를 사용해 결과물을 확인 할 수 있습니다.
+
+### EKS Pod
+**조건**: EC2, VPC, EKS 등 AWS 리소스를 조회하기 때문에 IAM Role 권한이 필요합니다.
+여기서는 **eksctl을 활용해 IRSA(ServiceAccount)로 Pod에 IAM Role을 주입**하여 사용합니다.
+
+**예) eksctl**: 기본 namespace에 "eks-checklist-sa" 이름의 ServiceAccount를 만들고 두 개의 권한을 부여합니다
+ - AmazonEKSWorkerNodePolicy: EKS Cluster 조회 권한
+ - AmazonEC2ReadOnlyAccess: EC2, VPC, Subnet 등 조회 권한
+
+1. IAM ServiceAccount 생성 (IRSA): 
+```bash
+eksctl create iamserviceaccount \
+   --name eks-checklist-sa \
+   --namespace default \
+   --cluster <CLUSTER_NAME> \
+   --attach-policy-arn arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy \
+   --attach-policy-arn arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess \
+   --approve \
+   --override-existing-serviceaccounts
+```
+2. 레포지토리 복사 및 매니페스트 디렉터리로 이동:
+```bash
+git clone https://github.com/fitcloud/eks-checklist.git
+cd eks-checklist/manifest
+```
+3. HTML 보고서 추출 Job 배포:
+```bash
+kubectl apply -f output-html-job.yaml
+```
+4. 보고서 가져오기:
+```bash
+kubectl cp <eks-checklist-job-POD-NAME>:/output/<REPORT_NAME> ./eks-checklist-report.html
+```
+5. 정리 (리소스 삭제):
+```bash
+eksctl delete iamserviceaccount --cluster <CLUSTER_NAME> --name eks-checklist-sa
+kubectl delete -f output-html-job.yaml
+```
