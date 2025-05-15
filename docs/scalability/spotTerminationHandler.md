@@ -6,9 +6,7 @@ Spot 인스턴스는 AWS에서 저비용으로 제공되지만, 언제든지 회
 
 ## Impact
 - 예기치 않은 중단: Spot 인스턴스 종료 시 알림을 받지 못하면 Pod가 강제 종료되어, 서비스 장애나 데이터 손실이 발생할 수 있습니다.
-
 - Graceful Shutdown 실패: 종료 전 처리가 이루어지지 않아 요청이 유실되고, 애플리케이션 무결성이 훼손될 수 있습니다.
-
 - 운영 복잡성 증가: 수동으로 Spot 종료를 감지·대응해야 하므로 운영 부담이 커지고, 자동 확장/복구 프로세스가 비효율적으로 작동합니다.
 
 ## Diagnosis
@@ -17,7 +15,6 @@ Spot 인스턴스는 AWS에서 저비용으로 제공되지만, 언제든지 회
 ```bash
 kubectl get pods -A --no-headers | awk '{print $1, $2}' | grep termination-handler
 ```
-
 
 ## Mitigation
 Spot Termination Handler를 설치하여 Spot 인스턴스 종료 알림을 자동으로 처리하도록 설정하세요.

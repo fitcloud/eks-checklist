@@ -4,10 +4,12 @@
 이 점검은 Kubernetes 컨테이너가 root 사용자(UID 0) 로 실행되고 있는지 확인하는 보안 검사입니다.
 Kubernetes에서 securityContext.runAsUser 필드를 통해 컨테이너를 일반 사용자 권한으로 실행할 수 있으며, 해당 필드가 명시적으로 설정되어 있고 UID가 0이 아닐 때만 안전한 상태로 판단됩니다.
 또한 Windows 컨테이너의 경우, runAsUserName이 "Administrator"로 설정되면 루트 권한과 유사한 위험으로 간주합니다.
+컨테이너가 runAsUser: 0(root) 또는 미지정 상태면 보안 취약. 반드시 일반 사용자 권한(예: UID 1000)으로 실행해야 안전합니다.
 
 ## **Impact**
 - 루트 권한 컨테이너는 취약점 발생 시 호스트 시스템까지 침해 가능
 - Pod 간 보안 격리 실패 가능성 증가
+- 보안사고 확산 가능성 증가
 
 ## **Diagnosis**
 아래 명령어를 사용하면 클러스터 내의 컨테이너 중에서 다음 조건에 해당하는 경우를 탐지할 수 있습니다.
@@ -18,37 +20,9 @@ Kubernetes에서 securityContext.runAsUser 필드를 통해 컨테이너를 일�
 **command example**
 ```bash
 kubectl get pods -A -o json | jq -r '
-  .items[]
-  | select(
-      (.metadata.name | test("aws-node|coredns|eks-pod-identity-agent|kube-proxy") | not)
-    )
-  | . as $pod
-  | .spec.containers[]
-  | {
-      namespace: $pod.metadata.namespace,
-      pod: $pod.metadata.name,
-      container: .name,
-      hasSecurityContext: (has("securityContext")),
-      runAsUser: (
-        (try .securityContext.runAsUser catch null)
-      ),
-      runAsUserName: (
-        (try .securityContext.windowsOptions.runAsUserName catch null)
-      )
-    }
-  | select(
-      (.runAsUser == 0)
-      or (.hasSecurityContext | not)
-      or (.runAsUser == null)
-      or (.runAsUserName == "Administrator")
-    )
-  | if .runAsUser == 0 then
-      "Namespace: \(.namespace) | Pod: \(.pod) | Container: \(.container) (명시적 root 계정 실행)"
-    elif .runAsUserName == "Administrator" then
-      "Namespace: \(.namespace) | Pod: \(.pod) | Container: \(.container) (Windows Administrator 실행)"
-    else
-      "Namespace: \(.namespace) | Pod: \(.pod) | Container: \(.container) (RunAsUser 미설정, root로 실행 가능성 존재)"
-    end
+.items[] | . as $p | $p.spec.containers[]
+| select((.securityContext.runAsUser // 0) == 0)
+| "NS:\($p.metadata.namespace) Pod:\($p.metadata.name) Ctr:\(.name) (root 실행)"
 '
 ```
 - 이 명령은 보안 상 취약한 컨테이너만 필터링하여 표시하므로, 출력이 없다면 모든 컨테이너가 적절한 사용자 권한으로 실행되고 있는 것입니다.
@@ -68,19 +42,10 @@ Namespace: winspace | Pod: winpod | Container: winapp (Windows Administrator 실
 컨테이너에 securityContext.runAsUser를 명시하고 UID 0을 피하세요. 루트 권한을 회피하는 것은 기본 보안 원칙 중 하나입니다.
 
 **비루트 사용자로 실행 설정 example**
-```bash
-apiVersion: v1
-kind: Pod
-metadata:
-  name: busybox-test
-spec:
-  containers:
-  - name: busybox
-    image: busybox
-    command: ["sh", "-c", "sleep 3600"]
-    securityContext:
-      runAsUser: 1000
-      allowPrivilegeEscalation: false
+```yaml
+securityContext:
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
 ```
 참고 링크
 [Pod-security](https://kubernetes.io/ko/docs/concepts/security/pod-security-standards/)

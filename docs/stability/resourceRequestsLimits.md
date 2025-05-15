@@ -5,7 +5,6 @@
 
 ## Impact
 - 리소스 부족: 메모리나 CPU 부족 시 애플리케이션 성능 저하 또는 OOM(Out of Memory) 발생 가능
-
 - 리소스 과잉: 불필요한 리소스 낭비로 비용 상승
 
 ## Diagnosis

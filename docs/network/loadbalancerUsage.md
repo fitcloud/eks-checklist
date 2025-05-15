@@ -31,3 +31,5 @@ aws elbv2 create-load-balancer --name my-alb --subnets subnet-12345678 --securit
 ```bash
 aws elbv2 create-load-balancer --name my-nlb --subnets subnet-12345678 --security-groups sg-12345678 --scheme internet-facing --load-balancer-type network
 ```
+
+[AWS ALB NLB 사용 사례](https://aws.amazon.com/ko/compare/the-difference-between-the-difference-between-application-network-and-gateway-load-balancing/)

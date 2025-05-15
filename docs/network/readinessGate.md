@@ -17,7 +17,7 @@ next} {if ($4 ~ /elbv2.k8s.aws\/pod-readiness-gate-inject=enabled/) print $1, "E
 ## Mitigation
 PodReadinessGate를 적용하세요
 
-example
+**example**
 ```bash
 $ kubectl create namespace readiness
 namespace/readiness created

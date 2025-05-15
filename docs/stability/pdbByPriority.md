@@ -34,3 +34,5 @@ spec:
     matchLabels:
       app: critical-app
 ```
+
+[Kubenetes Pods distruption](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)

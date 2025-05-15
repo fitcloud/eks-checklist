@@ -5,14 +5,12 @@ Kubernetes 1.16부터 도입된 EndpointSlices는 기존의 Endpoints 리소스�
 
 ## **Impact**
 - 효율성 부족: Endpoint는 대규모 클러스터에서 성능 문제를 일으킬 수 있음
-
 - 확장성 한계: 많은 Pod가 있을 경우 Endpoint 방식으로는 관리가 어려움
 
 ## **Diagnosis**
 클러스터에서 EndpointSlices가 활성화되어 있는지 확인하고, Endpoint 대신 EndpointSlices를 사용하도록 설정합니다.
 
-EndpointSlices 활성화 확인:
-
+EndpointSlices 활성화 확인
 
 ```bash
 kubectl get endpointslices -A

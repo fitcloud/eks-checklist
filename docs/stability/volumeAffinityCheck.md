@@ -5,7 +5,6 @@ Volume Affinity는 Pod가 특정 **Persistent Volume (PV)**과 연결될 수 있
 
 ## Impact
 - 성능 저하: 잘못된 노드에서 PV가 사용되면 성능 이슈나 장애가 발생할 수 있음
-
 - 리소스 충돌: 여러 Pod가 동일한 리소스를 사용하게 되어 충돌이 발생할 수 있음
 
 ## Diagnosis

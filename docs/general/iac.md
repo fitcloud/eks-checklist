@@ -7,19 +7,17 @@ Terraform, AWS CDK 등의 도구는 이러한 IaC 구현에 널리 사용됩니�
 
 ## **Impact**
 - 재현 불가 문제: 수동 설정 시 동일한 인프라 환경을 재현하기 어려움
-
 - 협업 및 변경 이력 부족: 변경 사항이 기록되지 않아 추적 및 협업 어려움
-
 - 자동화 파이프라인 부재: CI/CD 또는 GitOps 파이프라인에 통합 불가
 
 ## **Diagnosis**
-EKS 클러스터 및 리소스가 IaC 도구를 통해 배포되었는지 다음 항목을 확인합니다:
+EKS 클러스터 및 리소스가 IaC 도구를 통해 배포되었는지 다음 항목을 확인합니다
 
 Git 리포지토리에 Terraform / CDK 등의 IaC 코드 존재 여부
 
 AWS 리소스 태그에 IaC 관련 태그(managed-by: terraform 등) 여부
 
-명령어 예시
+**example**
 
 ```bash
 # Git 레포에서 Terraform 코드 유무 확인
@@ -33,17 +31,15 @@ find . -name "*.tf"
 
 EKS 클러스터: Terraform aws_eks_cluster 리소스로 정의
 
-Before
+**Before**
 
 수동으로 AWS 콘솔에서 클러스터 생성 및 리소스 추가
 
-After
+**After**
 
 Terraform 또는 CDK를 통해 클러스터 구성 및 배포
 
 Git 리포지토리에 모든 인프라 코드 관리
 
-참고 링크
-Terraform AWS EKS 공식 문서 < 넣기 
-
-AWS CDK for EKS < 넣기
+[Terraform AWS EKS](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster)
+[AWS CDK for EKS](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_eks-readme.html)

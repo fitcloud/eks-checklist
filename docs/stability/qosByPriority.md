@@ -6,7 +6,6 @@ Kubernetes에서는 Guaranteed, Burstable, BestEffort 3가지 QoS 클래스를 �
 
 ## Impact
 - 리소스 우선순위: 중요한 애플리케이션이 리소스 부족 상황에서 우선적으로 자원을 할당받지 않으면 성능 저하나 장애가 발생할 수 있음
-
 - 자원 낭비: 과도한 리소스를 할당하면 비효율적인 비용 사용이 발생할 수 있음
 
 ## Diagnosis
@@ -48,3 +47,4 @@ spec:
               cpu: "1"
 ```
 
+[Kubenetes Pods Quality of Service](https://kubernetes.io/docs/concepts/workloads/pods/pod-qos/)

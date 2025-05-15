@@ -18,7 +18,7 @@ kubectl get deployments.apps -A -o custom-columns="NAMESPACE:.metadata.namespace
 ## Mitigation
 AWS Load Balancer Controller를 설치하세요
 
-e**xample**
+**example**
 ```bash 
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   -n kube-system \

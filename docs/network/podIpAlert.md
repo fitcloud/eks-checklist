@@ -5,12 +5,10 @@ Kubernetes 클러스터에서 Pod에 IP를 부여할 수 없을 때는 네트워
 
 ## **Impact**
 - Pod 스케줄링 실패: IP 할당 부족으로 새로운 Pod가 스케줄되지 않거나 실행되지 않을 수 있음
-
 - 애플리케이션 장애: 네트워크 리소스 부족으로 애플리케이션의 성능 저하 또는 장애가 발생할 수 있음
 
 ## **Diagnosis**
 Pod IP 부족 상태를 모니터링하려면, Kubernetes 이벤트를 통해 IP 할당 상태를 확인합니다.
-
 
 ```bash
 kubectl get events --sort-by='.lastTimestamp' | grep 'failed to allocate a network IP'
@@ -21,7 +19,7 @@ kubectl get events --sort-by='.lastTimestamp' | grep 'failed to allocate a netwo
 
 vpc-cni 배포 시 **`cni-metrics-helper`** 플러그인을 활성화 하여 추가 메트릭을 노출할 수 있습니다
 
-플러그인의 경우 배포 시  매계변수`cniMetricsHelper.enabled=true` 를 활성화 함으로 사용가능합니다
+플러그인의 경우 배포 시  매계변수`cniMetricsHelper.enabled=true` 를 활성화 함으로 사용 가능합니다
 
 추가 메트릭 중  `totalIPAddresses` 항목을 통해 Pod의 할당된 IP 개수을 확인 가능합니다
 

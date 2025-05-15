@@ -5,7 +5,6 @@ Amazon EKS 클러스터에서 데이터 플레인(Data Plane) 노드를 여러 �
 
 ## Impact
 - AZ 장애 시 서비스 중단 위험: 모든 노드가 하나의 가용 영역에 있을 경우, 해당 AZ 장애 시 전체 클러스터 운영에 문제가 생길 수 있습니다.
-
 - 자동 복구 제한: EKS의 자동 복구 기능은 여러 AZ에 걸쳐 노드를 구성했을 때 더 효과적으로 동작합니다.
 
 ## Diagnosis
@@ -17,7 +16,7 @@ kubectl describe node | grep "topology.kubernetes.io/zone"
 
 ## Mitigation
 다수의 가용 영역에 데이터 플레인 노드를 배포하세요
-example
+**example**
 
 nodegroup 사용 시
 ```bash

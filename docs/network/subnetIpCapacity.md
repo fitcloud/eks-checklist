@@ -1,21 +1,23 @@
 # NET-001 VPC 서브넷에 충분한 IP 대역대 확보
 
 ## Meaning
-VPC(Virtual Private Cloud) 서브넷에 충분한 IP 대역이 없을 경우, 여러 가지 문제가 발생할 수 있습니다. 이러한 문제들은 VPC 내의 리소스들이 IP 주소를 할당받을 수 없게 되어, 네트워크 통신에 문제가 생기거나 새로운 리소스를 배포할 수 없게 되는 상황을 초래할 수 있습니다.
+서브넷에 사용 가능한 IP가 부족하면, Pod이나 노드가 생성되지 않는 문제가 발생할 수 있습니다.
 
 ## Impact
-- iP 주소 부족: 문제: VPC 내의 서브넷에 할당된 IP 주소 범위가 적다면면, 서브넷 내의 인스턴스나 기타 리소스가 IP 주소를 할당받지 못해 새로운 리소스를 생성하거나 통신이 불가능해질 수 있습니다.
+- Pod Pending 상태 지속
+- 노드 오토스케일 실패
+- 전체 서비스 확장 불가
 
 ## Diagnosis
 EKS 클러스터에서 사용할 수 있는 Subnet과 사용가능한 IP 갯수를 확인하세요
 
 ```bash
-aws eks describe-cluster --name <CLUSTER_NAME> --query "cluster.resourcesVpcConfig.subnetIds" --output text | tr '\t' '\n' | xargs aws ec2 describe-subnets --subnet-ids | jq -r '.Subnets[] | [.SubnetId, .CidrBlock, .AvailableIpAddressCount] | @tsv' | column -t -s $'\t' -N "Name, CIDR Block, Available IPs"
+aws ec2 describe-subnets --subnet-ids $(aws eks describe-cluster --name <CLUSTER_NAME> --query "cluster.resourcesVpcConfig.subnetIds" --output text) --query 'Subnets[*].{ID:SubnetId, CIDR:CidrBlock, AvailableIPs:AvailableIpAddressCount}' --output table
 ```
 
 ## Mitigation
-사용가능한 IP 대역을 추가하세요
-CIDR을 추가할 때, 이미 다른 곳에서 사용 중이지 않은 대역을 선택해 주세요 (하기 링크 참조)
+IP 부족 시, 서브넷을 추가하거나 VPC에 새로운 CIDR 블록을 추가하세요.
 
 [EKS IP 최적화](https://docs.aws.amazon.com/eks/latest/best-practices/ip-opt.html)
+[AWS VPC](https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/vpc-ip-addressing.html)
 [Multiple CIDR ranges 사용](https://repost.aws/knowledge-center/eks-multiple-cidr-ranges)

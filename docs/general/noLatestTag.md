@@ -7,9 +7,7 @@ latest는 실제 어떤 버전의 이미지인지 명확하지 않으며, 시간
 
 ## **Impact**
 - 불안정한 배포: ```latest``` 태그가 변경될 경우, 동일한 배포라도 실행 환경이 달라질 수 있습니다.
-
 - 디버깅 어려움: 문제가 발생했을 때 정확한 이미지 버전을 알 수 없어 원인 분석이 어려워집니다.
-
 - 롤백 어려움: 이전 상태로 쉽게 되돌릴 수 없어 운영 안정성 저하 가능성.
 
 ## **Diagnosis**
@@ -23,14 +21,15 @@ kubectl get pods -A -o custom-columns=NAMESPACE:.metadata.namespace,NAME:.metada
 ```
 ## **Mitigation**
 컨테이너 이미지에서 ```latest``` 태그 대신 명시적인 버전 태그를 사용하도록 합니다.
-예를 들어, 다음과 같이 ```latest```를 명시적 버전으로 변경합니다.
 
-Before:
+**example**
+
+**Before**
 ```yaml
 image: nginx:latest
 ```
 
-After:
+**After**
 ```yaml
 image: nginx:1.25.2
 ```

@@ -14,13 +14,11 @@ EKS에서는 AWS KMS를 연동하여 etcd at-rest encryption을 설정하거나,
     
 ## Impact
 - 기본 설정 시 평문 저장: 민감 정보가 노출될 가능성 존재
-
 - 컴플라이언스 미준수: PCI-DSS, GDPR 등에서는 저장 시 암호화를 요구
 
 ## Diagnosis
 EKS 클러스터가 at-rest encryption을 사용하고 있는지 확인
-EKS는 클러스터 생성 시 encryptionConfig를 통해 KMS 키와 연동된 암호화를 설정할 수 있습니다. 다음 명령어로 확인:
-
+EKS는 클러스터 생성 시 encryptionConfig를 통해 KMS 키와 연동된 암호화를 설정할 수 있습니다. 다음 명령어로 확인
 
 ```bash
 # 클러스터에 설정된 encryption 정보 확인
@@ -81,13 +79,13 @@ spec:
         key: my-app/db-password
 ```
 
-Before
+**Before**
 
 Secret은 Base64 인코딩 상태로 ETCD에 저장 → 위험
 
 키 관리, 로테이션 불가
 
-After
+**After**
 
 EKS 수준에서 KMS 암호화 적용
 

@@ -7,7 +7,6 @@ EKS에서 Pod가 사용하는 영구 저장소는 보통 **EBS 볼륨을 통한 
 
 ## Impact
 - 데이터 유출 시 위험: 볼륨 탈취 또는 Snapshot 복제를 통한 평문 데이터 유출 가능성
-
 - 복구 시 데이터 노출: Snapshot 백업/복구 시에도 평문으로 노출 가능
 
 ## Diagnosis
@@ -26,7 +25,7 @@ aws ec2 describe-volumes --volume-ids vol-xxxxxxxx | jq '.Volumes[].Encrypted'
 Encrypted: true 가 나와야 암호화된 상태입니다.
 ```
 
-또한, 사용중인 스토리지 클래스에 다음과 같은 설정이 있는지 확인할 수 있습니다:
+사용중인 스토리지 클래스에 다음과 같은 설정이 있는지 확인할 수 있습니다
 
 ```yaml
 parameters:
@@ -67,12 +66,14 @@ PVC 재생성 또는 볼륨 마이그레이션
 
 기존 PVC 제거 후 교체
 
-Before
+**Before**
 
 StorageClass에 encrypted 설정 없음 → 평문 EBS 사용
 
-After
+**After**
 
 모든 PVC는 암호화된 EBS를 기반으로 생성
 
 KMS 키 관리로 보안 수준 향상
+
+[AWS EKS PV 암호화](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/data-encryption-and-secrets-management.html)

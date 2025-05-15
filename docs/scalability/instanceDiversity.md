@@ -13,8 +13,9 @@
 ```bash
 kubectl get nodes -o custom-columns="NODE_NAME:.metadata.name,INSTANCE_TYPE:.metadata.labels.beta\.kubernetes\.io/instance-type"
 ```
+
+**출력 example**
 ```bash
-#출력 예시
 NODE_NAME                                         INSTANCE_TYPE
 ip-10-20-12-101.ap-northeast-2.compute.internal   t3.medium
 ip-10-20-13-65.ap-northeast-2.compute.internal    t3.medium

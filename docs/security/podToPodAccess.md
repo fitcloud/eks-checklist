@@ -8,9 +8,7 @@ Pod-to-Pod 접근 제어는 이러한 무분별한 접근을 방지하고, 각 �
 
 ## Impact
 - 무제한 통신 허용: 모든 Pod가 모든 Pod에 접근할 수 있어 보안 위협 발생 시 피해가 확산될 수 있음
-
 - 서비스 간 데이터 노출: 인증/인가가 구현되지 않은 서비스가 노출될 수 있음
-
 - 컴플라이언스 미준수: 보안 요구사항이 있는 환경에서 감사에 실패할 가능성 존재
 
 ## Diagnosis
@@ -33,7 +31,7 @@ kubectl get networkpolicy --all-namespaces
 kubectl describe networkpolicy -n <namespace> <policy-name>
 ```
 
-또한 다음과 같은 기본 차단 정책이 적용되었는지 확인:
+다음과 같은 기본 차단 정책이 적용되었는지 확인
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -48,7 +46,7 @@ spec:
 ```
 
 ## Mitigation
-Pod 간 통신 제어를 위해 다음과 같은 작업을 수행해야 합니다:
+Pod 간 통신 제어를 위해 다음과 같은 작업을 수행해야 합니다
 
 CNI 플러그인 확인
 

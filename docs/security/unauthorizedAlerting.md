@@ -7,9 +7,7 @@ AWS에서는 CloudTrail, CloudWatch, Security Hub, SNS 등을 연계하여, 비�
 
 ## Impact
 - 사전 탐지 실패: 비정상 행위를 사전에 탐지하지 못하면 침해 사고로 이어질 수 있음
-
 - 알림 부재: 이상 징후를 포착했더라도 알림 시스템이 없으면 대응 불가
-
 - 감사 추적 불가: 장기적으로 어떤 위험이 있었는지 로그 기반 분석 불가능
 
 ## Diagnosis
@@ -36,7 +34,6 @@ aws cloudwatch describe-alarms
 aws sns list-subscriptions
 ```
 
-
 ## Mitigation
 아래와 같은 방식으로 비정상 접근 탐지 및 알림 체계를 구성합니다.
 
@@ -56,11 +53,11 @@ SNS 및 ChatOps 연동
 
 알람 발생 시 실시간 대응 가능
 
-Before
+**Before**
 
 이상행위 탐지 시 수동 확인 필요
 
-After
+**After**
 
 CloudTrail + CloudWatch Logs + SNS로 실시간 탐지 및 알림 구성
 
