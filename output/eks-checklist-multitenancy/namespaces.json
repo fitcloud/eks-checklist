@@ -1,0 +1,182 @@
+[
+  {
+    "metadata": {
+      "name": "default",
+      "uid": "c44642bb-5141-4cbb-ad6f-83310a938cfc",
+      "resourceVersion": "42",
+      "creationTimestamp": "2025-03-18T04:57:41Z",
+      "labels": {
+        "kubernetes.io/metadata.name": "default"
+      },
+      "managedFields": [
+        {
+          "manager": "kube-apiserver",
+          "operation": "Update",
+          "apiVersion": "v1",
+          "time": "2025-03-18T04:57:41Z",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:metadata": {
+              "f:labels": {
+                ".": {},
+                "f:kubernetes.io/metadata.name": {}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "spec": {
+      "finalizers": [
+        "kubernetes"
+      ]
+    },
+    "status": {
+      "phase": "Active"
+    }
+  },
+  {
+    "metadata": {
+      "name": "kube-node-lease",
+      "uid": "31469744-2614-4e0c-87a0-86efeb632d02",
+      "resourceVersion": "38",
+      "creationTimestamp": "2025-03-18T04:57:41Z",
+      "labels": {
+        "kubernetes.io/metadata.name": "kube-node-lease"
+      },
+      "managedFields": [
+        {
+          "manager": "kube-apiserver",
+          "operation": "Update",
+          "apiVersion": "v1",
+          "time": "2025-03-18T04:57:41Z",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:metadata": {
+              "f:labels": {
+                ".": {},
+                "f:kubernetes.io/metadata.name": {}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "spec": {
+      "finalizers": [
+        "kubernetes"
+      ]
+    },
+    "status": {
+      "phase": "Active"
+    }
+  },
+  {
+    "metadata": {
+      "name": "kube-public",
+      "uid": "016113fc-204d-4e19-808b-bbf8ba203411",
+      "resourceVersion": "27",
+      "creationTimestamp": "2025-03-18T04:57:41Z",
+      "labels": {
+        "kubernetes.io/metadata.name": "kube-public"
+      },
+      "managedFields": [
+        {
+          "manager": "kube-apiserver",
+          "operation": "Update",
+          "apiVersion": "v1",
+          "time": "2025-03-18T04:57:41Z",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:metadata": {
+              "f:labels": {
+                ".": {},
+                "f:kubernetes.io/metadata.name": {}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "spec": {
+      "finalizers": [
+        "kubernetes"
+      ]
+    },
+    "status": {
+      "phase": "Active"
+    }
+  },
+  {
+    "metadata": {
+      "name": "kube-system",
+      "uid": "4b361b39-aaec-47d2-ab38-bee4abc914af",
+      "resourceVersion": "5",
+      "creationTimestamp": "2025-03-18T04:57:41Z",
+      "labels": {
+        "kubernetes.io/metadata.name": "kube-system"
+      },
+      "managedFields": [
+        {
+          "manager": "kube-apiserver",
+          "operation": "Update",
+          "apiVersion": "v1",
+          "time": "2025-03-18T04:57:41Z",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:metadata": {
+              "f:labels": {
+                ".": {},
+                "f:kubernetes.io/metadata.name": {}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "spec": {
+      "finalizers": [
+        "kubernetes"
+      ]
+    },
+    "status": {
+      "phase": "Active"
+    }
+  },
+  {
+    "metadata": {
+      "name": "test",
+      "uid": "a384c3c0-2166-4068-8c98-0a61f2dff150",
+      "resourceVersion": "1615296",
+      "creationTimestamp": "2025-03-25T06:53:36Z",
+      "labels": {
+        "kubernetes.io/metadata.name": "test"
+      },
+      "managedFields": [
+        {
+          "manager": "kubectl-create",
+          "operation": "Update",
+          "apiVersion": "v1",
+          "time": "2025-03-25T06:53:36Z",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:metadata": {
+              "f:labels": {
+                ".": {},
+                "f:kubernetes.io/metadata.name": {}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "spec": {
+      "finalizers": [
+        "kubernetes"
+      ]
+    },
+    "status": {
+      "phase": "Active"
+    }
+  }
+]

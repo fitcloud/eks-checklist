@@ -107,7 +107,7 @@ func AddResultForHTML(r CheckResult, category string) {
 func SaveHTMLReport() (string, error) {
 	// 파일 생성
 	now := time.Now()
-	filename := "eks-checklist-report-" + now.Format("20060102-150405") + ".html"
+	filename := "output/" + "eks-checklist-report-" + now.Format("20060102-150405") + ".html"
 	file, err := os.Create(filename)
 	if err != nil {
 		return "", fmt.Errorf("파일 생성 오류: %v", err)

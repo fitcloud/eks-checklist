@@ -24,7 +24,7 @@ func CheckResourceAllocation(client kubernetes.Interface, cfg aws.Config, eksClu
 		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/resourceRequestsLimits",
 	}
 
-	baseDir := filepath.Join(".", "result", eksCluster+"-resource-allocation")
+	baseDir := filepath.Join(".", "output", eksCluster+"-resource-allocation")
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
 		return result

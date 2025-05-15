@@ -23,7 +23,7 @@ func CheckAccessControl(client kubernetes.Interface, cfg aws.Config, eksCluster 
 	}
 
 	// 👉 실행 디렉토리 기준 ./result 하위 경로 생성
-	baseDir := filepath.Join(".", "result", eksCluster+"-access-control")
+	baseDir := filepath.Join(".", "output", eksCluster+"-access-control")
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		result.Passed = false
 		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()

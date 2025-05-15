@@ -38,7 +38,7 @@ func CheckVolumeAffinity(client kubernetes.Interface, cfg aws.Config, eksCluster
 		return result
 	}
 
-	baseDir := filepath.Join(".", "result", eksCluster+"-volume-affinity")
+	baseDir := filepath.Join(".", "output", eksCluster+"-volume-affinity")
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
 		return result

@@ -23,7 +23,7 @@ func CheckImageStaticAnalysis(client kubernetes.Interface, cfg aws.Config, eksCl
 	}
 
 	// 결과 디렉토리 생성
-	baseDir := filepath.Join(".", "result", eksCluster+"-image-analysis")
+	baseDir := filepath.Join(".", "output", eksCluster+"-image-analysis")
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
 		return result

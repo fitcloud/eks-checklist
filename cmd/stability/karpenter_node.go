@@ -29,7 +29,7 @@ func CheckKarpenterNode(karpenter_installed common.CheckResult, client dynamic.I
 	// NodeClaim GVR (Karpenter v0.37.x 기준)
 	nodeClaimGVR := schema.GroupVersionResource{
 		Group:    "karpenter.k8s.aws",
-		Version:  "v1beta1",
+		Version:  "v1",
 		Resource: "nodeclaims",
 	}
 

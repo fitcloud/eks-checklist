@@ -1,0 +1,26 @@
+[
+  {
+    "namespace": "default",
+    "pvcName": "nginx-pvc",
+    "pvName": "pvc-709d03af-9d09-4b5e-b60d-94c2e894fd51",
+    "nodeAffinity": {
+      "required": {
+        "nodeSelectorTerms": [
+          {
+            "matchExpressions": [
+              {
+                "key": "topology.kubernetes.io/zone",
+                "operator": "In",
+                "values": [
+                  "ap-northeast-2c"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "podName": "nginx-59856579bf-pbp48",
+    "podNode": "ip-10-20-2-40.ap-northeast-2.compute.internal"
+  }
+]

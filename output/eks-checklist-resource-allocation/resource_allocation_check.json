@@ -1,0 +1,16 @@
+[
+  {
+    "namespace": "default",
+    "pod": "apache-singleton",
+    "container": "apache",
+    "hasRequest": false,
+    "hasLimit": false
+  },
+  {
+    "namespace": "default",
+    "pod": "nginx-59856579bf-pbp48",
+    "container": "nginx",
+    "hasRequest": false,
+    "hasLimit": false
+  }
+]

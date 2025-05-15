@@ -22,7 +22,7 @@ func CheckLoadBalancerUsage(client kubernetes.Interface, cfg aws.Config, eksClus
 		Runbook:    "https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/",
 	}
 
-	baseDir := filepath.Join(".", "result", eksCluster+"-loadbalancer-usage")
+	baseDir := filepath.Join(".", "output", eksCluster+"-loadbalancer-usage")
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
 		return result

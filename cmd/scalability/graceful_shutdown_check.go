@@ -22,7 +22,7 @@ func CheckGracefulShutdown(client kubernetes.Interface, cfg aws.Config, eksClust
 		Runbook:    "https://fitcloud.github.io/eks-checklist/scalability/gracefulShutdown",
 	}
 
-	baseDir := filepath.Join(".", "result", eksCluster+"-graceful-shutdown")
+	baseDir := filepath.Join(".", "output", eksCluster+"-graceful-shutdown")
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
 		return result

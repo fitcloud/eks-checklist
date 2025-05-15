@@ -22,7 +22,7 @@ func CheckImportantPodProtection(client kubernetes.Interface, cfg aws.Config, ek
 		Runbook:    "https://fitcloud.github.io/eks-checklist/scalability/podEvictionProtection",
 	}
 
-	baseDir := filepath.Join(".", "result", eksCluster+"-important-pod-protection")
+	baseDir := filepath.Join(".", "output", eksCluster+"-important-pod-protection")
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		result.FailureMsg = "결과 디렉토리 생성 실패: " + err.Error()
 		return result

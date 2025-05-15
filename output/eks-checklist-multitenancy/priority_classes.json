@@ -1,0 +1,54 @@
+[
+  {
+    "metadata": {
+      "name": "system-cluster-critical",
+      "uid": "5e5121af-3cee-4f11-8f03-da64b5031f45",
+      "resourceVersion": "68",
+      "generation": 1,
+      "creationTimestamp": "2025-03-18T04:57:42Z",
+      "managedFields": [
+        {
+          "manager": "kube-apiserver",
+          "operation": "Update",
+          "apiVersion": "scheduling.k8s.io/v1",
+          "time": "2025-03-18T04:57:42Z",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:description": {},
+            "f:preemptionPolicy": {},
+            "f:value": {}
+          }
+        }
+      ]
+    },
+    "value": 2000000000,
+    "description": "Used for system critical pods that must run in the cluster, but can be moved to another node if necessary.",
+    "preemptionPolicy": "PreemptLowerPriority"
+  },
+  {
+    "metadata": {
+      "name": "system-node-critical",
+      "uid": "dc0daa9e-83f5-4be0-afee-c57f21071757",
+      "resourceVersion": "67",
+      "generation": 1,
+      "creationTimestamp": "2025-03-18T04:57:42Z",
+      "managedFields": [
+        {
+          "manager": "kube-apiserver",
+          "operation": "Update",
+          "apiVersion": "scheduling.k8s.io/v1",
+          "time": "2025-03-18T04:57:42Z",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:description": {},
+            "f:preemptionPolicy": {},
+            "f:value": {}
+          }
+        }
+      ]
+    },
+    "value": 2000001000,
+    "description": "Used for system critical pods that must not be moved from their current node.",
+    "preemptionPolicy": "PreemptLowerPriority"
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "namespace": "default",
+    "pod": "apache-singleton",
+    "qosClass": "BestEffort"
+  },
+  {
+    "namespace": "default",
+    "pod": "nginx-59856579bf-pbp48",
+    "qosClass": "BestEffort"
+  }
+]
