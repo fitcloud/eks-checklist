@@ -10,7 +10,7 @@ IRSA(IAM Roles for Service Accounts) 또는 EKS Pod Identity는 각 서비스 �
   - EKS Pod Identity: EKS에서 보다 간단하게 IAM Role을 Pod에 매핑할 수 있는 방식 (EKS 전용 기능, 향후 IRSA 대체 가능)
 
 ## **Impact**
-IRSA나 EKS Pod Identity를 사용하지 않는 경우 다음과 같은 문제가 발생할 수 있습니다:
+IRSA나 EKS Pod Identity를 사용하지 않는 경우 다음과 같은 문제가 발생할 수 있습니다
 
 - 노드 Role을 공유하여 불필요하게 많은 권한이 Pod에 전달됨
 - AWS 리소스에 대한 권한 오남용 위험 증가

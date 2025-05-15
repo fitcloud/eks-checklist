@@ -10,7 +10,7 @@ Spot 인스턴스는 AWS에서 저비용으로 제공되지만, 언제든지 회
 - 운영 복잡성 증가: 수동으로 Spot 종료를 감지·대응해야 하므로 운영 부담이 커지고, 자동 확장/복구 프로세스가 비효율적으로 작동합니다.
 
 ## Diagnosis
-클러스터 전체 네임스페이스에서 “termination-handler” 문자열을 포함한 Pod가 있는지 확인:
+클러스터 전체 네임스페이스에서 “termination-handler” 문자열을 포함한 Pod가 있는지 확인
 
 ```bash
 kubectl get pods -A --no-headers | awk '{print $1, $2}' | grep termination-handler

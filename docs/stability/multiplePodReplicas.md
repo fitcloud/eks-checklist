@@ -9,14 +9,14 @@ ReplicaSet은 항상 지정된 수의 Pod가 실행되도록 보장하며, 최�
 - 장애 복구 및 확장성 저하
 
 ## Diagnosis
-다음 명령어로 복제본이 1개 이하인 Deployment를 확인하세요:
+다음 명령어로 복제본이 1개 이하인 Deployment를 확인하세요
 
 ```bash
 kubectl get deployments -A -o json | jq -r '.items[] | select(.spec.replicas <= 1) | "\(.metadata.namespace) | \(.metadata.name) | \(.spec.replicas)"'
 ```
 
 ## Mitigation
-Deployment의 .spec.replicas 값을 2 이상으로 수정하세요:
+Deployment의 .spec.replicas 값을 2 이상으로 수정하세요
 
 ```yaml
 spec:

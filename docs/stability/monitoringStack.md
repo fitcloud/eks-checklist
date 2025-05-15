@@ -7,7 +7,7 @@ kube-prometheus-stack는 Prometheus와 Grafana를 포함한 모니터링 솔루�
 - 모니터링 부재: 시스템의 성능 문제나 장애를 빠르게 파악할 수 없으며, 다운타임이 증가할 수 있음
 
 ## Diagnosis
-kube-prometheus-stack가 설치되어 있는지 확인:
+kube-prometheus-stack가 설치되어 있는지 확인
 
 ```bash
 kubectl get pods -n monitoring -l release=kube-prometheus-stack

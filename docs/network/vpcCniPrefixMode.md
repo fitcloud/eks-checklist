@@ -16,7 +16,7 @@ kubectl get ds aws-node -n kube-system -o jsonpath='{.spec.template.spec.contain
 출력 값이 "true"이면 Prefix 모드가 활성화된 것입니다.
 
 ## Mitigation
-관리형 애드온 및 자체관리형 애드온을 설치하세요요
+관리형 애드온 및 자체관리형 애드온을 설치하세요
 ```bash
 kubectl set env ds aws-node -n kube-system ENABLE_PREFIX_DELEGATION=true
 ```

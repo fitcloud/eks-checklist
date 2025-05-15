@@ -1,7 +1,7 @@
 # SEC-011 Secret 객체 암호화
 
 ## Meaning
-Kubernetes에서 Secret 객체는 주로 다음과 같은 민감 정보를 저장합니다:
+Kubernetes에서 Secret 객체는 주로 다음과 같은 민감 정보를 저장합니다
 
 데이터베이스 접속 정보
 
@@ -54,7 +54,7 @@ kubectl get pods -A | grep csi-secrets-store
 EKS 클러스터 생성 시 KMS 연동
 
 External Secrets 연동
-Kubernetes Secret 객체를 AWS Secrets Manager와 연동:
+Kubernetes Secret 객체를 AWS Secrets Manager와 연동
 
 external-secrets 또는 secrets-store-csi-driver 사용
 

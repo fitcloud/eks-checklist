@@ -43,7 +43,7 @@ CloudTrail 설정
 CloudWatch 알람 설정
 로그인 실패, EC2 권한 변경, EKS 관련 설정 변경 감지
 
-필터 예시 (로그인 실패):
+**필터 example (로그인 실패)**
 
 json
 { $.errorMessage = "*Failed*" }

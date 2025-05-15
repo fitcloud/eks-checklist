@@ -8,7 +8,7 @@
 - 복구 지연 및 운영 리스크 증가
 
 ## Diagnosis
-중요 Pod가 실행 중인 노드에 삭제 방지용 label이 설정돼 있는지 확인:
+중요 Pod가 실행 중인 노드에 삭제 방지용 label이 설정돼 있는지 확인
 
 ```bash
 kubectl get nodes --show-labels | grep do-not-disrupt
