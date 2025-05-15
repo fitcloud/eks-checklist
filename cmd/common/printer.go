@@ -5,13 +5,6 @@ import (
 	"sort"
 )
 
-const (
-	Red    = "\033[31m"
-	Green  = "\033[32m"
-	Yellow = "\033[33m"
-	Reset  = "\033[0m"
-)
-
 var (
 	PassedCount     int
 	FailedCount     int
@@ -44,7 +37,7 @@ func PrintCategoryHeader(category string) {
 	SetCurrentCategory(category)
 
 	// 정렬 모드이거나 HTML/PDF 출력 모드인 경우 헤더를 출력하지 않음
-	if SortByStatus || OutputFormat == "html" || OutputFormat == "pdf" {
+	if SortByStatus || OutputFormat == OutputFormatHTML || OutputFormat == OutputFormatPDF {
 		return
 	}
 
@@ -66,7 +59,7 @@ func PrintResult(r CheckResult) {
 	}
 
 	// HTML 출력을 위한 결과 추가
-	if OutputFormat == "html" || OutputFormat == "pdf" {
+	if OutputFormat == OutputFormatHTML || OutputFormat == OutputFormatPDF {
 		// 정렬 모드일 경우 결과를 바로 추가하지 않고 저장
 		if SortByStatus {
 			// 카테고리 정보를 결과에 저장
@@ -93,12 +86,12 @@ func PrintResult(r CheckResult) {
 // printSingleResult 단일 결과 출력
 func printSingleResult(r CheckResult) {
 	if r.Passed {
-		fmt.Printf(Green+"✔ PASS | %s\n"+Reset, r.CheckName)
+		fmt.Printf(ColorGreen+"%s PASS | %s\n"+ColorReset, IconPass, r.CheckName)
 	} else {
 		if r.Manual {
-			fmt.Printf(Yellow+"⚠ MANUAL | %s\n"+Reset, r.CheckName)
+			fmt.Printf(ColorYellow+"%s MANUAL | %s\n"+ColorReset, IconManual, r.CheckName)
 		} else {
-			fmt.Printf(Red+"✖ FAIL | %s\n"+Reset, r.CheckName)
+			fmt.Printf(ColorRed+"%s FAIL | %s\n"+ColorReset, IconFail, r.CheckName)
 		}
 		fmt.Printf("  ├─ 🔸 이유 : %s\n", r.FailureMsg)
 		if len(r.Resources) > 0 {
@@ -118,18 +111,18 @@ func printSingleResult(r CheckResult) {
 
 func PrintSummary() {
 	// 정렬 모드이고 텍스트 출력인 경우 저장된 결과를 상태별로 출력
-	if SortByStatus && OutputFormat == "text" {
+	if SortByStatus && OutputFormat == OutputFormatText {
 		fmt.Println("\n===============[정렬된 결과]===============")
 		printSortedTextResults()
 		return
 	}
 
 	// HTML/PDF 출력에서 정렬 모드인 경우
-	if SortByStatus && (OutputFormat == "html" || OutputFormat == "pdf") {
+	if SortByStatus && (OutputFormat == OutputFormatHTML || OutputFormat == OutputFormatPDF) {
 		processSortedHtmlResults()
 	}
 
-	if OutputFormat == "html" || OutputFormat == "pdf" {
+	if OutputFormat == OutputFormatHTML || OutputFormat == OutputFormatPDF {
 		// HTML 보고서 저장
 		htmlFilePath, err := SaveHTMLReport()
 		if err != nil {
@@ -137,13 +130,13 @@ func PrintSummary() {
 			return
 		}
 
-		if OutputFormat == "html" {
+		if OutputFormat == OutputFormatHTML {
 			fmt.Printf("HTML 보고서가 %s에 저장되었습니다.\n", htmlFilePath)
 			return // HTML 보고서 저장 후 종료
 		}
 
 		// PDF 변환이 필요한 경우
-		if OutputFormat == "pdf" {
+		if OutputFormat == OutputFormatPDF {
 			pdfFilePath, err := ConvertHTMLToPDF(htmlFilePath)
 			if err != nil {
 				fmt.Printf("PDF 변환 오류: %v\n", err)
@@ -155,9 +148,9 @@ func PrintSummary() {
 	}
 
 	fmt.Println("\n===============[Checklist Summary]===============")
-	fmt.Printf(Green+"✔ PASS: %d\n"+Reset, PassedCount)
-	fmt.Printf(Red+"✖ FAIL: %d\n"+Reset, FailedCount)
-	fmt.Printf(Yellow+"⚠ Manual: %d\n"+Reset, ManualCount)
+	fmt.Printf(ColorGreen+"%s PASS: %d\n"+ColorReset, IconPass, PassedCount)
+	fmt.Printf(ColorRed+"%s FAIL: %d\n"+ColorReset, IconFail, FailedCount)
+	fmt.Printf(ColorYellow+"%s Manual: %d\n"+ColorReset, IconManual, ManualCount)
 	fmt.Println("===============[End of Summary]=================")
 }
 
@@ -193,7 +186,7 @@ func printSortedTextResults() {
 
 	// PASS 섹션 출력
 	if hasPassed := countResults(sortedResults, true, false); hasPassed > 0 {
-		fmt.Printf("\n===============[PASS]===============\n")
+		fmt.Printf("\n===============[%s]===============\n", StatusPass)
 		for _, r := range sortedResults {
 			if r.Passed {
 				printSingleResult(r)
@@ -203,7 +196,7 @@ func printSortedTextResults() {
 
 	// FAIL 섹션 출력
 	if hasFailed := countResults(sortedResults, false, false); hasFailed > 0 {
-		fmt.Printf("\n===============[FAIL]===============\n")
+		fmt.Printf("\n===============[%s]===============\n", StatusFail)
 		for _, r := range sortedResults {
 			if !r.Passed && !r.Manual {
 				printSingleResult(r)
@@ -213,18 +206,18 @@ func printSortedTextResults() {
 
 	// MANUAL 섹션 출력
 	if hasManual := countResults(sortedResults, false, true); hasManual > 0 {
-		fmt.Printf("\n===============[MANUAL]===============\n")
+		fmt.Printf("\n===============[%s]===============\n", StatusManual)
 		for _, r := range sortedResults {
-			if r.Manual {
+			if !r.Passed && r.Manual {
 				printSingleResult(r)
 			}
 		}
 	}
 
 	fmt.Println("\n===============[Checklist Summary]===============")
-	fmt.Printf(Green+"✔ PASS: %d\n"+Reset, PassedCount)
-	fmt.Printf(Red+"✖ FAIL: %d\n"+Reset, FailedCount)
-	fmt.Printf(Yellow+"⚠ Manual: %d\n"+Reset, ManualCount)
+	fmt.Printf(ColorGreen+"%s PASS: %d\n"+ColorReset, IconPass, PassedCount)
+	fmt.Printf(ColorRed+"%s FAIL: %d\n"+ColorReset, IconFail, FailedCount)
+	fmt.Printf(ColorYellow+"%s Manual: %d\n"+ColorReset, IconManual, ManualCount)
 	fmt.Println("===============[End of Summary]=================")
 }
 
@@ -243,16 +236,16 @@ func countResults(results []CheckResult, passed bool, manual bool) int {
 func processSortedHtmlResults() {
 	// HTML 출력용으로 모든 결과를 상태별로 변환
 	for _, r := range sortedResults {
-		status := "PASS"
-		statusClass := "success"
+		status := StatusPass
+		statusClass := ClassSuccess
 
 		if !r.Passed {
 			if r.Manual {
-				status = "MANUAL"
-				statusClass = "warning"
+				status = StatusManual
+				statusClass = ClassWarning
 			} else {
-				status = "FAIL"
-				statusClass = "danger"
+				status = StatusFail
+				statusClass = ClassDanger
 			}
 		}
 
@@ -280,22 +273,15 @@ func processSortedHtmlResults() {
 	htmlResults = sortedHtmlResults
 
 	// 상태별 카테고리 추가
-	categoryResults["PASS"] = []CheckResultHTML{}
-	categoryResults["FAIL"] = []CheckResultHTML{}
-	categoryResults["MANUAL"] = []CheckResultHTML{}
+	categoryResults[StatusPass] = []CheckResultHTML{}
+	categoryResults[StatusFail] = []CheckResultHTML{}
+	categoryResults[StatusManual] = []CheckResultHTML{}
 
 	// categoryOrder 맨 앞에 상태 카테고리 추가
-	categoryOrder = append([]string{"PASS", "FAIL", "MANUAL"}, categoryOrder...)
+	categoryOrder = append([]string{StatusPass, StatusFail, StatusManual}, categoryOrder...)
 
 	// 각 상태별 결과 분류
-	for _, r := range sortedHtmlResults {
-		switch r.Status {
-		case "PASS":
-			categoryResults["PASS"] = append(categoryResults["PASS"], r)
-		case "FAIL":
-			categoryResults["FAIL"] = append(categoryResults["FAIL"], r)
-		case "MANUAL":
-			categoryResults["MANUAL"] = append(categoryResults["MANUAL"], r)
-		}
+	for _, result := range sortedHtmlResults {
+		categoryResults[result.Status] = append(categoryResults[result.Status], result)
 	}
 }

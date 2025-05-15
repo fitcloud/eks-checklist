@@ -133,7 +133,7 @@ func getKubeconfigWithContext(kubeconfigPath string, context string, awsProfile 
 }
 
 // getKubeconfig 클러스터 선택 기능을 통합한 kubeconfig 로드 함수
-func getKubeconfig(kubeconfigPath string, kubeconfigContext string, awsProfile string) (string, rest.Config) {
+func getKubeconfig(kubeconfigPath string, kubeconfigContext string, awsProfile string) (string, rest.Config, error) {
 	var config *rest.Config
 	var err error
 	var selectedContext string
@@ -146,12 +146,11 @@ func getKubeconfig(kubeconfigPath string, kubeconfigContext string, awsProfile s
 		// InClusterConfig 사용
 		config, err = rest.InClusterConfig()
 		if err != nil {
-			fmt.Printf("인클러스터 설정을 로드하는 중 오류 발생: %v\n", err)
-			os.Exit(1)
+			return "", rest.Config{}, fmt.Errorf("인클러스터 설정을 로드하는 중 오류 발생: %w", err)
 		}
 
 		// 클러스터 내부에서는 AWS_PROFILE이 의미가 없으므로 빈 문자열 반환
-		return "", *config
+		return "", *config, nil
 	}
 
 	// Docker 환경에서 실행 중이지만 클러스터 외부인 경우
@@ -160,28 +159,25 @@ func getKubeconfig(kubeconfigPath string, kubeconfigContext string, awsProfile s
 		selectedContext = kubeconfigContext
 		config, err = getKubeconfigWithContext(kubeconfigPath, selectedContext, awsProfile)
 		if err != nil {
-			fmt.Printf("지정된 컨텍스트 '%s'를 로드하는 중 오류 발생: %v\n", selectedContext, err)
-			os.Exit(1)
+			return "", rest.Config{}, fmt.Errorf("지정된 컨텍스트 '%s'를 로드하는 중 오류 발생: %w", selectedContext, err)
 		}
 	} else {
 		// 대화형 선택 메뉴 표시
 		var selErr error
 		selectedContext, selErr = selectCluster(kubeconfigPath)
 		if selErr != nil {
-			fmt.Printf("클러스터 선택 중 오류 발생: %v\n", selErr)
-			os.Exit(1)
+			return "", rest.Config{}, fmt.Errorf("클러스터 선택 중 오류 발생: %w", selErr)
 		}
 
 		config, err = getKubeconfigWithContext(kubeconfigPath, selectedContext, awsProfile)
 		if err != nil {
-			fmt.Printf("선택한 컨텍스트 '%s'를 로드하는 중 오류 발생: %v\n", selectedContext, err)
-			os.Exit(1)
+			return "", rest.Config{}, fmt.Errorf("선택한 컨텍스트 '%s'를 로드하는 중 오류 발생: %w", selectedContext, err)
 		}
 	}
 
 	AWS_PROFILE = getAwsProfileFromContext(kubeconfigPath, selectedContext)
 
-	return AWS_PROFILE, *config
+	return AWS_PROFILE, *config, nil
 }
 
 // getAwsProfileFromContext는 주어진 컨텍스트에서 AWS_PROFILE 환경 변수 값을 추출합니다
@@ -279,20 +275,20 @@ func getEksClusterName(kubeconfig rest.Config) string {
 	return kubeconfig.ExecProvider.Args[clusterNameIdx+1]
 }
 
-func createK8sClient(kubeconfig rest.Config) kubernetes.Interface {
+func createK8sClient(kubeconfig rest.Config) (kubernetes.Interface, error) {
 	client, err := kubernetes.NewForConfig(&kubeconfig)
 	if err != nil {
-		panic(err.Error())
+		return nil, fmt.Errorf("Kubernetes 클라이언트 생성 실패: %w", err)
 	}
 
-	return client
+	return client, nil
 }
 
 // CreateDynamicClient: dynamic.Interface 생성
 func CreateDynamicClient(kubeconfig *rest.Config) (dynamic.Interface, error) {
 	dynamicClient, err := dynamic.NewForConfig(kubeconfig)
 	if err != nil {
-		panic(err.Error())
+		return nil, fmt.Errorf("Dynamic 클라이언트 생성 실패: %w", err)
 	}
 
 	return dynamicClient, nil
