@@ -43,7 +43,7 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - >
-              /eks-checklist --output html &&
+              /eks-checklist --sort --output html &&
               echo "Sleeping for 300 seconds..." &&
               sleep 300
           env:
