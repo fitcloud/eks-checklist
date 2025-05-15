@@ -32,7 +32,7 @@ topologySpreadConstraints:
       matchLabels:
         app: your-app
 ```
-- maxSkew: 허용 가능한 분산 불균형 정도
+maxSkew: 허용 가능한 분산 불균형 정도
 
 **PodAntiAffinity 설정**
 ```yaml
@@ -44,7 +44,7 @@ affinity:
             app: your-app
         topologyKey: kubernetes.io/hostname
 ```
-- topologyKey를 기반으로 동일한 app을 가진 Pod가 같은 노드에 배치되지 않도록 함
+topologyKey를 기반으로 동일한 app을 가진 Pod가 같은 노드에 배치되지 않도록 함
 
 [Kubernetes - Assigning Pods to Nodes](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/)
 [Kubernetes - Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/)

@@ -75,3 +75,5 @@ Calico, Cilium 등을 설치하여 정책 기반 제어 가능
 기본 거부 정책 + 최소 허용 정책 적용
 
 민감한 서비스 보호 및 lateral movement 차단
+
+[EKS Pods 네트워크 정책을 통한 pod 트래픽 제한](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/cni-network-policy.html)

@@ -19,3 +19,5 @@ kube-prometheus-stack가 설치되지 않았다면, Helm을 통해 설치합니�
 ```bash
 helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack
 ```
+
+[AWS EKS Prometheus를 사용한 클러스터 모니터링](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/prometheus.html)

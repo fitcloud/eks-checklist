@@ -30,3 +30,5 @@ aws iam detach-role-policy \
   --policy-arn arn:aws:iam::aws:policy/<UnwantedPolicyName>
 ```
 **반드시 AmazonEKSWorkerNodePolicy, AmazonEKS_CNI_Policy,AmazonEC2ContainerRegistryReadOnly 외의 정책은 제거해야 합니다.**
+
+[Amazon EKS 데이터 플레인 권한](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/create-node-role.html)

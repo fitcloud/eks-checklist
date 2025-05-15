@@ -18,5 +18,8 @@ kubectl get pods -A --no-headers | awk '{print $1, $2}' | grep termination-handl
 
 ## Mitigation
 Spot Termination Handler를 설치하여 Spot 인스턴스 종료 알림을 자동으로 처리하도록 설정하세요.
-
+```bash
 kubectl apply -f https://github.com/aws/aws-node-termination-handler/releases/latest/download/aws-node-termination-handler.yaml
+```
+
+[AWS Node Termination handler github](https://github.com/aws/aws-node-termination-handler)

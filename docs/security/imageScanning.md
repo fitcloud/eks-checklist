@@ -83,3 +83,4 @@ Alpine, Distroless 이미지 활용
 
 배포 전 차단 정책으로 보안 선제 대응
 
+[Container 이미지 Scan](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/windows-images.html)

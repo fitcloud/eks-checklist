@@ -90,3 +90,5 @@ Secret은 Base64 인코딩 상태로 ETCD에 저장 → 위험
 EKS 수준에서 KMS 암호화 적용
 
 외부 Secret Manager와 연동하여 보안 수준 향상
+
+[Amazon EKS 포드와 함께 AWS Secrets Manager 보안 암호 사용](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/manage-secrets.html)

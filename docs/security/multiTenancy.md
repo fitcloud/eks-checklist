@@ -66,7 +66,6 @@ IAM 정책을 클러스터별로 설정하여 권한 격리
 
 하드 멀티 테넌시 적용 시 각 테넌트 별 완전한 EKS 클러스터 및 VPC 격리
 
-참고 링크
 [IAM Roles for Service Accounts (IRSA) 공식 문서](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/iam-roles-for-service-accounts.html)
 
 [EKS에서 하드 멀티 테넌시 구현하기 - AWS Well-Architected Framework](https://aws.amazon.com/ko/architecture/well-architected/?wa-lens-whitepapers.sort-by=item.additionalFields.sortDate&wa-lens-whitepapers.sort-order=desc&wa-guidance-whitepapers.sort-by=item.additionalFields.sortDate&wa-guidance-whitepapers.sort-order=desc)

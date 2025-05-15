@@ -1,17 +1,17 @@
 # SEC-005 루트 유저가 아닌 유저로 컨테이너 실행
 
-## **Meaning**
+## Meaning
 이 점검은 Kubernetes 컨테이너가 root 사용자(UID 0) 로 실행되고 있는지 확인하는 보안 검사입니다.
 Kubernetes에서 securityContext.runAsUser 필드를 통해 컨테이너를 일반 사용자 권한으로 실행할 수 있으며, 해당 필드가 명시적으로 설정되어 있고 UID가 0이 아닐 때만 안전한 상태로 판단됩니다.
 또한 Windows 컨테이너의 경우, runAsUserName이 "Administrator"로 설정되면 루트 권한과 유사한 위험으로 간주합니다.
 컨테이너가 runAsUser: 0(root) 또는 미지정 상태면 보안 취약. 반드시 일반 사용자 권한(예: UID 1000)으로 실행해야 안전합니다.
 
-## **Impact**
+## Impact
 - 루트 권한 컨테이너는 취약점 발생 시 호스트 시스템까지 침해 가능
 - Pod 간 보안 격리 실패 가능성 증가
 - 보안사고 확산 가능성 증가
 
-## **Diagnosis**
+## Diagnosis
 아래 명령어를 사용하면 클러스터 내의 컨테이너 중에서 다음 조건에 해당하는 경우를 탐지할 수 있습니다.
 - runAsUser가 0으로 명시된 경우 (명시적으로 root 권한 실행)
 - securityContext 또는 runAsUser가 아예 명시되지 않은 경우 (기본적으로 root 권한 실행 가능)
@@ -38,7 +38,7 @@ Namespace: winspace | Pod: winpod | Container: winapp (Windows Administrator 실
 - 명시적 root 계정 실행: runAsUser: 0으로 명시되어 있어 의도적으로 루트로 실행되도록 설정된 컨테이너입니다.
 - Windows Administrator 실행: Windows 기반 컨테이너에서 runAsUserName이 "Administrator"로 설정된 경우로, 보안상 root 실행과 동일한 위험을 가집니다.
 
-## **Mitigation**
+## Mitigation
 컨테이너에 securityContext.runAsUser를 명시하고 UID 0을 피하세요. 루트 권한을 회피하는 것은 기본 보안 원칙 중 하나입니다.
 
 **비루트 사용자로 실행 설정 example**
@@ -47,5 +47,5 @@ securityContext:
   runAsUser: 1000
   allowPrivilegeEscalation: false
 ```
-참고 링크
+
 [Pod-security](https://kubernetes.io/ko/docs/concepts/security/pod-security-standards/)
