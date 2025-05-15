@@ -11,27 +11,23 @@
 2. 운영 환경으로의 보안 위협 전파
 
 3. 파이프라인의 보안 공백
-
 ## Impact
 - 취약한 이미지 배포: CVE 포함 이미지가 실제 환경에 배포될 수 있음
 - 공격 벡터 증가: 미패치된 취약점으로 인해 공격에 노출될 가능성
 - 감사/보안 테스트 실패: 기업 보안 정책 및 외부 감사 기준 미충족
 
-
 ## Diagnosis
 컨테이너 이미지에 대해 정적 분석이 수행되고 있는지 확인합니다
 
-CI/CD 파이프라인에서 이미지 스캐너가 포함되어 있는가?
-GitHub Actions, GitLab CI, ArgoCD 등에서 정적 분석 단계 확인
-
-취약점 레벨 기준(Low/Medium/High/Critical)에 따른 차단 정책 존재 여부
+1. CI/CD 파이프라인에서 이미지 스캐너가 포함되어 있는지 확인합니다
+2. GitHub Actions, GitLab CI, ArgoCD 등에서 정적 분석 단계 확인
+3. 취약점 레벨 기준(Low/Medium/High/Critical)에 따른 차단 정책 존재 여부
 
 사용 중인 스캐닝 도구 확인
 
 대표적인 도구
 
 - Trivy (Aqua Security)
-
 - Amazon ECR 이미지 스캐닝
 
 **example Trivy CLI로 이미지 스캔**
@@ -59,17 +55,11 @@ aws ecr describe-image-scan-findings \
 ## Mitigation
 정적 분석 도구 도입 및 자동화
 
-스캔 결과 기반 정책 수립
-CRITICAL 취약점 발견 시 배포 차단
-
-HIGH 이상 취약점 Slack/Email 알림 전파
-
-정기적 리포트 생성 (예: 주간 기준)
-
-이미지 최적화 및 최소화
-Alpine, Distroless 이미지 활용
-
-사용하지 않는 패키지 제거로 공격 표면 축소
+1. 스캔 결과 기반 정책 수립
+2. CRITICAL 취약점 발견 시 배포 차단
+3. HIGH 이상 취약점 Slack/Email 알림 전파
+4. 정기적 리포트 생성 (예: 주간 기준)
+5. 이미지 최적화 및 최소화(Alpine, Distroless 이미지 활용) - 사용하지 않는 패키지 제거로 공격 표면 축소
 
 **Before**
 

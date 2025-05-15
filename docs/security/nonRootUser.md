@@ -41,7 +41,7 @@ Namespace: winspace | Pod: winpod | Container: winapp (Windows Administrator 실
 ## Mitigation
 컨테이너에 securityContext.runAsUser를 명시하고 UID 0을 피하세요. 루트 권한을 회피하는 것은 기본 보안 원칙 중 하나입니다.
 
-**비루트 사용자로 실행 설정 example**
+**Non-Root 사용자로 실행 설정 example**
 ```yaml
 securityContext:
   runAsUser: 1000
