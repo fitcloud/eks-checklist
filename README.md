@@ -69,14 +69,13 @@ EKS-Checklist를 사용하기 전에 다음 항목들이 설치되고 올바르�
 EKS-Checklist는 GitHub의 릴리즈 페이지에서 원하는 버전을 다운로드하여 사용할 수 있습니다.
 ### GitHub Releases에서 다운로드
 1. [GitHub Releases](https://github.com/fitcloud/eks-checklist/releases) 페이지로 이동합니다.
-2. 원하는 버전의 태그를 선택합니다.
-3. 운영 체제에 맞는 바이너리를 다운로드합니다.
+2. 운영 체제에 맞는 바이너리를 다운로드합니다.
 
 ## 사용법
-### 실행 flags
+### 실행 방법
 ```bash
 {바이너리 파일명} {--flags}
-예: eks-checklist-darwin-amd64 --help
+예: eks-checklist --help
 ```
 - `--context` : 사용할 kubeconfig 컨텍스트 이름
 - `--kubeconfig` : 사용할 kubeconfig 파일 경로 (기본값: `"C:\\Users\\사용자이름\\.kube\\config"`)
