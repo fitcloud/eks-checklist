@@ -19,6 +19,7 @@ kubectl get daemonsets --all-namespaces -o json | jq -r '
 
 ## Mitigation
 중요 DaemonSet에 priorityClassName을 추가하세요.
+
 **example**
 ```yaml
 spec:

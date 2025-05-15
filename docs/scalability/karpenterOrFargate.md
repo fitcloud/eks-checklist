@@ -25,7 +25,7 @@ kubectl get nodes -l eks.amazonaws.com/fargate-profile -o wide
 ## Mitigation
 Karpenter가 관리하는 노드에 Karpenter를 실행하지 않고 최소 하나 이상의 워커 노드가 있는 소규모 전용 노드 그룹 사용 하여 Kapenter를 설치하거나 'Karpenter' 네임스페이스 대한 Fargate Profile을 생성하여 EKS Fagate에서 Karpenter를 실행하세요.
 
-**example***
+**example**
 
 전용 노드 그룹
 ```bash

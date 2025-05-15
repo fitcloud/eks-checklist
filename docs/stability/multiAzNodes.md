@@ -16,6 +16,7 @@ kubectl describe node | grep "topology.kubernetes.io/zone"
 
 ## Mitigation
 다수의 가용 영역에 데이터 플레인 노드를 배포하세요
+
 **example**
 
 nodegroup 사용 시

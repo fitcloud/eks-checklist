@@ -19,6 +19,7 @@ kubectl get cm -n kube-system kube-proxy-config -o json | jq -r '.data.config' |
 kube-proxy-config mode를 IPVS로 변경해주세요.
 
 **example**
+
 EKS Add-on kube-proxy 업데이트
 ```bash
 aws eks update-addon --cluster-name $CLUSTER_NAME --addon-name kube-proxy \

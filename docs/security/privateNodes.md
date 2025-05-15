@@ -16,7 +16,7 @@ EKS 클러스터가 사용하는 Subnet이 Public or Private인지 확인하세�
 aws ec2 describe-route-tables --filters "Name=association.subnet-id,Values=$(aws eks describe-cluster --name eks-checklist --query 'cluster.resourcesVpcConfig.subnetIds' --output text | tr '\t' ',')" | jq -r '.RouteTables[] | {RouteTableId, Routes: .Routes[] | select(.DestinationCidrBlock == "0.0.0.0/0") } | {RouteTableId, DestinationCidrBlock: .Routes.DestinationCidrBlock, GatewayId: (if .Routes.GatewayId then .Routes.GatewayId else .Routes.NatGatewayId end), PublicStatus: (if .Routes.GatewayId and (.Routes.GatewayId | test("^igw-")) then "public" elif .Routes.NatGatewayId then "private" else "private" end)}'
 ```
 
-출력 Example
+**출력 example**
 ```bash
 Internet Gateway 존재
   "DestinationCidrBlock": "0.0.0.0/0",
@@ -33,7 +33,7 @@ Natgateway 존재
 Private Subnet을 사용하세요
 Internet Gateway 존재 시 작업 진행
 
-Example
+**example**
 ```bash
 aws ec2 create-route --route-table-id <ROUTE-TABLE-ID> --destination-cidr-block 0.0.0.0/0 --nat-gateway-id <NAT-GATEWAY-ID>
 ```

@@ -19,7 +19,7 @@ IRSA나 EKS Pod Identity를 사용하지 않는 경우 다음과 같은 문제�
 ## Diagnosis
 서비스 계정(ServiceAccount)에 IRSA 또는 EKS Pod Identity 관련 annotation이 설정되어 있는지 확인합니다.
 
-Command Example
+**Example**
 ```bash
 kubectl get sa --all-namespaces -o jsonpath="{range .items[*]}{.metadata.namespace}{'\t'}{.metadata.name}{'\t'}{.metadata.annotations.eks\.amazonaws\.com/role-arn}{'\t'}{.metadata.annotations.eks\.amazonaws\.com/identity}{'\t'}{.metadata.annotations.eks\.amazonaws\.com/audience}{'\n'}{end}" | grep -v "kube-system"
 ```

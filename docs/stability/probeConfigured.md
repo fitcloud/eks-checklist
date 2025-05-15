@@ -26,7 +26,8 @@ kubectl get pods --all-namespaces -o json | jq -r '
 
 ## Mitigation
 파드 정의에 startupProbe, readinessProbe, livenessProbe를 설정합니다.
-example
+
+**example**
 ```yaml
 apiVersion: v1
 kind: Pod

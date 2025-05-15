@@ -19,7 +19,7 @@ EKS 클러스터의 API 엔드포인트가 퍼블릭으로 열려 있는지 확�
 ```bash
 aws eks describe-cluster --name <cluster-name> --query "cluster.resourcesVpcConfig"
 ```
-Result Example
+**Result Example**
 ```json
 {
   "endpointPublicAccess": true,
