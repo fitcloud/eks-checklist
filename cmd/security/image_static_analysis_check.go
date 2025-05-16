@@ -15,11 +15,11 @@ import (
 
 func CheckImageStaticAnalysis(client kubernetes.Interface, cfg aws.Config, eksCluster string) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "컨테이너 이미지 정적 분석 - Manual",
+		CheckName:  "[SEC-013] 컨테이너 이미지 정적 분석",
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "컨테이너 이미지의 보안 취약점 여부는 수동으로 정적 분석 도구를 사용해 확인해야 합니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/security/imageScanning",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/security/SEC-013",
 	}
 
 	// 결과 디렉토리 생성

@@ -15,11 +15,11 @@ import (
 
 func CheckGracefulShutdown(client kubernetes.Interface, cfg aws.Config, eksCluster string) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "Application에 Graceful shutdown 적용 - Manual",
+		CheckName:  "[SCL-005] Application에 Graceful shutdown 적용",
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "Graceful shutdown 처리는 컨테이너 종료 이벤트 처리 여부를 코드 및 설정에서 수동 점검해야 합니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/scalability/gracefulShutdown",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/scalability/SCL-005",
 	}
 
 	baseDir := filepath.Join(".", "output", eksCluster+"-graceful-shutdown")

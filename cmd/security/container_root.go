@@ -14,11 +14,11 @@ import (
 // CheckContainerExecutionUser checks if any container is running as root (UID 0).
 func CheckContainerExecutionUser(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "루트 유저가 아닌 유저로 컨테이너 실행",
+		CheckName:  "[SEC-005] 루트 유저가 아닌 유저로 컨테이너 실행",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 컨테이너가 root 유저로 실행 중이거나, RunAsUser가 명시되지 않았습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/security/nonRootUser",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/security/SEC-005",
 	}
 
 	// 검사에서 제외할 문자열

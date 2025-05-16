@@ -14,10 +14,10 @@ import (
 // CheckKubeProxyIPVSMode checks whether kube-proxy is set to use IPVS mode.
 func CheckKubeProxyIPVSMode(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName: "kube-proxy에 IPVS 모드 적용",
+		CheckName: "[NET-008] kube-proxy에 IPVS 모드 적용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://fitcloud.github.io/eks-checklist/network/kubeProxyIpvsMode",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/runbook/network/NET-008",
 	}
 
 	configMap, err := client.CoreV1().ConfigMaps("kube-system").Get(context.TODO(), "kube-proxy-config", metav1.GetOptions{})

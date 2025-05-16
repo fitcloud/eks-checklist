@@ -13,11 +13,11 @@ import (
 // ReadnonlyFilesystemCheck checks whether containers use readOnlyRootFilesystem.
 func ReadnonlyFilesystemCheck(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "읽기 전용 파일시스템 사용",
+		CheckName:  "[SEC-014] 읽기 전용 파일시스템 사용",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 컨테이너가 readOnlyRootFilesystem=true 설정을 사용하지 않고 있습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/security/readOnlyRootFS",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/security/SEC-014",
 	}
 
 	pods, err := client.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})

@@ -13,10 +13,10 @@ import (
 // CheckReadinessGateEnabled checks if any namespace has pod readiness gate enabled.
 func CheckReadinessGateEnabled(controller_installed common.CheckResult, client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName: "Pod Readiness Gate 적용",
+		CheckName: "[NET-007] Pod Readiness Gate 적용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://fitcloud.github.io/eks-checklist/network/readinessGate",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/runbook/network/NET-007",
 	}
 
 	if !controller_installed.Passed {

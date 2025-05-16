@@ -14,11 +14,11 @@ type EksCluster struct {
 // Audit 로그 활성화 여부를 체크하는 함수
 func CheckAuditLoggingEnabled(eksCluster *EksCluster) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "Audit 로그 활성화",
+		CheckName:  "[SEC-007] Audit 로그 활성화",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "Audit 로그가 활성화되지 않았습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/security/auditLogging",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/security/SEC-007",
 	}
 
 	if eksCluster.Cluster.Logging == nil {

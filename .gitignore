@@ -81,7 +81,7 @@ output/*
 sample-eks-troubleshooting-rag-chatbot/*
 
 report 결과물 파일
-eks-checklist-report*
+eks-checklist-*
 
 .DS_Store
 .DS_Store

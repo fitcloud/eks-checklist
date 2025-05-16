@@ -15,11 +15,11 @@ import (
 
 func CheckAccessControl(client kubernetes.Interface, cfg aws.Config, eksCluster string) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "클러스터 접근 제어(Access entries, aws-auth 컨피그맵)",
+		CheckName:  "[SEC-002] 클러스터 접근 제어(Access entries, aws-auth 컨피그맵)",
 		Manual:     true,
 		Passed:     true,
 		FailureMsg: "클러스터 접근 제어 설정이 되어 있으나, 적합한 설정이 되어 있는지 수동으로 확인해야 합니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/security/clusterAccessControl",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/security/SEC-002",
 	}
 
 	// 👉 실행 디렉토리 기준 ./result 하위 경로 생성

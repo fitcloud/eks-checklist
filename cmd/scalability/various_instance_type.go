@@ -14,11 +14,11 @@ import (
 // CheckInstanceTypes checks if the cluster uses multiple instance types (e.g., for cost optimization, flexibility).
 func CheckInstanceTypes(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "다양한 인스턴스 타입 사용",
+		CheckName:  "[SCL-007] 다양한 인스턴스 타입 사용",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "클러스터에서 단일 인스턴스 타입만 사용 중입니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/scalability/instanceDiversity",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/scalability/SCL-007",
 	}
 
 	nodes, err := client.CoreV1().Nodes().List(context.TODO(), metav1.ListOptions{})
