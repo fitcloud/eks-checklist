@@ -15,11 +15,11 @@ import (
 
 func CheckImportantPodProtection(client kubernetes.Interface, cfg aws.Config, eksCluster string) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "중요 Pod에 노드 삭제 방지용 Label 부여 - Manual",
+		CheckName:  "[SCL-004] 중요 Pod에 노드 삭제 방지용 Label 부여 - Manual",
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "중요한 Pod가 실행 중인 노드에 삭제 방지용 라벨이 설정되었는지 수동으로 확인해야 합니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/scalability/podEvictionProtection",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/scalability/SCL-004",
 	}
 
 	baseDir := filepath.Join(".", "output", eksCluster+"-important-pod-protection")

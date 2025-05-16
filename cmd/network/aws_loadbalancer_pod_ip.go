@@ -13,10 +13,10 @@ import (
 // CheckAwsLoadBalancerPodIp checks whether ALB/NLB uses Pod IP as its target.
 func CheckAwsLoadBalancerPodIp(controller_installed common.CheckResult, client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName: "ALB/NLB의 대상으로 Pod의 IP 사용",
+		CheckName: "[NET-006] ALB/NLB의 대상으로 Pod의 IP 사용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://fitcloud.github.io/eks-checklist/network/podIpTarget",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/runbook/network/NET-006",
 	}
 
 	if !controller_installed.Passed {

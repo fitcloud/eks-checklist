@@ -128,11 +128,11 @@ func GetAttachedPolicies(roleName string) ([]string, error) {
 // CheckNodeIAMRoles는 모든 노드의 IAM 역할에 허용되지 않은 정책이 있는지 확인
 func CheckNodeIAMRoles(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "데이터 플레인 노드에 필수로 필요한 IAM 권한만 부여",
+		CheckName:  "[SEC-004] 데이터 플레인 노드에 필수로 필요한 IAM 권한만 부여",
 		Manual:     false,
 		Passed:     true, // 기본적으로 통과 상태로 설정, 문제 발생 시 false로 변경
 		FailureMsg: "일부 노드에서 허용되지 않은 IAM 정책이 발견되었습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/security/minimalNodeIam", // 문제가 있을 경우 참고할 Runbook 링크
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/security/SEC-004", // 문제가 있을 경우 참고할 Runbook 링크
 	}
 
 	// 노드 IP 목록 가져오기

@@ -14,10 +14,10 @@ import (
 // GetKubecost checks if Kubecost is deployed in the cluster.
 func GetKubecost(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName: "EKS용 Kubecost 설치",
+		CheckName: "[COST-001] EKS용 Kubecost 설치",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://fitcloud.github.io/eks-checklist/cost/kubecost",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/runbook/cost/COST-001",
 	}
 
 	deploys, err := client.AppsV1().Deployments(v1.NamespaceAll).List(context.TODO(), v1.ListOptions{})

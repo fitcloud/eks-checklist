@@ -16,11 +16,11 @@ import (
 // DataplanePrivateCheck checks whether all subnets used by the EKS data plane are private.
 func DataplanePrivateCheck(eksCluster EksCluster, cfg aws.Config) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "데이터 플레인 사설망",
+		CheckName:  "[SEC-012] 데이터 플레인 사설망",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 서브넷이 IGW(인터넷 게이트웨이)와 연결되어 있어 퍼블릭 상태입니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/security/privateNodes",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/security/SEC-012",
 	}
 
 	eksClient := eks.NewFromConfig(cfg)

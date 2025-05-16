@@ -13,11 +13,11 @@ import (
 // CheckPVEcryption - Persistent Volume (PV)의 암호화 상태를 확인
 func CheckPVEcryption(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "PV 암호화",
+		CheckName:  "[SEC-010] PV 암호화",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 PV가 암호화되지 않았거나 수동 확인이 필요합니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/security/pvEncryption",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/security/SEC-010",
 	}
 
 	pvs, err := client.CoreV1().PersistentVolumes().List(context.TODO(), metav1.ListOptions{})

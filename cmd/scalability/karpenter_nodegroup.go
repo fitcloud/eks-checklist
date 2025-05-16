@@ -13,11 +13,11 @@ import (
 // CheckNodeGroupUsage는 Karpenter 전용 노드 그룹 또는 Fargate 사용 여부를 검사합니다.
 func CheckNodeGroupUsage(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "Karpenter 전용 노드 그룹 혹은 Fargate 사용",
+		CheckName:  "[SCL-002] Karpenter 전용 노드 그룹 혹은 Fargate 사용",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "Karpenter 전용 노드 그룹 또는 Fargate가 사용되고 있지 않습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/scalability/karpenterOrFargate",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/scalability/SCL-002",
 	}
 
 	nodes, err := client.CoreV1().Nodes().List(context.TODO(), metaV1.ListOptions{})

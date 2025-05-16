@@ -11,12 +11,12 @@ import (
 
 func CheckImageTag(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName: "컨테이너 이미지 태그에 latest 미사용",
+		CheckName: "[GEN-003] 컨테이너 이미지 태그에 latest 미사용",
 		Manual:    false,
 		Passed:    true,
 		// SuccessMsg: "모든 컨테이너 이미지는 latest 태그를 사용 중이지 않습니다.",
 		FailureMsg: "일부 컨테이터 이미지가 latest 태그를 사용 중입니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/general/noLatestTag",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/general/GEN-003",
 	}
 
 	pods, err := client.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})
