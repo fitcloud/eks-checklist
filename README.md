@@ -2,7 +2,7 @@
     <a href="https://fitcloud.github.io/eks-checklist/guidedocs/introduction/" target="_blank"><img alt="EKS-Checklist" src="/docs/images/EKS_Checklist.png" width="400"></a><br>EKS-Checklist
 </h1>
 
-<p align="center">자세한 내용은 <a href="https://fitcloud.github.io/eks-checklist/guidedocs/introduction/" target="_blank">EKS-Checklist</a>을 방문하여 문서 및 가이드북을 확인하세요</p>
+<p align="center">자세한 내용은 <a href="https://fitcloud.github.io/eks-checklist/guidedocs/introduction/" target="_blank">EKS Checklist</a>을 방문하여 문서 및 가이드북을 확인하세요</p>
 
 <div align="center"
    
@@ -36,10 +36,10 @@
 
 </div>
 
-# EKS-Checklist
-### EKS-Checklist는 Amazon EKS (Elastic Kubernetes Service) 클러스터의 정보를 확인하여 EKS 클러스터가 AWS EKS 권장 모범 사례 및 Kubernetes의 권장 모범 사례를 준수하고 있는지 점검하고, 클러스터 운영을 최적화하는 데 필요한 권장 사항을 제공합니다.
+# EKS Checklist
+### EKS Checklist는 Amazon EKS (Elastic Kubernetes Service) 클러스터의 정보를 확인하여 EKS 클러스터가 AWS EKS 권장 모범 사례 및 Kubernetes의 권장 모범 사례를 준수하고 있는지 점검하고, 클러스터 운영을 최적화하는 데 필요한 권장 사항을 제공합니다.
 
-* **쉬운 셀프 점검**EKS Cluster가 AWS EKS 모법사례 및 Kubernetes 모범사례에 준수 하고 잇는지 쉽게 확인이 가능합니다.
+* **쉬운 셀프 점검** EKS Cluster가 AWS EKS 모법사례 및 Kubernetes 모범사례에 준수 하고 잇는지 쉽게 확인이 가능합니다.
 * **보고서 제공** 사용자는 원하는 보고서 양식 html, txt, pdf 형식으로 선택하여 제공받을 수 있으며 한눈에 문제점 식별 할 수 있습니다.
 * **가이드 제공** EKS Cluster의 문제점에 대한 각각의 항목에 대하여 자세한 가이드를 제공받아 문제점을 개선 할 수 있습니다.
 * **다양한 OS 환경 지원** Window, Linux, MacOS 환경에 맞는 툴을 제공받아 사용 할 수 있습니다.

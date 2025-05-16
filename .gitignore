@@ -75,6 +75,7 @@ bsd/*
 
 # 프로그램 실행 시 출력되는 파일/폴더
 result/*
+output/*
 
 # 챗봇 테스트? 폴더
 sample-eks-troubleshooting-rag-chatbot/*
