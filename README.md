@@ -136,27 +136,32 @@ docker run -v ~/.kube:/root/.kube -v ~/.aws:/root/.aws -v ./output:/output publi
  - AmazonEKSWorkerNodePolicy: EKS Cluster 조회 권한
  - AmazonEC2ReadOnlyAccess: EC2, VPC, Subnet 등 조회 권한
 
-1. IAM ServiceAccount 생성 (IRSA): 
+1. IAM Policy 생성:
+```bash
+curl -sSL https://raw.githubusercontent.com/fitcloud/eks-checklist/refs/heads/main/policy/minimum-policy.json -o minimum-policy.json
+POLICY_ARN=$(aws iam create-policy --policy-name eks-checklist-access --policy-document file://minimum-policy.json --query 'Policy.Arn' --output text)
+echo $POLICY_ARN
+```
+2. IAM ServiceAccount 생성 (IRSA): 
 ```bash
 eksctl create iamserviceaccount \
    --name eks-checklist-sa \
    --namespace default \
-   --cluster <CLUSTER_NAME> \
-   --attach-policy-arn arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy \
-   --attach-policy-arn arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess \
+   --cluster eks-checklist \
+   --attach-policy-arn $POLICY_ARN \
    --approve \
    --override-existing-serviceaccounts
 ```
-2. HTML 보고서 추출 Job 배포:
+3. HTML 보고서 추출 Job 배포:
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/fitcloud/eks-checklist/refs/heads/main/manifest/output-html-job.yaml
 ```
-3. 결과물 가져오기:
+4. 결과물 가져오기:
 ```bash
 POD_NAME=$(kubectl get pod -l job-name=eks-checklist-job -o jsonpath="{.items[0].metadata.name}")
 kubectl cp $POD_NAME:/output ./output
 ```
-4. 정리 (리소스 삭제):
+5. 정리 (리소스 삭제):
 ```bash
 eksctl delete iamserviceaccount --cluster <CLUSTER_NAME> --name eks-checklist-sa
 kubectl delete -f output-html-job.yaml
