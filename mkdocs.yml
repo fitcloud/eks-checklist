@@ -18,6 +18,11 @@ theme:
   features:
     - content.code.copy
     - content.code.select
+
+docs_dir: docs
+use_directory_urls: true
+index: home/introduction.md
+
 nav:
     - Home : 
       - Welcome : home/introduction.md
