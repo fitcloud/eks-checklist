@@ -2,7 +2,7 @@
     <a href="https://fitcloud.github.io/eks-checklist/guidedocs/introduction/" target="_blank"><img alt="EKS-Checklist" src="/docs/images/EKS_Checklist.png" width="400"></a><br>EKS-Checklist
 </h1>
 
-<p align="center">자세한 내용은 <a href="https://fitcloud.github.io/eks-checklist/home/introduction/" target="_blank">EKS Checklist</a>을 방문하여 문서 및 가이드북을 확인하세요</p>
+<p align="center">자세한 내용은 <a href="https://fitcloud.github.io/eks-checklist/" target="_blank">EKS Checklist</a>을 방문하여 문서 및 가이드북을 확인하세요</p>
 
 <div align="center"
    
