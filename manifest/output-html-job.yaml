@@ -10,6 +10,7 @@ rules:
     "services",
     "namespaces",
     "persistentvolumes",
+    "persistentvolumeclaims",
     "secrets",
     "configmaps",
     "serviceaccounts",
