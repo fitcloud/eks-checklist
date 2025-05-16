@@ -13,15 +13,20 @@ extra_css:
   - assets/css/custom.css
 
 site_name: "EKS Checklist"
+docs_dir: docs
 theme:
   name: "material"
   features:
     - content.code.copy
     - content.code.select
+    - navigation.instant  # 추가
+    - navigation.tracking  # 추가
+    - navigation.indexes  # 추가 - 섹션 인덱스 페이지 사용
+
 nav:
     - Home : 
-      - Welcome : guidedocs/introduction.md
-      - How it works : guidedocs/howitworks.md
+      - index.md
+      - How it works : home/howitworks.md
     - Runbook:
       - General:
         - GEN-001 코드형 인프라 : runbook/general/GEN-001.md
