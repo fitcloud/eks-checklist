@@ -7,6 +7,48 @@
   },
   {
     "namespace": "default",
+    "pod": "eks-checklist-job-9gf6q",
+    "container": "eks-checklist",
+    "image": "public.ecr.aws/x5b3c7k0/eks-checklist:test"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-9vxbz",
+    "container": "eks-checklist",
+    "image": "public.ecr.aws/x5b3c7k0/eks-checklist:test"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-9w6m4",
+    "container": "eks-checklist",
+    "image": "public.ecr.aws/x5b3c7k0/eks-checklist:test"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-clt54",
+    "container": "eks-checklist",
+    "image": "public.ecr.aws/x5b3c7k0/eks-checklist:test"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-k9l9g",
+    "container": "eks-checklist",
+    "image": "public.ecr.aws/x5b3c7k0/eks-checklist:test"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-l6vrz",
+    "container": "eks-checklist",
+    "image": "public.ecr.aws/x5b3c7k0/eks-checklist:test"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-rg2pm",
+    "container": "eks-checklist",
+    "image": "public.ecr.aws/x5b3c7k0/eks-checklist:test"
+  },
+  {
+    "namespace": "default",
     "pod": "nginx-59856579bf-pbp48",
     "container": "nginx",
     "image": "nginx:latest"
