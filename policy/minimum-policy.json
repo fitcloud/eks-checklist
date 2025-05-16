@@ -1,0 +1,21 @@
+{
+"Version": "2012-10-17",
+"Statement": [
+    {
+    "Effect": "Allow",
+    "Action": [
+        "eks:DescribeCluster",
+        "eks:ListNodegroups",
+        "eks:DescribeNodegroup",
+        "ec2:Describe*",
+        "ec2:GetConsoleOutput",
+        "ec2:GetPasswordData",
+        "iam:Get*",
+        "iam:List*",
+        "vpc:Describe*"
+    ],
+    "Resource": "*"
+    }
+]
+}
+  
