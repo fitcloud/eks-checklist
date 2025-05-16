@@ -2,7 +2,7 @@
     <a href="https://fitcloud.github.io/eks-checklist/guidedocs/introduction/" target="_blank"><img alt="EKS-Checklist" src="/docs/images/EKS_Checklist.png" width="400"></a><br>EKS-Checklist
 </h1>
 
-<p align="center">자세한 내용은 <a href="https://fitcloud.github.io/eks-checklist/guidedocs/introduction/" target="_blank">EKS Checklist</a>을 방문하여 문서 및 가이드북을 확인하세요</p>
+<p align="center">자세한 내용은 <a href="https://fitcloud.github.io/eks-checklist/home/introduction/" target="_blank">EKS Checklist</a>을 방문하여 문서 및 가이드북을 확인하세요</p>
 
 <div align="center"
    
@@ -147,20 +147,16 @@ eksctl create iamserviceaccount \
    --approve \
    --override-existing-serviceaccounts
 ```
-2. 레포지토리 복사 및 매니페스트 디렉터리로 이동:
+2. HTML 보고서 추출 Job 배포:
 ```bash
-git clone https://github.com/fitcloud/eks-checklist.git
-cd eks-checklist/manifest
+kubectl apply -f https://raw.githubusercontent.com/fitcloud/eks-checklist/refs/heads/main/manifest/output-html-job.yaml
 ```
-3. HTML 보고서 추출 Job 배포:
+3. 결과물 가져오기:
 ```bash
-kubectl apply -f output-html-job.yaml
+POD_NAME=$(kubectl get pod -l job-name=eks-checklist-job -o jsonpath="{.items[0].metadata.name}")
+kubectl cp $POD_NAME:/output ./output
 ```
-4. 보고서 가져오기:
-```bash
-kubectl cp <eks-checklist-job-POD-NAME>:/output/<REPORT_NAME> ./eks-checklist-report.html
-```
-5. 정리 (리소스 삭제):
+4. 정리 (리소스 삭제):
 ```bash
 eksctl delete iamserviceaccount --cluster <CLUSTER_NAME> --name eks-checklist-sa
 kubectl delete -f output-html-job.yaml

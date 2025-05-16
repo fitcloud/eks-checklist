@@ -4,10 +4,13 @@ metadata:
   name: eks-checklist-role
 rules:
 - apiGroups: [""]
-  resources: ["nodes", "pods", "services", "namespaces"]
+  resources: ["nodes", "pods", "services", "namespaces", "persistentvolumes", "secrets"]
   verbs: ["get", "list"]
 - apiGroups: ["apps"]
   resources: ["deployments", "daemonsets", "statefulsets", "replicasets"]
+  verbs: ["get", "list"]
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
   verbs: ["get", "list"]
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: ["roles", "clusterroles", "rolebindings", "clusterrolebindings"]
