@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -15,11 +15,11 @@ import (
 
 func CheckQoSClass(client kubernetes.Interface, cfg aws.Config, eksCluster string) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "애플리케이션 중요도에 따른 QoS 적용 - Manual",
+		CheckName:  "[REL-008] 애플리케이션 중요도에 따른 QoS 적용 - Manual",
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "Pod의 QoS 클래스는 자동으로 분석되었으며, 애플리케이션 중요도에 따라 적절한 QoS가 적용되었는지는 수동 판단해야 합니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/qosByPriority",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-008",
 	}
 
 	baseDir := filepath.Join(".", "output", eksCluster+"-qos-class")

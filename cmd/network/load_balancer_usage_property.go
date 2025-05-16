@@ -15,11 +15,11 @@ import (
 
 func CheckLoadBalancerUsage(client kubernetes.Interface, cfg aws.Config, eksCluster string) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "사용 사례에 맞는 로드밸런서 사용(ALB or NLB) - Manual",
+		CheckName:  "[NET-004] 사용 사례에 맞는 로드밸런서 사용(ALB or NLB)",
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "모든 Ingress 리소스를 수집하였습니다. 각 서비스에 적합한 ALB 또는 NLB 사용 여부는 수동으로 점검해야 합니다.",
-		Runbook:    "https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/network/NET-004",
 	}
 
 	baseDir := filepath.Join(".", "output", eksCluster+"-loadbalancer-usage")

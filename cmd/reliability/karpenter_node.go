@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -13,11 +13,11 @@ import (
 // CheckKarpenterNode checks whether there are any Karpenter NodeClaims provisioned in the cluster.
 func CheckKarpenterNode(karpenter_installed common.CheckResult, client dynamic.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "Karpenter 기반 노드 생성",
+		CheckName:  "[REL-013] Karpenter 기반 노드 생성",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "Karpenter가 노드를 프로비저닝한 흔적(NodeClaim 리소스)이 존재하지 않습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/karpenterNodes",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-013",
 	}
 
 	if !karpenter_installed.Passed {

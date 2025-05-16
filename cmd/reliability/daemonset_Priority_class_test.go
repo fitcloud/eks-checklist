@@ -1,11 +1,11 @@
-package stability_test
+package reliability_test
 
 import (
 	"context"
 	"testing"
 
 	"eks-checklist/cmd/common"
-	"eks-checklist/cmd/stability"
+	"eks-checklist/cmd/reliability"
 	"eks-checklist/cmd/testutils"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -76,7 +76,7 @@ func TestCheckDaemonSetPriorityClass(t *testing.T) {
 
 			// 첫 번째 인자로 Karpenter 설치 여부를 나타내는 CheckResult 전달
 			karpenterCheck := common.CheckResult{Passed: karpenterInstalled}
-			result := stability.CheckDaemonSetPriorityClass(karpenterCheck, client)
+			result := reliability.CheckDaemonSetPriorityClass(karpenterCheck, client)
 			if result.Passed != expectPass {
 				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectPass, result.Passed)
 			}

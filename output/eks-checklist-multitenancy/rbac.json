@@ -1342,9 +1342,9 @@
     {
       "metadata": {
         "name": "eks-checklist-binding",
-        "uid": "9536c6a1-dc5e-479b-a471-fdd6b0922a36",
-        "resourceVersion": "15822933",
-        "creationTimestamp": "2025-05-16T00:25:38Z",
+        "uid": "e217043f-5259-4eb0-aa09-a851aed69206",
+        "resourceVersion": "15903327",
+        "creationTimestamp": "2025-05-16T06:51:36Z",
         "annotations": {
           "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"ClusterRoleBinding\",\"metadata\":{\"annotations\":{},\"name\":\"eks-checklist-binding\"},\"roleRef\":{\"apiGroup\":\"rbac.authorization.k8s.io\",\"kind\":\"ClusterRole\",\"name\":\"eks-checklist-role\"},\"subjects\":[{\"kind\":\"ServiceAccount\",\"name\":\"eks-checklist-sa\",\"namespace\":\"default\"}]}\n"
         },
@@ -1353,7 +1353,7 @@
             "manager": "kubectl-client-side-apply",
             "operation": "Update",
             "apiVersion": "rbac.authorization.k8s.io/v1",
-            "time": "2025-05-16T00:25:37Z",
+            "time": "2025-05-16T06:51:36Z",
             "fieldsType": "FieldsV1",
             "fieldsV1": {
               "f:metadata": {

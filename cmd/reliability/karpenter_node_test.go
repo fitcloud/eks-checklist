@@ -1,10 +1,10 @@
-package stability_test
+package reliability_test
 
 import (
 	"testing"
 
 	"eks-checklist/cmd/common"
-	"eks-checklist/cmd/stability"
+	"eks-checklist/cmd/reliability"
 	"eks-checklist/cmd/testutils"
 
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -68,7 +68,7 @@ func TestCheckKarpenterNode(t *testing.T) {
 			karpenterCheck := common.CheckResult{Passed: karpenterInstalled}
 
 			// 함수 호출: 두 인자(karpenterCheck, client) 전달
-			result := stability.CheckKarpenterNode(karpenterCheck, client)
+			result := reliability.CheckKarpenterNode(karpenterCheck, client)
 
 			if result.Passed != expectPass {
 				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectPass, result.Passed)

@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -12,11 +12,11 @@ import (
 // CheckCoreDNSHpa checks if CoreDNS has an HPA set in the kube-system namespace.
 func CheckCoreDNSHpa(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "CoreDNS에 HPA 적용",
+		CheckName:  "[REL-016] CoreDNS에 HPA 적용",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "CoreDNS에 Horizontal Pod Autoscaler(HPA)가 설정되어 있지 않습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/corednsHPA",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-016",
 	}
 
 	hpas, err := client.AutoscalingV1().HorizontalPodAutoscalers("kube-system").List(context.TODO(), v1.ListOptions{

@@ -20,11 +20,11 @@ type EksCluster struct {
 // CheckVpcSubnetIpCapacity collects IP usage stats for all subnets and prints them for manual inspection.
 func CheckVpcSubnetIpCapacity(eksCluster EksCluster, cfg aws.Config) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "VPC 서브넷에 충분한 IP 대역대 확보 - Manual",
+		CheckName:  "[NET-001] VPC 서브넷에 충분한 IP 대역대 확보",
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "모든 서브넷의 IP 사용량을 출력했습니다. 사용 가능 용량이 충분한지 수동으로 확인하세요.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/network/subnetIpCapacity",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/network/NET-001",
 	}
 
 	subnetIds := eksCluster.Cluster.ResourcesVpcConfig.SubnetIds

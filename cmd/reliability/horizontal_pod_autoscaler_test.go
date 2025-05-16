@@ -1,12 +1,11 @@
-package stability_test
+package reliability_test
 
 import (
 	"context"
+	"eks-checklist/cmd/reliability"
+	"eks-checklist/cmd/testutils"
 	"fmt"
 	"testing"
-
-	"eks-checklist/cmd/stability"
-	"eks-checklist/cmd/testutils"
 
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
@@ -97,7 +96,7 @@ func TestCheckHpa(t *testing.T) {
 			}
 
 			// 함수 실행 및 결과 비교
-			result := stability.CheckHpa(client)
+			result := reliability.CheckHpa(client)
 			if result.Passed != expectPass {
 				t.Errorf("Test '%s' failed: expected %v, got %v\nFailureMsg: %s\nResources: %v", testName, expectPass, result.Passed, result.FailureMsg, result.Resources)
 			} else {

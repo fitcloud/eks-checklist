@@ -8,49 +8,7 @@
   },
   {
     "namespace": "default",
-    "pod": "eks-checklist-job-9gf6q",
-    "container": "eks-checklist",
-    "terminationGracePeriodSeconds": 30,
-    "hasPreStopHook": false
-  },
-  {
-    "namespace": "default",
-    "pod": "eks-checklist-job-9vxbz",
-    "container": "eks-checklist",
-    "terminationGracePeriodSeconds": 30,
-    "hasPreStopHook": false
-  },
-  {
-    "namespace": "default",
-    "pod": "eks-checklist-job-9w6m4",
-    "container": "eks-checklist",
-    "terminationGracePeriodSeconds": 30,
-    "hasPreStopHook": false
-  },
-  {
-    "namespace": "default",
-    "pod": "eks-checklist-job-clt54",
-    "container": "eks-checklist",
-    "terminationGracePeriodSeconds": 30,
-    "hasPreStopHook": false
-  },
-  {
-    "namespace": "default",
-    "pod": "eks-checklist-job-k9l9g",
-    "container": "eks-checklist",
-    "terminationGracePeriodSeconds": 30,
-    "hasPreStopHook": false
-  },
-  {
-    "namespace": "default",
-    "pod": "eks-checklist-job-l6vrz",
-    "container": "eks-checklist",
-    "terminationGracePeriodSeconds": 30,
-    "hasPreStopHook": false
-  },
-  {
-    "namespace": "default",
-    "pod": "eks-checklist-job-rg2pm",
+    "pod": "eks-checklist-job-l72t2",
     "container": "eks-checklist",
     "terminationGracePeriodSeconds": 30,
     "hasPreStopHook": false

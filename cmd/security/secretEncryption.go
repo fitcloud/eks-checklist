@@ -13,11 +13,11 @@ import (
 // Secret 객체의 암호화 여부를 확인하는 함수
 func CheckSecretEncryption(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "Secret 객체 암호화",
+		CheckName:  "[SEC-011] Secret 객체 암호화",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 Secret 객체가 암호화되지 않은 채로 저장되어 있습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/security/secretEncryption",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/security/SEC-011",
 	}
 
 	secrets, err := client.CoreV1().Secrets("").List(context.TODO(), metav1.ListOptions{})

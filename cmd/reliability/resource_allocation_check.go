@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -17,11 +17,11 @@ import (
 
 func CheckResourceAllocation(client kubernetes.Interface, cfg aws.Config, eksCluster string) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "애플리케이션에 적절한 CPU/RAM 할당",
+		CheckName:  "[REL-007] 애플리케이션에 적절한 CPU/RAM 할당",
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "일부 Pod에 Request/Limit 설정이 없거나, 값의 적정성은 수동 확인이 필요합니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/resourceRequestsLimits",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-007",
 	}
 
 	baseDir := filepath.Join(".", "output", eksCluster+"-resource-allocation")

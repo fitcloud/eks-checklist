@@ -13,10 +13,10 @@ import (
 // CheckAwsLoadBalancerController checks if AWS Load Balancer Controller is installed via Deployment.
 func CheckAwsLoadBalancerController(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName: "AWS Load Balancer Controller 사용",
+		CheckName: "[NET-005] AWS Load Balancer Controller 사용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://fitcloud.github.io/eks-checklist/network/albController",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/runbook/network/NET-005",
 	}
 
 	deploys, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})

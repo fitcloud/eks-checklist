@@ -1,10 +1,10 @@
-package stability_test
+package reliability_test
 
 import (
 	"context"
 	"testing"
 
-	"eks-checklist/cmd/stability"
+	"eks-checklist/cmd/reliability"
 	"eks-checklist/cmd/testutils"
 
 	corev1 "k8s.io/api/core/v1"
@@ -55,7 +55,7 @@ func TestCheckCoreDNSCache(t *testing.T) {
 				// ConfigMap을 생성하지 않음
 			}
 
-			result := stability.CheckCoreDNSCache(client)
+			result := reliability.CheckCoreDNSCache(client)
 
 			if result.Passed != expectPass {
 				t.Errorf("Test '%s' failed: expected %v, got %v", name, expectPass, result.Passed)

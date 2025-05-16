@@ -56,24 +56,24 @@ nav:
         - SCL-006 노드 확장/축소 정책 적용 : runbook/scalability/SCL-006.md
         - SCL-007 다양한 인스턴스 타입 사용 : runbook/scalability/SCL-007.md
       - Reliability:
-        - REL-001 싱글톤 Pod 미사용 : runbook/stability/REL-001.md
-        - REL-002 2개 이상의 Pod 복제본 사용 : runbook/stability/REL-002.md
-        - REL-003 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 : runbook/stability/REL-003.md
-        - REL-004 HPA 적용 : runbook/stability/REL-004.md
-        - REL-005 Probe(Startup, Readiness, Liveness) 적용 : runbook/stability/REL-005.md
-        - REL-006 중요 워크로드에 대한 PDB(Pod Distruption Budget) 적용 : runbook/stability/REL-006.md
-        - REL-007 애플리케이션에 적절한 CPU/RAM 할당 : runbook/stability/REL-007.md
-        - REL-008 애플리케이션 중요도에 따른 QoS 적용 : runbook/stability/REL-008.md
-        - REL-009 인프라 및 애플리케이션 모니터링 스택 적용 : runbook/stability/REL-009.md
-        - REL-010 반영구 저장소에 애플리케이션 로그 저장 : runbook/stability/REL-010.md
-        - REL-011 오토스케일링 그룹 기반 관리형 노드 그룹 생성 : runbook/stability/REL-011.md
-        - REL-012 Cluster Autoscaler 적용 : runbook/stability/REL-012.md
-        - REL-013 Karpenter 기반 노드 생성 : runbook/stability/REL-013.md
-        - REL-014 다수의 가용 영역에 데이터 플레인 노드 배포 : runbook/stability/REL-014.md
-        - REL-015 PV 사용시 volume affinity 위반 사항 체크 : runbook/stability/REL-015.md
-        - REL-016 CoreDNS에 HPA 적용 : runbook/stability/REL-016.md
-        - REL-017 DNS 캐시 적용 : runbook/stability/REL-017.md
-        - REL-018 Karpenter 사용시 DaemonSet에 Priority Class 부여 : runbook/stability/REL-018.md
+        - REL-001 싱글톤 Pod 미사용 : runbook/reliability/REL-001.md
+        - REL-002 2개 이상의 Pod 복제본 사용 : runbook/reliability/REL-002.md
+        - REL-003 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 : runbook/reliability/REL-003.md
+        - REL-004 HPA 적용 : runbook/reliability/REL-004.md
+        - REL-005 Probe(Startup, Readiness, Liveness) 적용 : runbook/reliability/REL-005.md
+        - REL-006 중요 워크로드에 대한 PDB(Pod Distruption Budget) 적용 : runbook/reliability/REL-006.md
+        - REL-007 애플리케이션에 적절한 CPU/RAM 할당 : runbook/reliability/REL-007.md
+        - REL-008 애플리케이션 중요도에 따른 QoS 적용 : runbook/reliability/REL-008.md
+        - REL-009 인프라 및 애플리케이션 모니터링 스택 적용 : runbook/reliability/REL-009.md
+        - REL-010 반영구 저장소에 애플리케이션 로그 저장 : runbook/reliability/REL-010.md
+        - REL-011 오토스케일링 그룹 기반 관리형 노드 그룹 생성 : runbook/reliability/REL-011.md
+        - REL-012 Cluster Autoscaler 적용 : runbook/reliability/REL-012.md
+        - REL-013 Karpenter 기반 노드 생성 : runbook/reliability/REL-013.md
+        - REL-014 다수의 가용 영역에 데이터 플레인 노드 배포 : runbook/reliability/REL-014.md
+        - REL-015 PV 사용시 volume affinity 위반 사항 체크 : runbook/reliability/REL-015.md
+        - REL-016 CoreDNS에 HPA 적용 : runbook/reliability/REL-016.md
+        - REL-017 DNS 캐시 적용 : runbook/reliability/REL-017.md
+        - REL-018 Karpenter 사용시 DaemonSet에 Priority Class 부여 : runbook/reliability/REL-018.md
       - Network:
         - NET-001 VPC 서브넷에 충분한 IP 대역대 확보: runbook/network/NET-001.md
         - NET-002 Pod에 부여할 IP 부족시 알림 설정: runbook/network/NET-002.md

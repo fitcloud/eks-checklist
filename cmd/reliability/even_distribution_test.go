@@ -1,11 +1,10 @@
-package stability_test
+package reliability_test
 
 import (
 	"context"
-	"testing"
-
-	"eks-checklist/cmd/stability"
+	"eks-checklist/cmd/reliability"
 	"eks-checklist/cmd/testutils"
+	"testing"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -91,7 +90,7 @@ func TestCheckPodDistributionAndAffinity(t *testing.T) {
 				}
 			}
 
-			result := stability.CheckPodDistributionAndAffinity(client)
+			result := reliability.CheckPodDistributionAndAffinity(client)
 
 			// 기대값에 따라 "PASS" 또는 "FAIL" 문자열이 출력되었는지 확인
 			if result.Passed != expectPass {

@@ -1,11 +1,10 @@
-package stability_test
+package reliability_test
 
 import (
 	"context"
-	"testing"
-
-	"eks-checklist/cmd/stability"
+	"eks-checklist/cmd/reliability"
 	"eks-checklist/cmd/testutils"
+	"testing"
 
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -42,7 +41,7 @@ func TestCheckCoreDNSHpa(t *testing.T) {
 				}
 			}
 
-			result := stability.CheckCoreDNSHpa(client)
+			result := reliability.CheckCoreDNSHpa(client)
 
 			if result.Passed != !expectPass {
 				t.Errorf("Test '%s' failed: expected %v, got %v", name, !expectPass, result.Passed)

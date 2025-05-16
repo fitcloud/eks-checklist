@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -13,11 +13,11 @@ import (
 // CheckHpa checks whether Deployments are using Horizontal Pod Autoscaler (HPA).
 func CheckHpa(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "HPA 적용",
+		CheckName:  "[REL-004] HPA 적용",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 Deployment에 HPA가 적용되어 있지 않습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/hpaEnabled",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-004",
 	}
 
 	// 모든 Deployment 조회

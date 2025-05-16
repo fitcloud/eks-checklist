@@ -1,10 +1,10 @@
-package stability_test
+package reliability_test
 
 import (
 	"context"
 	"testing"
 
-	"eks-checklist/cmd/stability"
+	"eks-checklist/cmd/reliability"
 	"eks-checklist/cmd/testutils"
 
 	corev1 "k8s.io/api/core/v1"
@@ -114,7 +114,7 @@ func TestCheckProbe(t *testing.T) {
 			client.CoreV1().Pods(pod.Namespace).Create(context.TODO(), &pod, v1.CreateOptions{})
 
 			// 함수 실행
-			result := stability.CheckProbe(client)
+			result := reliability.CheckProbe(client)
 
 			if result.Passed != expectPass {
 				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectPass, result.Passed)

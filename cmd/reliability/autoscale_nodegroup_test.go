@@ -1,13 +1,12 @@
-package stability_test
+package reliability_test
 
 import (
 	"context"
+	"eks-checklist/cmd/reliability"
+	"eks-checklist/cmd/testutils"
 	"fmt"
 	"reflect"
 	"testing"
-
-	"eks-checklist/cmd/stability"
-	"eks-checklist/cmd/testutils"
 
 	"bou.ke/monkey"
 	"github.com/aws/aws-sdk-go/aws"
@@ -223,7 +222,7 @@ func TestCheckAutoScaledManagedNodeGroup(t *testing.T) {
 				})
 			defer patch2.Unpatch()
 
-			result := stability.CheckAutoScaledManagedNodeGroup(client, clusterName)
+			result := reliability.CheckAutoScaledManagedNodeGroup(client, clusterName)
 			if result.Passed != expectedPass {
 				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectedPass, result.Passed)
 			}

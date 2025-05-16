@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -13,11 +13,11 @@ import (
 // PodReplicaSetCheck checks that ReplicaSets are configured with more than 1 pod (replica).
 func PodReplicaSetCheck(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "2개 이상의 Pod 복제본 사용",
+		CheckName:  "[REL-002] 2개 이상의 Pod 복제본 사용",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 ReplicaSet이 복제본을 1개만 사용하고 있습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/multiplePodReplicas",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-002",
 	}
 
 	replicaSets, err := client.AppsV1().ReplicaSets("").List(context.TODO(), v1.ListOptions{})

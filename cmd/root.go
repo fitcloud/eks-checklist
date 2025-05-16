@@ -5,9 +5,9 @@ import (
 	"eks-checklist/cmd/cost"
 	"eks-checklist/cmd/general"
 	"eks-checklist/cmd/network"
+	"eks-checklist/cmd/reliability"
 	"eks-checklist/cmd/scalability"
 	"eks-checklist/cmd/security"
-	"eks-checklist/cmd/stability"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -127,8 +127,6 @@ var rootCmd = &cobra.Command{
 		// 루트 유저가 아닌 유저로 컨테이너 실행 - Automatic
 		common.PrintResult(security.CheckContainerExecutionUser(k8sClient))
 
-		// 불필요한 OS 권한 비부여 - Automatic
-
 		// 멀티 태넌시 적용 유무 - Manual
 		common.PrintResult(security.CheckMultitenancy(k8sClient, cfg, cluster))
 
@@ -184,58 +182,58 @@ var rootCmd = &cobra.Command{
 		common.PrintCategoryHeader("Stability Check")
 
 		// 싱글톤 Pod 미사용 - Automatic
-		common.PrintResult(stability.SingletonPodCheck(k8sClient))
+		common.PrintResult(reliability.SingletonPodCheck(k8sClient))
 
 		// 2개 이상의 Pod 복제본 사용 - Automatic
-		common.PrintResult(stability.PodReplicaSetCheck(k8sClient))
+		common.PrintResult(reliability.PodReplicaSetCheck(k8sClient))
 
 		// 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포 - Automatic
-		common.PrintResult(stability.CheckPodDistributionAndAffinity(k8sClient))
+		common.PrintResult(reliability.CheckPodDistributionAndAffinity(k8sClient))
 
 		// HPA 적용 - Automatic
-		common.PrintResult(stability.CheckHpa(k8sClient))
+		common.PrintResult(reliability.CheckHpa(k8sClient))
 
 		// Probe(Startup, Readiness, Liveness) 적용 - Automatic
-		common.PrintResult(stability.CheckProbe(k8sClient))
+		common.PrintResult(reliability.CheckProbe(k8sClient))
 
 		// 중요 워크로드에 대한 PDB(Pod Distruption Budget) 적용 - Automatic/Manual
-		common.PrintResult(stability.CheckPDB())
+		common.PrintResult(reliability.CheckPDB())
 
 		// 애플리케이션에 적절한 CPU/RAM 할당 - Automatic/Manual
-		common.PrintResult(stability.CheckResourceAllocation(k8sClient, cfg, cluster))
+		common.PrintResult(reliability.CheckResourceAllocation(k8sClient, cfg, cluster))
 
 		// 애플리케이션 중요도에 따른 QoS 적용 - Automatic/Manual
-		common.PrintResult(stability.CheckQoSClass(k8sClient, cfg, cluster))
+		common.PrintResult(reliability.CheckQoSClass(k8sClient, cfg, cluster))
 
 		// 인프라 및 애플리케이션 모니터링 스택 적용 - Manual
-		common.PrintResult(stability.CheckNodeScalingPolicy())
+		common.PrintResult(reliability.CheckNodeScalingPolicy())
 
 		// 반영구 저장소에 애플리케이션 로그 저장 - Manual
-		common.PrintResult(stability.CheckApplicationLogs())
+		common.PrintResult(reliability.CheckApplicationLogs())
 
 		// 오토스케일링 그룹 기반 관리형 노드 그룹 생성 - Automatic
-		common.PrintResult(stability.CheckAutoScaledManagedNodeGroup(k8sClient, cluster))
+		common.PrintResult(reliability.CheckAutoScaledManagedNodeGroup(k8sClient, cluster))
 
 		// Cluster Autoscaler 적용 - Automatic
-		common.PrintResult(stability.CheckClusterAutoscalerEnabled(k8sClient))
+		common.PrintResult(reliability.CheckClusterAutoscalerEnabled(k8sClient))
 
 		// Karpenter 기반 노드 생성 - Automatic
-		common.PrintResult(stability.CheckKarpenterNode(scalability.GetKarpenter(k8sClient), dynamicClient))
+		common.PrintResult(reliability.CheckKarpenterNode(scalability.GetKarpenter(k8sClient), dynamicClient))
 
 		// 다수의 가용 영역에 데이터 플레인 노드 배포 - Automatic
-		common.PrintResult(stability.CheckNodeMultiAZ(k8sClient))
+		common.PrintResult(reliability.CheckNodeMultiAZ(k8sClient))
 
 		// PV 사용시 volume affinity 위반 사항 체크 - Manual (PV 어피니티 전부다 출력)
-		common.PrintResult(stability.CheckVolumeAffinity(k8sClient, cfg, cluster))
+		common.PrintResult(reliability.CheckVolumeAffinity(k8sClient, cfg, cluster))
 
 		// CoreDNS에 HPA 적용 - Automatic
-		common.PrintResult(stability.CheckCoreDNSHpa(k8sClient))
+		common.PrintResult(reliability.CheckCoreDNSHpa(k8sClient))
 
 		// DNS 캐시 적용 - Automatic
-		common.PrintResult(stability.CheckCoreDNSCache(k8sClient))
+		common.PrintResult(reliability.CheckCoreDNSCache(k8sClient))
 
 		// // Karpenter 사용시 DaemonSet에 Priority Class 부여 - Automatic
-		common.PrintResult(stability.CheckDaemonSetPriorityClass(scalability.GetKarpenter(k8sClient), k8sClient))
+		common.PrintResult(reliability.CheckDaemonSetPriorityClass(scalability.GetKarpenter(k8sClient), k8sClient))
 
 		// Network 항목 체크 기능은 하단 항목에 추가
 		common.PrintCategoryHeader("Network Check")

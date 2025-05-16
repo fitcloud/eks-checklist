@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -13,11 +13,11 @@ import (
 // CheckProbe - 모든 Pod을 검색하여 startupProbe, livenessProbe, readinessProbe 가 모두 설정되었는지 확인
 func CheckProbe(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "Probe(Startup, Readiness, Liveness) 적용",
+		CheckName:  "[REL-005] Probe(Startup, Readiness, Liveness) 적용",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 컨테이너에 startup/liveness/readiness probe가 누락되어 있습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/probeConfigured",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-005",
 	}
 
 	pods, err := client.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})

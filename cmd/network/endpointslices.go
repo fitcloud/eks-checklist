@@ -13,10 +13,10 @@ import (
 // EndpointSlicesCheck checks whether all services use EndpointSlices instead of Endpoints.
 func EndpointSlicesCheck(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName: "Endpoint 대신 EndpointSlices 사용",
+		CheckName: "[NET-009] Endpoint 대신 EndpointSlices 사용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://your.runbook.url/latest-tag-image",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/runbook/network/NET-009",
 	}
 
 	endpointSlices, err := client.DiscoveryV1().EndpointSlices("").List(context.TODO(), v1.ListOptions{})

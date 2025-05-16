@@ -13,10 +13,10 @@ import (
 // CheckVpcCniPrefixMode checks if the aws-node DaemonSet has ENABLE_PREFIX_DELEGATION=true.
 func CheckVpcCniPrefixMode(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName: "VPC CNI의 Prefix 모드 사용",
+		CheckName: "[NET-003] VPC CNI의 Prefix 모드 사용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://fitcloud.github.io/eks-checklist/network/vpcCniPrefixMode",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/runbook/network/NET-003",
 	}
 
 	daemonsets, err := client.AppsV1().DaemonSets("").List(context.TODO(), v1.ListOptions{})

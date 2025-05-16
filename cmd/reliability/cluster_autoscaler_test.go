@@ -1,10 +1,10 @@
-package stability_test
+package reliability_test
 
 import (
 	"context"
 	"testing"
 
-	"eks-checklist/cmd/stability"
+	"eks-checklist/cmd/reliability"
 	"eks-checklist/cmd/testutils"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -86,7 +86,7 @@ func TestCheckClusterAutoscalerEnabled(t *testing.T) {
 			}
 
 			// CheckClusterAutoscalerEnabled 함수 실행 및 반환값 검증
-			result := stability.CheckClusterAutoscalerEnabled(client)
+			result := reliability.CheckClusterAutoscalerEnabled(client)
 
 			if result.Passed != expectPass {
 				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectPass, result.Passed)

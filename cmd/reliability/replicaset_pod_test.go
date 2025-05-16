@@ -1,10 +1,10 @@
-package stability_test
+package reliability_test
 
 import (
 	"context"
 	"testing"
 
-	"eks-checklist/cmd/stability"
+	"eks-checklist/cmd/reliability"
 	"eks-checklist/cmd/testutils"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -71,7 +71,7 @@ func TestPodReplicaSetCheck(t *testing.T) {
 				}
 			}
 
-			result := stability.PodReplicaSetCheck(client)
+			result := reliability.PodReplicaSetCheck(client)
 			if result.Passed != expectPass {
 				t.Errorf("Test '%s' failed: expected %v, got %v", testName, expectPass, result.Passed)
 			}

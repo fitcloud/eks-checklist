@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -13,11 +13,11 @@ import (
 // CheckDaemonSetPriorityClass checks if all DaemonSets have a PriorityClass assigned.
 func CheckDaemonSetPriorityClass(karpenter_installed common.CheckResult, client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "Karpenter 사용시 DaemonSet에 Priority Class 부여",
+		CheckName:  "[REL-018] Karpenter 사용시 DaemonSet에 Priority Class 부여",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 DaemonSet에 PriorityClass가 설정되어 있지 않습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/daemonSetPriorityClass",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-018",
 	}
 
 	if !karpenter_installed.Passed {

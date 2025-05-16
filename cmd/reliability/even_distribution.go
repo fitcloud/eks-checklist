@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -13,11 +13,11 @@ import (
 // CheckPodDistributionAndAffinity checks whether pods are evenly distributed via affinity or topologySpreadConstraints.
 func CheckPodDistributionAndAffinity(clientset kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "동일한 역할을 하는 Pod를 다수의 노드에 분산 배포",
+		CheckName:  "[REL-003] 동일한 역할을 하는 Pod를 다수의 노드에 분산 배포",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 Pod에 affinity나 유효한 topologySpreadConstraints 설정이 누락되어 있습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/podSpreadAcrossNodes",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-003",
 	}
 
 	pods, err := clientset.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})

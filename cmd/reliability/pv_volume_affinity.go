@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -16,11 +16,11 @@ import (
 
 func CheckVolumeAffinity(client kubernetes.Interface, cfg aws.Config, eksCluster string) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "PV 사용시 volume affinity 위반 사항 체크 - Manual",
+		CheckName:  "[REL-015] PV 사용시 volume affinity 위반 사항 체크",
 		Manual:     true,
 		Passed:     false,
 		FailureMsg: "PV와 관련된 nodeAffinity 조건을 자동 수집하였으며, Pod 스케줄링 위치와의 일치 여부는 수동으로 점검해야 합니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/volumeAffinityCheck",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-015",
 	}
 
 	ctx := context.TODO()

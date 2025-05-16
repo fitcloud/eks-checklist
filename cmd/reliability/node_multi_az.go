@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -13,11 +13,11 @@ import (
 // CheckNodeMultiAZ - 데이터 플레인 노드가 여러 가용영역(AZ)에 분산 배포되어 있는지 확인
 func CheckNodeMultiAZ(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "다수의 가용 영역에 데이터 플레인 노드 배포",
+		CheckName:  "[REL-014] 다수의 가용 영역에 데이터 플레인 노드 배포",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "데이터 플레인 노드가 다수의 가용 영역(AZ)에 분산되어 있지 않습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/multiAzNodes",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-014",
 	}
 
 	nodes, err := client.CoreV1().Nodes().List(context.TODO(), v1.ListOptions{})

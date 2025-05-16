@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -14,11 +14,11 @@ import (
 // CheckClusterAutoscalerEnabled checks whether the Cluster Autoscaler is deployed in the cluster.
 func CheckClusterAutoscalerEnabled(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "Cluster Autoscaler 적용",
+		CheckName:  "[REL-012] Cluster Autoscaler 적용",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "Cluster Autoscaler가 설치되어 있지 않습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/clusterAutoscaler",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-012",
 	}
 
 	deployments, err := client.AppsV1().Deployments("").List(context.TODO(), v1.ListOptions{})

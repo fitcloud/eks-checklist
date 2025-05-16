@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -13,10 +13,10 @@ import (
 // CheckCoreDNSCache checks whether the "cache" plugin is enabled in the CoreDNS Corefile.
 func CheckCoreDNSCache(client kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName: "DNS 캐시 적용",
+		CheckName: "[REL-017] DNS 캐시 적용",
 		Manual:    false,
 		Passed:    true,
-		Runbook:   "https://fitcloud.github.io/eks-checklist/stability/dnsCaching",
+		Runbook:   "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-017",
 	}
 
 	configMap, err := client.CoreV1().ConfigMaps("kube-system").Get(context.TODO(), "coredns", v1.GetOptions{})

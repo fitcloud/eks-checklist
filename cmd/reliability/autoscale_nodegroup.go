@@ -1,4 +1,4 @@
-package stability
+package reliability
 
 import (
 	"context"
@@ -18,11 +18,11 @@ import (
 // CheckAutoScaledManagedNodeGroup - ASG 기반 관리형 노드 그룹 자동 확장 여부 확인
 func CheckAutoScaledManagedNodeGroup(client kubernetes.Interface, clusterName string) common.CheckResult {
 	result := common.CheckResult{
-		CheckName:  "오토스케일링 그룹 기반 관리형 노드 그룹 생성",
+		CheckName:  "[REL-011] 오토스케일링 그룹 기반 관리형 노드 그룹 생성",
 		Manual:     false,
 		Passed:     true,
 		FailureMsg: "일부 관리형 노드 그룹이 ASG를 통한 자동 확장 구성이 되어 있지 않습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/stability/managedNodeGroupASG",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/reliability/REL-011",
 	}
 
 	result.Passed = false // 기본은 실패

@@ -12,12 +12,12 @@ import (
 
 func CheckIRSAAndPodIdentity(clientset kubernetes.Interface) common.CheckResult {
 	result := common.CheckResult{
-		CheckName: "IRSA 또는 EKS Pod Identity 기반 권한 부여",
+		CheckName: "[SEC-003] IRSA 또는 EKS Pod Identity 기반 권한 부여",
 		Manual:    false,
 		Passed:    true,
 		// SuccessMsg: "IRSA 또는 EKS Pod Identity 기반 권한 부여",
 		FailureMsg: "일부 서비스 계정이 IRSA 또는 EKS Pod Identity를 사용하지 않고 있습니다.",
-		Runbook:    "https://fitcloud.github.io/eks-checklist/security/podIamAuth",
+		Runbook:    "https://fitcloud.github.io/eks-checklist/runbook/security/SEC-003",
 	}
 
 	saList, err := clientset.CoreV1().ServiceAccounts("").List(context.TODO(), v1.ListOptions{
