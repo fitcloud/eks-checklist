@@ -12,7 +12,8 @@ rules:
     "persistentvolumes",
     "secrets",
     "configmaps",
-    "serviceaccounts"
+    "serviceaccounts",
+    "endpoints"
   ]
   verbs: ["get", "list"]
 - apiGroups: ["apps"]
