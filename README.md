@@ -151,9 +151,10 @@ eksctl create iamserviceaccount \
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/fitcloud/eks-checklist/refs/heads/main/manifest/output-html-job.yaml
 ```
-3. 보고서 가져오기:
+3. 결과물 가져오기:
 ```bash
-kubectl cp <eks-checklist-job-POD-NAME>:/output/<REPORT_NAME> ./eks-checklist-report.html
+POD_NAME=$(kubectl get pod -l job-name=eks-checklist-job -o jsonpath="{.items[0].metadata.name}")
+kubectl cp $POD_NAME:/output ./output
 ```
 4. 정리 (리소스 삭제):
 ```bash
