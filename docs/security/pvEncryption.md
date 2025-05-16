@@ -49,23 +49,11 @@ parameters:
   type: gp3
   encrypted: "true"
   kmsKeyId: arn:aws:kms:ap-northeast-2:123456789012:key/abcde-1234-5678-xyz
-reclaimPolicy: Delete
-volumeBindingMode: WaitForFirstConsumer
 ```
 
 encrypted: "true"로 설정
 
 KMS 키를 명시적으로 지정 가능 (기본 AWS 관리 키 사용도 가능)
-
-PVC 재생성 또는 볼륨 마이그레이션
-
-기존 비암호화 볼륨을 암호화 방법
-
-암호화된 새 PVC를 생성
-
-데이터를 복사
-
-기존 PVC 제거 후 교체
 
 **Before**
 
@@ -73,8 +61,6 @@ StorageClass에 encrypted 설정 없음 → 평문 EBS 사용
 
 **After**
 
-모든 PVC는 암호화된 EBS를 기반으로 생성
-
-KMS 키 관리로 보안 수준 향상
+모든 PVC는 암호화된 EBS를 기반으로 생성, KMS 키 관리로 보안 수준 향상
 
 [AWS EKS PV 암호화](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/data-encryption-and-secrets-management.html)

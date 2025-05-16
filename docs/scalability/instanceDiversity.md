@@ -25,6 +25,9 @@ ip-10-20-13-65.ap-northeast-2.compute.internal    t3.medium
 다양한 Instance Type을 사용하세요
 
 [최적의 Amazon EC2 Node Instance 유형 선택](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/choosing-instance-type.html)
+
 [EKS Fargate](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/fargate.html)
+
 [AWS 관리형 노드 그룹](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/create-managed-node-group.html)
+
 [Karpenter Nodepool](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/karpenter.html)

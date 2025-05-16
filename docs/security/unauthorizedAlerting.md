@@ -11,15 +11,11 @@ AWS에서는 CloudTrail, CloudWatch, Security Hub, SNS 등을 연계하여, 비�
 - 감사 추적 불가: 장기적으로 어떤 위험이 있었는지 로그 기반 분석 불가능
 
 ## Diagnosis
-이 기능의 상태를 진단하는 방법을 설명합니다.
 
 다음 항목을 기반으로 비정상 접근 탐지 및 알림 설정 여부를 확인합니다:
-
-CloudTrail: 모든 이벤트 기록 여부, S3 저장 여부
-
-CloudWatch 알람 구성 여부: 특정 API 호출, 실패 로그 등에 대한 알람 구성
-
-SNS 또는 ChatOps 연계 여부(Slack, 이메일 등)
+- CloudTrail: 모든 이벤트 기록 여부, S3 저장 여부
+- CloudWatch 알람 구성 여부: 특정 API 호출, 실패 로그 등에 대한 알람 구성
+- SNS 또는 ChatOps 연계 여부(Slack, 이메일 등)
 
 명령어 또는 콘솔 진단 예시:
 
@@ -42,16 +38,6 @@ CloudTrail 설정
 
 CloudWatch 알람 설정
 로그인 실패, EC2 권한 변경, EKS 관련 설정 변경 감지
-
-**필터 example (로그인 실패)**
-
-json
-{ $.errorMessage = "*Failed*" }
-
-SNS 및 ChatOps 연동
-알림 채널로 이메일, Slack, Webhook 등 등록
-
-알람 발생 시 실시간 대응 가능
 
 **Before**
 

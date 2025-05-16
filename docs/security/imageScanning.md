@@ -23,20 +23,16 @@
 2. GitHub Actions, GitLab CI, ArgoCD 등에서 정적 분석 단계 확인
 3. 취약점 레벨 기준(Low/Medium/High/Critical)에 따른 차단 정책 존재 여부
 
-사용 중인 스캐닝 도구 확인
-
 대표적인 도구
-
 - Trivy (Aqua Security)
 - Amazon ECR 이미지 스캐닝
 
 **example Trivy CLI로 이미지 스캔**
-
 ```bash
 trivy image nginx:1.25.2
-결과는 다음과 같이 취약점 리스트를 출력하며, CVSS 점수, 수정 버전 등도 제공됩니다.
 ```
 
+result
 ```text
 nginx:1.25.2 (debian 11)
 
@@ -56,21 +52,17 @@ aws ecr describe-image-scan-findings \
 정적 분석 도구 도입 및 자동화
 
 1. 스캔 결과 기반 정책 수립
-2. CRITICAL 취약점 발견 시 배포 차단
-3. HIGH 이상 취약점 Slack/Email 알림 전파
-4. 정기적 리포트 생성 (예: 주간 기준)
-5. 이미지 최적화 및 최소화(Alpine, Distroless 이미지 활용) - 사용하지 않는 패키지 제거로 공격 표면 축소
+2. 정기적 리포트 생성 (예: 주간 기준)
+3. 이미지 최적화 및 최소화(Alpine, Distroless 이미지 활용) - 사용하지 않는 패키지 제거로 공격 표면 축소
 
 **Before**
 
 아무런 검사 없이 이미지 배포
-
 운영 중 취약점 발견 후 긴급 대응
 
 **After**
 
 빌드 시 자동 취약점 검사
-
 배포 전 차단 정책으로 보안 선제 대응
 
 [Container 이미지 Scan](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/windows-images.html)
