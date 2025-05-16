@@ -16,7 +16,7 @@ kubectl get pods --all-namespaces -o json | jq -r '.items[] | select(.metadata.o
 ```
 
 ## Mitigation
-싱글톤 Pod를 제거하고 구성을 적용하세요.
+싱글톤 Pod를 제거하고 구성을 적용하세요
 
 [EKS Singleton Pod 실행 방지](https://docs.aws.amazon.com/ko_kr/eks/latest/best-practices/application.html#_recommendations)
 
