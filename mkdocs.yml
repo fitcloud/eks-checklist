@@ -20,8 +20,8 @@ theme:
     - content.code.select
 nav:
     - Home : 
-      - Welcome : guidedocs/introduction.md
-      - How it works : guidedocs/howitworks.md
+      - Welcome : home/introduction.md
+      - How it works : home/howitworks.md
     - Runbook:
       - General:
         - GEN-001 코드형 인프라 : runbook/general/GEN-001.md
