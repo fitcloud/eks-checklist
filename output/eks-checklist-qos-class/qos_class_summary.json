@@ -6,6 +6,41 @@
   },
   {
     "namespace": "default",
+    "pod": "eks-checklist-job-9gf6q",
+    "qosClass": "BestEffort"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-9vxbz",
+    "qosClass": "BestEffort"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-9w6m4",
+    "qosClass": "BestEffort"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-clt54",
+    "qosClass": "BestEffort"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-k9l9g",
+    "qosClass": "BestEffort"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-l6vrz",
+    "qosClass": "BestEffort"
+  },
+  {
+    "namespace": "default",
+    "pod": "eks-checklist-job-rg2pm",
+    "qosClass": "BestEffort"
+  },
+  {
+    "namespace": "default",
     "pod": "nginx-59856579bf-pbp48",
     "qosClass": "BestEffort"
   }
