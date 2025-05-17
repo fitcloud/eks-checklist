@@ -66,7 +66,8 @@ spec:
       serviceAccountName: eks-checklist-sa  # 서비스 어카운트 지정
       containers:
         - name: eks-checklist
-          image: public.ecr.aws/x5b3c7k0/eks-checklist:latest
+          image: public.ecr.aws/x5b3c7k0/eks-checklist:test
+          imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args:
             - >
@@ -74,10 +75,8 @@ spec:
               echo "Sleeping for 300 seconds..." &&
               sleep 300
           env:
-          - name: AWS_REGION
-            value: ap-northeast-2  # 클러스터가 있는 리전
-          - name: CLUSTER_NAME
-            value: eks-checklist  # EKS 클러스터 이름
+            - name: IN_K8S
+              value: "true"  # Kubernetes 환경에서 실행 중임을 나타내는 환경 변수
           volumeMounts:
             - name: output-volume
               mountPath: /output  # 결과를 output 디렉터리에 저장

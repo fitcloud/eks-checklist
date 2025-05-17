@@ -4,6 +4,7 @@
     {
     "Effect": "Allow",
     "Action": [
+        "eks:ListClusters",
         "eks:DescribeCluster",
         "eks:ListNodegroups",
         "eks:DescribeNodegroup",
