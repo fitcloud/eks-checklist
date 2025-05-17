@@ -31,7 +31,6 @@ var rootCmd = &cobra.Command{
 	Short: "eks-checklist",
 	Long:  "eks-checklist",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("eks-checklist version 1")
 		common.SetSortMode(sortMode)
 
 		if outputFilter != "" {

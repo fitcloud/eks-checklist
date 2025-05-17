@@ -67,6 +67,7 @@ spec:
       containers:
         - name: eks-checklist
           image: public.ecr.aws/x5b3c7k0/eks-checklist:test
+          imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args:
             - >
