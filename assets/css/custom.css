@@ -1,0 +1,15 @@
+/* 코드 블록 자동 줄바꿈 */
+code, pre {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+  }
+/* EKS Checklist 이미지 크기 조정 */
+  img[src='../images/EKS_Checklist.png'] {
+    width: 350px;
+    height: auto;
+  }
+/*  output.png 이미지 크기 조정 */
+  img[src='../images/output.png'] {
+    width: 500px;
+    height: auto;
+  }
