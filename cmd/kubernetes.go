@@ -2,6 +2,9 @@ package cmd
 
 import (
 	"bufio"
+	"context"
+	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -9,8 +12,8 @@ import (
 	"strconv"
 	"strings"
 
-	"context"
-
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/eks"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
@@ -140,7 +143,7 @@ func getKubeconfig(kubeconfigPath string, kubeconfigContext string, awsProfile s
 	var AWS_PROFILE string
 
 	// Kubernetes 클러스터 내부에서 실행 중인지 확인
-	if os.Getenv("KUBERNETES_SERVICE_HOST") != "" {
+	if os.Getenv("IN_K8S") != "" {
 		fmt.Println("Kubernetes 클러스터 내부에서 실행 중입니다. ServiceAccount 인증 정보를 사용합니다.")
 
 		// InClusterConfig 사용
@@ -222,19 +225,41 @@ func getAwsProfileFromContext(kubeconfigPath string, contextName string) string 
 	return ""
 }
 
-// getEksClusterName은 실행 환경에 따라 적절한 방법으로 EKS 클러스터 이름을 가져옵니다
-func getEksClusterName(kubeconfig rest.Config) string {
-	// 클러스터 내부에서 실행 중인지 확인
-	if os.Getenv("KUBERNETES_SERVICE_HOST") != "" {
-		// 클러스터 내부에서는 다양한 방법으로 클러스터 이름 찾기 시도
+// JWT 토큰의 페이로드 구조체
+type TokenPayload struct {
+	Iss string `json:"iss"`
+	// 다른 필드들...
+}
 
-		// 방법 1: ConfigMap에서 클러스터 정보 읽기
+// getEksClusterName 함수 수정 - AWS 설정을 인자로 받도록 변경
+func getEksClusterName(kubeconfig rest.Config, cfg aws.Config) string {
+	// 클러스터 내부에서 실행 중인지 확인
+	if os.Getenv("IN_K8S") != "" {
+		fmt.Println("Kubernetes 클러스터 내부에서 실행 중입니다. 클러스터 이름을 자동으로 감지합니다.")
+
+		// 방법 1: ServiceAccount 토큰에서 클러스터 이름 추출
+		clusterName, err := getEksClusterNameFromServiceAccountToken(cfg)
+		if err == nil && clusterName != "" {
+			fmt.Printf("ServiceAccount 토큰에서 클러스터 이름을 찾았습니다: %s\n", clusterName)
+			return clusterName
+		} else if err != nil {
+			fmt.Printf("ServiceAccount 토큰 방식 실패: %v\n", err)
+		}
+
+		// 방법 2: 환경 변수에서 가져오기
+		if clusterName := os.Getenv("CLUSTER_NAME"); clusterName != "" {
+			fmt.Printf("환경 변수에서 클러스터 이름을 찾았습니다: %s\n", clusterName)
+			return clusterName
+		}
+
+		// 방법 3: ConfigMap에서 클러스터 정보 읽기
 		clientset, err := kubernetes.NewForConfig(&kubeconfig)
 		if err == nil {
 			// kube-system 네임스페이스의 aws-auth ConfigMap 확인
 			configMap, err := clientset.CoreV1().ConfigMaps("kube-system").Get(context.Background(), "aws-auth", metav1.GetOptions{})
 			if err == nil && configMap != nil {
 				if clusterName, ok := configMap.Data["cluster-name"]; ok {
+					fmt.Printf("aws-auth ConfigMap에서 클러스터 이름을 찾았습니다: %s\n", clusterName)
 					return clusterName
 				}
 			}
@@ -243,26 +268,24 @@ func getEksClusterName(kubeconfig rest.Config) string {
 			configMap, err = clientset.CoreV1().ConfigMaps("kube-system").Get(context.Background(), "cluster-info", metav1.GetOptions{})
 			if err == nil && configMap != nil {
 				if data, ok := configMap.Data["cluster.name"]; ok {
+					fmt.Printf("cluster-info ConfigMap에서 클러스터 이름을 찾았습니다: %s\n", data)
 					return data
 				}
 			}
 		}
 
-		// 방법 2: 환경 변수에서 가져오기
-		if clusterName := os.Getenv("CLUSTER_NAME"); clusterName != "" {
-			return clusterName
-		}
-
-		// 방법 3: 노드 이름에서 추출 시도
-		// EKS 노드 이름은 보통 ip-xxx-xxx-xxx-xxx.region.compute.internal 형식
+		// 방법 4: 노드 이름에서 추출 시도
 		nodeName := os.Getenv("NODE_NAME")
 		if strings.Contains(nodeName, "compute.internal") {
 			parts := strings.Split(nodeName, ".")
 			if len(parts) > 1 {
-				return "eks-cluster-in-" + parts[1]
+				clusterName := "eks-cluster-in-" + parts[1]
+				fmt.Printf("노드 이름에서 클러스터 이름을 추정했습니다: %s\n", clusterName)
+				return clusterName
 			}
 		}
 
+		fmt.Println("클러스터 이름을 찾을 수 없어 기본값을 사용합니다: in-cluster")
 		return "in-cluster"
 	}
 
@@ -277,6 +300,129 @@ func getEksClusterName(kubeconfig rest.Config) string {
 	}
 
 	return kubeconfig.ExecProvider.Args[clusterNameIdx+1]
+}
+
+// getEksClusterNameFromServiceAccountToken 함수 수정 - AWS 설정을 인자로 받도록 변경
+func getEksClusterNameFromServiceAccountToken(cfg aws.Config) (string, error) {
+	// 서비스 어카운트 토큰 파일 경로
+	tokenPath := "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
+	// 토큰 파일이 존재하는지 확인
+	if _, err := os.Stat(tokenPath); os.IsNotExist(err) {
+		return "", fmt.Errorf("서비스 어카운트 토큰 파일을 찾을 수 없습니다: %v", err)
+	}
+
+	// 토큰 파일 읽기
+	tokenBytes, err := os.ReadFile(tokenPath)
+	if err != nil {
+		return "", fmt.Errorf("토큰 파일을 읽을 수 없습니다: %v", err)
+	}
+
+	// JWT 토큰은 헤더.페이로드.서명 형식
+	tokenParts := strings.Split(string(tokenBytes), ".")
+	if len(tokenParts) != 3 {
+		return "", fmt.Errorf("유효하지 않은 JWT 토큰 형식입니다")
+	}
+
+	// 페이로드 부분만 추출 (Base64 인코딩된 상태)
+	payloadBase64 := tokenParts[1]
+
+	// 패딩 추가 (JWT에서는 패딩이 생략됨)
+	if len(payloadBase64)%4 != 0 {
+		payloadBase64 += strings.Repeat("=", 4-len(payloadBase64)%4)
+	}
+
+	// Base64 디코딩
+	payloadBytes, err := base64.StdEncoding.DecodeString(payloadBase64)
+	if err != nil {
+		// URL-safe Base64 방식으로 재시도
+		payloadBase64 = strings.ReplaceAll(payloadBase64, "-", "+")
+		payloadBase64 = strings.ReplaceAll(payloadBase64, "_", "/")
+		payloadBytes, err = base64.StdEncoding.DecodeString(payloadBase64)
+		if err != nil {
+			return "", fmt.Errorf("토큰 페이로드를 디코딩할 수 없습니다: %v", err)
+		}
+	}
+
+	// JSON 파싱
+	var payload TokenPayload
+	if err := json.Unmarshal(payloadBytes, &payload); err != nil {
+		return "", fmt.Errorf("토큰 페이로드를 파싱할 수 없습니다: %v", err)
+	}
+
+	// iss 값 확인
+	if payload.Iss == "" {
+		return "", fmt.Errorf("토큰에 발급자(iss) 정보가 없습니다")
+	}
+
+	// iss 값에서 클러스터 ID 추출 (https://oidc.eks.{region}.amazonaws.com/id/{cluster-id} 형식)
+	parts := strings.Split(payload.Iss, "/")
+	if len(parts) < 2 {
+		return "", fmt.Errorf("토큰의 발급자(iss) 형식이 예상과 다릅니다: %s", payload.Iss)
+	}
+
+	clusterId := parts[len(parts)-1]
+
+	// 리전 추출 (oidc.eks.{region}.amazonaws.com 형식)
+	issuerParts := strings.Split(payload.Iss, ".")
+	if len(issuerParts) < 4 {
+		return "", fmt.Errorf("토큰의 발급자(iss)에서 리전을 추출할 수 없습니다: %s", payload.Iss)
+	}
+
+	region := issuerParts[2]
+
+	// 환경 변수에 리전 설정 (AWS CLI가 사용할 수 있게)
+	os.Setenv("AWS_REGION", region)
+	fmt.Printf("토큰에서 리전 정보를 찾아 설정했습니다: %s\n", region)
+
+	// AWS SDK를 사용하여 클러스터 ID로 클러스터 이름 조회
+	return getClusterNameByID(clusterId, region, cfg)
+}
+
+// getClusterNameByID 함수 수정 - AWS SDK를 사용하도록 변경
+func getClusterNameByID(clusterId, region string, cfg aws.Config) (string, error) {
+	// 리전 설정이 있으면 해당 리전으로 설정 업데이트
+	if region != "" {
+		cfg.Region = region
+	}
+
+	// EKS 클라이언트 생성
+	eksClient := eks.NewFromConfig(cfg)
+
+	// EKS 클러스터 목록 가져오기
+	listClustersOutput, err := eksClient.ListClusters(context.TODO(), &eks.ListClustersInput{})
+	if err != nil {
+		return "", fmt.Errorf("EKS 클러스터 목록을 조회하는 중 오류 발생: %v", err)
+	}
+
+	// 각 클러스터에 대해 정보 조회하여 클러스터 ID 비교
+	for _, clusterName := range listClustersOutput.Clusters {
+		// 클러스터 상세 정보 가져오기
+		describeOutput, err := eksClient.DescribeCluster(context.TODO(), &eks.DescribeClusterInput{
+			Name: aws.String(clusterName),
+		})
+
+		if err != nil {
+			fmt.Printf("클러스터 %s 정보 조회 중 오류 발생: %v\n", clusterName, err)
+			continue
+		}
+
+		// OIDC 발급자 URL에 클러스터 ID가 포함되어 있는지 확인
+		if describeOutput.Cluster != nil &&
+			describeOutput.Cluster.Identity != nil &&
+			describeOutput.Cluster.Identity.Oidc != nil &&
+			describeOutput.Cluster.Identity.Oidc.Issuer != nil {
+
+			issuer := *describeOutput.Cluster.Identity.Oidc.Issuer
+
+			if strings.Contains(issuer, clusterId) {
+				fmt.Printf("클러스터 ID %s에 해당하는 클러스터를 찾았습니다: %s\n", clusterId, clusterName)
+				return clusterName, nil
+			}
+		}
+	}
+
+	return "", fmt.Errorf("클러스터 ID %s에 해당하는 EKS 클러스터를 찾을 수 없습니다", clusterId)
 }
 
 func createK8sClient(kubeconfig rest.Config) kubernetes.Interface {

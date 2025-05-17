@@ -31,6 +31,7 @@ var rootCmd = &cobra.Command{
 	Short: "eks-checklist",
 	Long:  "eks-checklist",
 	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Printf("eks-checklist version 1")
 		common.SetSortMode(sortMode)
 
 		if outputFilter != "" {
@@ -84,12 +85,13 @@ var rootCmd = &cobra.Command{
 		}
 
 		AWS_PROFILE, kubeconfig := getKubeconfig(kubeconfigPath, kubeconfigContext, awsProfile)
-		cluster := getEksClusterName(kubeconfig)
+		cfg := GetAWSConfig(AWS_PROFILE)
+		cluster := getEksClusterName(kubeconfig, cfg)
 
 		fmt.Printf("Running checks on %s\n", cluster)
 
 		k8sClient := createK8sClient(kubeconfig)
-		cfg := GetAWSConfig(AWS_PROFILE)
+
 		eksCluster := Describe(cluster, cfg)
 		dynamicClient, err := CreateDynamicClient(&kubeconfig)
 		if err != nil {
